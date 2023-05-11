@@ -30,7 +30,7 @@ export default createGlobalStyle`
   }
   body {
       line-height: 1;
-      font-family: 'Lato', sans-serif;
+      font-family: 'Brandon Grotesque Black', sans-serif;
       background-color: #f7f7f7 ;
   }
   ol, ul {
@@ -45,6 +45,13 @@ export default createGlobalStyle`
       content: none;
   } 
   h1{
-    font-family: "Abril Fatface", cursive;
+    font-family: 'Brandon Grotesque Regular', sans-serif;
   }
 `;
+
+// font-family: 'Brandon Grotesque Regular', sans-serif;
+// font-family: 'Brandon Grotesque Thin', sans-serif;
+// font-family: 'Brandon Grotesque Light', sans-serif;
+// font-family: 'Brandon Grotesque Medium', sans-serif;
+// font-family: 'Brandon Grotesque Bold', sans-serif;
+// font-family: 'Brandon Grotesque Black', sans-serif;
