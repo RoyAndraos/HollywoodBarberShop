@@ -1,11 +1,22 @@
 import styled from "styled-components";
 import GlobalStyles from "./GlobalStyles";
+import Header from "./components/Header";
+import HomePage from "./components/HomePage";
+import Footer from "./components/Footer";
+import { Routes, Route } from "react-router-dom";
+import Admin from "./components/Admin";
 const App = () => {
   return (
     <Container>
       <GlobalStyles />
-      <Heading>Hollywood Barber Shop</Heading>
-      <OtherHeading>Hollywood Barber Shop</OtherHeading>
+      <Header />
+      <Routes>
+        <Route path={"/"} element={<HomePage />} />
+      </Routes>
+      <Routes>
+        <Route path={"/admin"} element={<Admin />} />
+      </Routes>
+      <Footer />
     </Container>
   );
 };
@@ -17,23 +28,11 @@ const Container = styled.div`
   align-items: center;
 
   @media screen and (min-width: 768px) {
-    flex-direction: row;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
-const Heading = styled.div`
-  font-size: 24px;
-
-  @media screen and (min-width: 768px) {
-    font-size: 36px;
-  }
-`;
-
-const OtherHeading = styled.h1`
-  font-size: 24px;
-  @media screen and (min-width: 768px) {
-    padding: 12px;
-    font-size: 36px;
-  }
-`;
 export default App;
