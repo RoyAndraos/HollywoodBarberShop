@@ -9,9 +9,6 @@ const Footer = () => {
       <LinkWrapper>
         <span>Contact</span>
       </LinkWrapper>
-      <LinkWrapper>
-        <span>Location</span>
-      </LinkWrapper>
     </Wrapper>
   );
 };
@@ -24,15 +21,12 @@ const Wrapper = styled.div`
   width: 90%;
   position: fixed;
   bottom: 0;
+  left: 5%;
 `;
 
 const LinkWrapper = styled.div`
-  border-right: 1px solid grey;
-  width: 33%;
+  width: 20%;
   text-align: center;
-  &:last-of-type {
-    border: none;
-  }
 `;
 
 export default Footer;
