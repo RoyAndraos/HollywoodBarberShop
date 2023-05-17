@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const BurgerMenu = ({ isOpen, setIsOpen }) => {
   const toggleMenu = () => {
-    setIsOpen(!isOpen);
+    if (isOpen === "true") {
+      setIsOpen("flase");
+    } else {
+      setIsOpen("true");
+    }
   };
 
   return (
     <BurgerContainer onClick={toggleMenu}>
-      <BurgerBar isOpen={isOpen} style={{ width: "70%", left: "20%" }} />
-      <BurgerBar isOpen={isOpen} />
-      <BurgerBar isOpen={isOpen} style={{ width: "70%", left: "20%" }} />
+      <BurgerBar isopen={isOpen} style={{ width: "70%", left: "20%" }} />
+      <BurgerBar isopen={isOpen} />
+      <BurgerBar isopen={isOpen} style={{ width: "70%", left: "20%" }} />
     </BurgerContainer>
   );
 };
@@ -33,23 +37,23 @@ const BurgerBar = styled.div`
   height: 3px;
   background-color: #cddfd9;
   border-radius: 10px;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease-in-out;
+  &:first-child {
+    transition: all 0.3s ease-in-out;
+    transform: ${(props) =>
+      props.isopen === "true" ? "translateY(9px) rotate(45deg);" : ""};
+  }
 
-  ${({ isOpen }) =>
-    isOpen &&
-    `
-    &:first-child {
-      transform: translateX(-7px) translateY(8px) rotate(45deg);
-    }
+  &:nth-child(2) {
+    transition: all 0.3s ease-in-out;
+    opacity: ${(props) => (props.isopen === "true" ? "0" : "1")};
+  }
 
-    &:nth-child(2) {
-       opacity: 0;
-    }
-
-    &:last-child {
-       transform: translateX(-7px) translateY(-9px) rotate(-45deg);
-    }
-  `}
+  &:last-child {
+    transition: all 0.3s ease-in-out;
+    transform: ${(props) =>
+      props.isopen === "true" ? "translateY(-8.2px) rotate(-45deg)" : ""};
+  }
 `;
 
 export default BurgerMenu;

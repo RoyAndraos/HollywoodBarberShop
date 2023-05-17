@@ -4,19 +4,26 @@ import Header from "./components/Header";
 import HomePage from "./components/HomePage";
 import Footer from "./components/Footer";
 import { Routes, Route } from "react-router-dom";
-import Admin from "./components/Admin";
+import Admin from "./Admin/Admin";
+import { useLocation } from "react-router-dom";
+import Dashboard from "./Admin/Dashboard";
+import Schedule from "./Admin/Schedule";
+import NavBar from "./Admin/NavBar";
+
 const App = () => {
+  const location = useLocation();
   return (
     <Container>
       <GlobalStyles />
-      <Header />
+      {!location.pathname.includes("/admin") && <Header />}
+      {location.pathname.includes("/admin/dashboard") && <NavBar />}
       <Routes>
         <Route path={"/"} element={<HomePage />} />
-      </Routes>
-      <Routes>
         <Route path={"/admin"} element={<Admin />} />
+        <Route path={"/admin/dashboard"} element={<Dashboard />} />
+        <Route path={"/admin/dashboard/schedule"} element={<Schedule />} />
       </Routes>
-      <Footer />
+      {!location.pathname.includes("/admin") && <Footer />}
     </Container>
   );
 };
@@ -24,15 +31,8 @@ const App = () => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  @media screen and (min-width: 768px) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+  background-color: rgba(0, 0, 0, 0.15);
+  height: 100vh;
 `;
 
 export default App;
