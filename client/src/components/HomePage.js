@@ -1,10 +1,11 @@
 import { styled } from "styled-components";
-
+import ImageSlideShow from "./ImageSlideShow";
+import Footer from "./Footer";
 const HomePage = () => {
   return (
     <Container>
-      <Heading>Hollywood </Heading>
-      <OtherHeading>cuts</OtherHeading>
+      <Footer />
+      <ImageSlideShow />
     </Container>
   );
 };
@@ -13,10 +14,11 @@ const Container = styled.div`
   color: black;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   width: 100%;
-  height:100%;
+  height: 100%;
+  position: relative;
+  border-bottom: 5px solid #011c13;
 
   @media screen and (min-width: 768px) {
     display: flex;
@@ -24,22 +26,6 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     width: 100%;
-  }
-`;
-
-const Heading = styled.div`
-  font-size: 24px;
-
-  @media screen and (min-width: 768px) {
-    font-size: 36px;
-  }
-`;
-
-const OtherHeading = styled.h1`
-  font-size: 24px;
-  @media screen and (min-width: 768px) {
-    padding: 12px;
-    font-size: 36px;
   }
 `;
 

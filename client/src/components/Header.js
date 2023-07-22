@@ -8,12 +8,14 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState("false");
 
   return (
-    <Wrapper>
-      <StylecAccount />
-      <Logo src={"/assets/bg1.png"} />
+    <div style={{ backgroundColor: "#011c13" }}>
+      <Wrapper>
+        <StylecAccount />
+        <Logo src={"/assets/bg1.png"} />
         <BurgerMenu isOpen={isOpen} setIsOpen={setIsOpen} />
-      {isOpen === "true" && <DropDownMenu />}
-    </Wrapper>
+        {isOpen === "true" && <DropDownMenu />}
+      </Wrapper>
+    </div>
   );
 };
 const Wrapper = styled.div`
@@ -24,6 +26,8 @@ const Wrapper = styled.div`
   height: 10vh;
   position: relative;
   background-color: #035e3f;
+  border: 4px solid rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
 `;
 const Logo = styled.img`
   position: absolute;
@@ -32,6 +36,7 @@ const Logo = styled.img`
   height: 80%;
   margin: 10px 0 10px 0;
   border-radius: 30%;
+  width: 33%;
   /* border-bottom: 2px solid rgba(0, 0, 0, 0.7);
   box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.7); */
 `;
