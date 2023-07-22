@@ -1,20 +1,17 @@
 import { styled } from "styled-components";
-import background from "../assets/bg1.png";
 import { FaUser } from "react-icons/fa";
 import BurgerMenu from "./BurgerMenu";
 import { useState } from "react";
 import DropDownMenu from "./DropDownMenu";
-import { useLocation } from "react-router-dom";
+
 const Header = () => {
   const [isOpen, setIsOpen] = useState("false");
-  const location = useLocation();
+
   return (
     <Wrapper>
-      {!location.pathname.includes("/admin") && <StylecAccount />}
-      <Logo src={background} />
-      {!location.pathname.includes("/admin") && (
+      <StylecAccount />
+      <Logo src={"/assets/bg1.png"} />
         <BurgerMenu isOpen={isOpen} setIsOpen={setIsOpen} />
-      )}
       {isOpen === "true" && <DropDownMenu />}
     </Wrapper>
   );

@@ -16,7 +16,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 80vh;
+  height:100%;
 
   @media screen and (min-width: 768px) {
     display: flex;

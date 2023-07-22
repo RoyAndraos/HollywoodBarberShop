@@ -1,6 +1,16 @@
 import { styled } from "styled-components";
 const DropDownMenu = () => {
-  return <Wrapper>DropDownMenu</Wrapper>;
+  return <Wrapper>
+          <ul>
+            <li>Barbers</li>
+          </ul>
+          <ul>
+            <li>About</li>
+          </ul>
+          <ul>
+            <li>Book</li>
+          </ul>
+        </Wrapper>;
 };
 
 const Wrapper = styled.div`
