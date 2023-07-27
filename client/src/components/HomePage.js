@@ -4,7 +4,6 @@ import Footer from "./Footer";
 const HomePage = () => {
   return (
     <Container>
-      <Footer />
       <ImageSlideShow />
     </Container>
   );

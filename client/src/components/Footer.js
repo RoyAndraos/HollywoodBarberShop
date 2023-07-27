@@ -52,7 +52,7 @@ const Wrapper = styled.div`
   justify-content: flex-start;
   height: 10vh;
   width: 90%;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0.5%;
 

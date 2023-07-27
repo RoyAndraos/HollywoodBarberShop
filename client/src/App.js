@@ -3,6 +3,8 @@ import GlobalStyles from "./GlobalStyles";
 import Header from "./components/Header";
 import HomePage from "./components/HomePage";
 import { Routes, Route } from "react-router-dom";
+import Gallery from "./components/Gallery";
+import Footer from "./components/Footer";
 const App = () => {
   return (
     <Container>
@@ -10,7 +12,9 @@ const App = () => {
       <Header />
       <Routes>
         <Route path={"/"} element={<HomePage />} />
+        <Route path={"/gallery"} element={<Gallery />} />
       </Routes>
+      <Footer />
     </Container>
   );
 };

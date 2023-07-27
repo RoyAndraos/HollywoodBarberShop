@@ -116,15 +116,5 @@ const StyledImage = styled.img`
   z-index: ${(props) => (props.isactive === "true" ? "2" : "1")};
 `;
 
-const BackGroundTry = styled.div`
-  width: 96vw;
-  height: 100%;
-  overflow: hidden;
-  border-radius: 10px;
-  background-image: url("/assets/toolCloseUp.jpg");
-  background-size: cover;
-  background-repeat: repeat;
-  filter: blur(10px);
-`;
 
 export default ImageSlideShow;

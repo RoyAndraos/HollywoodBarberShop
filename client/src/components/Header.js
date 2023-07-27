@@ -3,6 +3,7 @@ import { FaUser } from "react-icons/fa";
 import BurgerMenu from "./BurgerMenu";
 import { useState } from "react";
 import DropDownMenu from "./DropDownMenu";
+import { NavLink } from "react-router-dom";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState("false");
@@ -11,9 +12,11 @@ const Header = () => {
     <div style={{ backgroundColor: "#011c13" }}>
       <Wrapper>
         <StylecAccount />
-        <Logo src={"/assets/bg1.png"} />
+        <StyledNavLink to="/">
+          <Logo src={"/assets/bg1.png"} />
+        </StyledNavLink>
         <BurgerMenu isOpen={isOpen} setIsOpen={setIsOpen} />
-        {isOpen === "true" && <DropDownMenu />}
+        {isOpen === "true" && <DropDownMenu setIsOpen={setIsOpen}/>}
       </Wrapper>
     </div>
   );
@@ -30,7 +33,7 @@ const Wrapper = styled.div`
   border-radius: 10px;
 `;
 const Logo = styled.img`
-  position: absolute;
+  position: relative;
   left: 50%;
   transform: translateX(-50%);
   height: 80%;
@@ -48,5 +51,13 @@ const StylecAccount = styled(FaUser)`
   opacity: 0.8;
   color: white;
 `;
+
+const StyledNavLink = styled(NavLink)`
+  position: absolute;
+  hegiht: 100%;
+  width :100%;
+  height: 80%;
+  top: 10%;
+`
 
 export default Header;
