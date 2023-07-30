@@ -44,9 +44,6 @@ export default createGlobalStyle`
       content: '';
       content: none;
   } 
-  h1{
-    font-family: 'Brandon Grotesque Regular', sans-serif;
-  }
 `;
 
 // font-family: 'Brandon Grotesque Regular', sans-serif;

@@ -9,6 +9,7 @@ const ImageSlideShow = () => {
 
   return (
     <Wrapper>
+      <BookButton>Book Now!</BookButton>
       <RadioContainer>
         <input
           type="radio"
@@ -80,13 +81,15 @@ const ImageSlideShow = () => {
 };
 const Wrapper = styled.div`
   width: 100vw;
-  height: 100%;
+  height: 89.5vh;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: #011c13;
   z-index: 0;
+  border-bottom: 5px solid #011c13;
+  padding-top: 3px;
 `;
 
 const ImageContainer = styled.div`
@@ -116,5 +119,20 @@ const StyledImage = styled.img`
   z-index: ${(props) => (props.isactive === "true" ? "2" : "1")};
 `;
 
+const BookButton = styled.button`
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  width: 60vw;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background-color: #035e3f;
+  color: whitesmoke;
+  font-size: 1.8rem;
+  padding: 20px 15px;
+  border-radius: 30px;
+  border: 6px solid #011c13;
+  opacity: 0.9;
+`;
 
 export default ImageSlideShow;

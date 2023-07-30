@@ -2,7 +2,7 @@
 
 const express = require("express");
 const morgan = require("morgan");
-const { signIn, verifyToken, getDashboard } = require("./server");
+const { getBarberInfo, addContact } = require("./server");
 const PORT = 4000;
 
 express()
@@ -20,6 +20,8 @@ express()
   .use(morgan("tiny"))
   .use(express.json())
   .use(express.static("public"))
+  .get("/getBarberInfo", getBarberInfo)
+  .post("/addContact", addContact)
   .listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
   });

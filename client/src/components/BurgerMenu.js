@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 
-const BurgerMenu = ({ isOpen, setIsOpen }) => {
+const BurgerMenu = ({ isopen, setIsOpen }) => {
   const toggleMenu = () => {
-    if (isOpen === "true") {
-      setIsOpen("flase");
+    if (isopen === "true") {
+      setIsOpen("false");
     } else {
       setIsOpen("true");
     }
@@ -12,9 +12,9 @@ const BurgerMenu = ({ isOpen, setIsOpen }) => {
 
   return (
     <BurgerContainer onClick={toggleMenu}>
-      <BurgerBar isopen={isOpen} style={{ width: "70%", left: "20%" }} />
-      <BurgerBar isopen={isOpen} />
-      <BurgerBar isopen={isOpen} style={{ width: "70%", left: "20%" }} />
+      <BurgerBar isopen={isopen} style={{ width: "70%", left: "20%" }} />
+      <BurgerBar isopen={isopen} />
+      <BurgerBar isopen={isopen} style={{ width: "70%", left: "20%" }} />
     </BurgerContainer>
   );
 };
@@ -25,10 +25,11 @@ const BurgerContainer = styled.div`
   justify-content: space-between;
   width: 30px;
   height: 20px;
-  margin-right: 15px;
-  margin-bottom: 15px;
-
+  position: fixed;
   cursor: pointer;
+  z-index: 1000;
+  right: 25px;
+  top: 5.3%;
 `;
 
 const BurgerBar = styled.div`
