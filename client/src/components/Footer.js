@@ -6,10 +6,8 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { AiFillInstagram } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
 import { AiFillPhone } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
 const Footer = () => {
   const [isOpen, setIsOpen] = useState("false");
-  const navigate = useNavigate();
   const address =
     "Hollywood fairmount salon de barbier, 18 Av. Fairmount O, Montreal, Quebec H2T 2M1";
   const shopLocationURL = `https://www.google.com/maps?q=${encodeURIComponent(
