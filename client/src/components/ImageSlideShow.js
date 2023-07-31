@@ -3,13 +3,6 @@ import { styled } from "styled-components";
  import {AiOutlineLeft, AiOutlineRight} from 'react-icons/ai';
 const ImageSlideShow = () => {
   const [imagePos, setImagePos] = useState(0);
-  const handleSlideRight = () => {
-    setImagePos(prev => (prev - 100));
-  };
-
-  const handleSlideLeft = () => {
-    setImagePos(prev => (prev + 100));
-  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -22,13 +15,30 @@ const ImageSlideShow = () => {
     };
   }, []);
 
+  const handleSlideRight = () => {
+    if(imagePos !== -400){
+    setImagePos(prev => (prev - 100));} else{
+      setImagePos(prev => (prev + 400));
+    }
+  };
+
+  const handleSlideLeft = () => {
+    if(imagePos !== 0){
+    setImagePos(prev => (prev + 100));
+  } else{
+    setImagePos(prev => (prev - 400));
+  }
+  };
+
+ 
+
   return (
     <Wrapper>
       <BookButton>Book Now!</BookButton>
-      <StyledLeftButton onClick={()=>handleSlideLeft()} disabled={imagePos === 0}>
+      <StyledLeftButton onClick={()=>handleSlideLeft()} >
         <AiOutlineLeft/>
       </StyledLeftButton>
-      <StyledRightButton onClick={()=>handleSlideRight()} disabled={imagePos === -400}>
+      <StyledRightButton onClick={()=>handleSlideRight()} >
         <AiOutlineRight/>
       </StyledRightButton>
       <ImageContainer imagepos={imagePos}>

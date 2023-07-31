@@ -33,35 +33,31 @@ const Footer = () => {
           <IoShareSocialSharp style={{ fontSize: "30px", color: "white" }} />
         )}
       </ToggleIcon>
-      {isOpen ? (
+      {isOpen === "true" ? (
         <SocialMediaLinksWrapper isopen={isOpen}>
           <SocialMediaLink>
-            <StyledButton
-              onClick={() => {
-                navigate(
-                  "https://instagram.com/hollywood.barbers?igshid=MjEwN2IyYWYwYw=="
-                );
-              }}
+            <StyledLink
+              href="https://instagram.com/hollywood.barbers?igshid=MjEwN2IyYWYwYw=="
+              key={"instagramLink"}
             >
               <AiFillInstagram style={{ fontSize: "35px", color: "#035e3f" }} />
-            </StyledButton>
+            </StyledLink>
           </SocialMediaLink>
           <SocialMediaLink>
-            <StyledButton
-              onClick={() => {
-                navigate("https://www.facebook.com/hollywoodcutsbarbershop/");
-              }}
+            <StyledLink
+                href="https://www.facebook.com/hollywoodcutsbarbershop/"
+                key={"facebookLink"}
             >
               <BsFacebook style={{ fontSize: "29px", color: "#035e3f" }} />
-            </StyledButton>
+            </StyledLink>
           </SocialMediaLink>
           <SocialMediaLink>
-            <StyledButton onClick={() => navigate(shopLocationURL)}>
+            <a href={shopLocationURL}>
               <ImLocation2 style={{ fontSize: "27px", fill: "#035e3f" }} />
-            </StyledButton>
+            </a>
           </SocialMediaLink>
           <SocialMediaLink>
-            <StyledButton as="a" href="tel:+14389237297">
+            <StyledButton as="a" href="tel:+14389237297" key={"phoneLink"}>
               <AiFillPhone style={{ fontSize: "30px", fill: "#035e3f" }} />
             </StyledButton>
           </SocialMediaLink>
@@ -115,4 +111,9 @@ const StyledButton = styled.button`
   width: 100%;
   height: 40px;
 `;
+
+const StyledLink = styled.a`
+width: 100%;
+height: 40px;
+`
 export default Footer;
