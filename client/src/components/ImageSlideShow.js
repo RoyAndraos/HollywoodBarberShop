@@ -1,81 +1,59 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { styled } from "styled-components";
+ import {AiOutlineLeft, AiOutlineRight} from 'react-icons/ai';
 const ImageSlideShow = () => {
-  const [currentSlide, setCurrentSlide] = useState(1);
-
-  const handleChangeSlide = (slideNumber) => {
-    setCurrentSlide(slideNumber);
+  const [imagePos, setImagePos] = useState(0);
+  const handleSlideRight = () => {
+    setImagePos(prev => (prev - 100));
   };
+
+  const handleSlideLeft = () => {
+    setImagePos(prev => (prev + 100));
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // If imagePos reaches -400, reset it to 0, otherwise subtract 100
+      setImagePos(prev => (prev === -400 ? 0 : prev - 100));
+    }, 5000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <Wrapper>
       <BookButton>Book Now!</BookButton>
-      <RadioContainer>
-        <input
-          type="radio"
-          name="slide"
-          id="slide1"
-          checked={currentSlide === 1}
-          onChange={() => handleChangeSlide(1)}
-        />
-        <input
-          type="radio"
-          name="slide"
-          id="slide2"
-          checked={currentSlide === 2}
-          onChange={() => handleChangeSlide(2)}
-        />
-        <input
-          type="radio"
-          name="slide"
-          id="slide3"
-          checked={currentSlide === 3}
-          onChange={() => handleChangeSlide(3)}
-        />
-        <input
-          type="radio"
-          name="slide"
-          id="slide4"
-          checked={currentSlide === 4}
-          onChange={() => handleChangeSlide(4)}
-        />
-        <input
-          type="radio"
-          name="slide"
-          id="slide5"
-          checked={currentSlide === 5}
-          onChange={() => handleChangeSlide(5)}
-        />
-      </RadioContainer>
-
-      <ImageContainer>
+      <StyledLeftButton onClick={()=>handleSlideLeft()} disabled={imagePos === 0}>
+        <AiOutlineLeft/>
+      </StyledLeftButton>
+      <StyledRightButton onClick={()=>handleSlideRight()} disabled={imagePos === -400}>
+        <AiOutlineRight/>
+      </StyledRightButton>
+      <ImageContainer imagepos={imagePos}>
         <StyledImage
           src="/assets/casualDay.jpg"
           alt="slide1"
-          isactive={(currentSlide === 1).toString()}
         />
         <StyledImage
           src="/assets/chairCloseup.jpg"
           alt="slide2"
-          isactive={(currentSlide === 2).toString()}
         />
         <StyledImage
           src="/assets/chairFarBack.jpg"
           alt="slide3"
-          isactive={(currentSlide === 3).toString()}
         />
         <StyledImage
           src="/assets/storeFromOuts.jpg"
           alt="slide4"
-          isactive={(currentSlide === 4).toString()}
         />
 
-        <StyledImage
+          <StyledImage
           src="/assets/toolCloseUp.jpg"
           alt="slide5"
-          isactive={(currentSlide === 5).toString()}
         />
-      </ImageContainer>
+        </ImageContainer>
     </Wrapper>
   );
 };
@@ -90,33 +68,27 @@ const Wrapper = styled.div`
   z-index: 0;
   border-bottom: 5px solid #011c13;
   padding-top: 3px;
+  overflow: hidden;
 `;
 
 const ImageContainer = styled.div`
-  width: 96vw;
+  display: flex;
+  flex-direction: row;
+  width: fit-content;
+  left: ${(props) => props.imagepos}vw;
   height: 100%;
-  overflow: hidden;
   border-radius: 10px;
   z-index: 1;
   position: relative;
-`;
-
-const RadioContainer = styled.div`
-  display: flex;
-  z-index: 100;
-  position: absolute;
-  top: 15px;
-  left: 50%;
-  transform: translateX(-50%);
+  transition: 0.5s ease-in-out;
 `;
 
 const StyledImage = styled.img`
-  height: 100%;
   width: 100%;
-  display: ${(props) => (props.isactive === "true" ? "block" : "none")};
+  display: block;
   object-fit: cover;
-  position: ${(props) => (props.isactive === "true" ? "absolute" : "static")};
-  z-index: ${(props) => (props.isactive === "true" ? "2" : "1")};
+  border-right: 10px solid #011c13;
+  border-left: 10px solid #011c13;
 `;
 
 const BookButton = styled.button`
@@ -134,5 +106,27 @@ const BookButton = styled.button`
   border: 6px solid #011c13;
   opacity: 0.9;
 `;
+const StyledLeftButton = styled.button`
+  position: absolute;
+  top: 50%;
+  left: 30px;
+  transform: translateY(-50%) scaleY(2) scaleX(1.2);
+  z-index: 100;
+  font-size: 3rem;
+  background-color: transparent;
+  border: none;
+  color: grey;
+  `
+const StyledRightButton = styled.button`
+  position: absolute;
+  top: 50%;
+  right: 30px;
+  transform: translateY(-50%) scaleY(2) scaleX(1.2);
+  z-index: 100;
+  font-size: 3rem;
+  background-color: transparent;
+  border: none;
+  color: grey;
+  `
 
 export default ImageSlideShow;

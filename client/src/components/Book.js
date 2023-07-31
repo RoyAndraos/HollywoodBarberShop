@@ -88,7 +88,7 @@ const Book = () => {
       </StarsContainer>
       <InputsContainer>
         <LabelInputContainer>
-          <label>Email:</label>
+          <label>Email</label>
           <StyledInput
             type="text"
             key={"email"}
@@ -98,7 +98,7 @@ const Book = () => {
           ></StyledInput>
         </LabelInputContainer>
         <LabelInputContainer>
-          <label>Phone Number:</label>
+          <label>Phone Number</label>
           <StyledInput
             type="text"
             key={"number"}
@@ -159,7 +159,7 @@ const LabelInputContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  align-items: center;
+  align-items: baseline;
   height: 10vh;
   font-size: 1.2rem;
 `;
