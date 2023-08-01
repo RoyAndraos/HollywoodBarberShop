@@ -6,6 +6,7 @@ import { MdKeyboardArrowLeft } from "react-icons/md";
 import { AiFillInstagram } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
 import { AiFillPhone } from "react-icons/ai";
+import {BsGlobe2} from 'react-icons/bs';
 const Footer = () => {
   const [isOpen, setIsOpen] = useState("false");
   const address =
@@ -28,7 +29,7 @@ const Footer = () => {
         {isOpen === "true" ? (
           <MdKeyboardArrowLeft style={{ fontSize: "50px", color: "white" }} />
         ) : (
-          <IoShareSocialSharp style={{ fontSize: "30px", color: "white" }} />
+          <BsGlobe2 style={{   border: "1px solid white",fontSize: "30px", color: "white", backgroundColor:"rgba(3,94,63,0.6)", padding: "5px", borderRadius:"5px" }} />
         )}
       </ToggleIcon>
       {isOpen === "true" ? (
@@ -74,7 +75,7 @@ const Wrapper = styled.div`
   height: 10vh;
   width: 90%;
   position: fixed;
-  bottom: 20px;
+  bottom: 0;
   left: 0.5%;
   z-index: 100;
   transition: left 0.3s ease;
@@ -84,6 +85,7 @@ const Wrapper = styled.div`
 const ToggleIcon = styled.div`
   width: 20%;
   text-align: center;
+  margin-left:10px;
 `;
 
 const SocialMediaLinksWrapper = styled.div`

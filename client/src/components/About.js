@@ -15,11 +15,9 @@ const About = () => {
         <Story>
           the shop opened in 1957, and was run by the one and only Frederic
           Lereve.
-          <br />
           Amazed by the nice neighborhood and the even nicer people, Ralph
-          Boujaoude and Alain Boujaoude {" (father and son )"} decided to start
+          Boujaoude and Alain Boujaoude {" (father and son)"} decided to start
           a family business and take over the shop in 2023.
-          <br />
           Their goal is to keep the legacy of the shop going, while adding their
           personal passionate touch to it.
         </Story>
@@ -49,11 +47,13 @@ const StoryContainer = styled.div`
   margin-bottom: 20px;
 `;
 const Story = styled.div`
-  width: 70vw;
+  width: 68vw;
   text-align: center;
-  line-height: 1.2;
-  letter-spacing: 5px;
+  line-height: 1.4;
+  wrap:break-word;
+  letter-spacing: 4px;
   margin: 2vh 0 2vh 0;
+  font-family: "Brandon Grotesque Regular", sans-serif;
 `;
 const StyledImage = styled.img`
   width: 80vw;
