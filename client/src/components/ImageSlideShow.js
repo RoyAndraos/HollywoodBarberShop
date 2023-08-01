@@ -113,8 +113,9 @@ const BookButton = styled.button`
   font-size: 1.8rem;
   padding: 20px 15px;
   border-radius: 30px;
-  border: 6px solid #011c13;
+  border: none;
   opacity: 0.9;
+  font-family: 'Brandon Grotesque Black', sans-serif;
 `;
 const StyledLeftButton = styled.button`
   position: absolute;
