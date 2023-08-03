@@ -29,7 +29,7 @@ const BurgerContainer = styled.div`
   cursor: pointer;
   z-index: 1000;
   right: 25px;
-  top: 5.3%;
+  top: 5%;
 `;
 
 const BurgerBar = styled.div`

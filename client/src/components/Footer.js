@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { styled } from "styled-components";
 import { ImLocation2 } from "react-icons/im";
-import { IoShareSocialSharp } from "react-icons/io5";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { AiFillInstagram } from "react-icons/ai";
 import { BsFacebook } from "react-icons/bs";
 import { AiFillPhone } from "react-icons/ai";
-import {BsGlobe2} from 'react-icons/bs';
+import { BsGlobe2 } from "react-icons/bs";
 const Footer = () => {
   const [isOpen, setIsOpen] = useState("false");
   const address =
@@ -29,7 +28,17 @@ const Footer = () => {
         {isOpen === "true" ? (
           <MdKeyboardArrowLeft style={{ fontSize: "50px", color: "white" }} />
         ) : (
-          <BsGlobe2 style={{   border: "1px solid white",fontSize: "30px", color: "white", backgroundColor:"rgba(3,94,63,0.6)", padding: "5px", borderRadius:"5px" }} />
+          <BsGlobe2
+            style={{
+              border: "0.5px solid rgba(255,255,255,0.5)",
+              fontSize: "30px",
+              color: "white",
+              backgroundColor: "rgba(0,0,0,0.5)",
+              padding: "8px",
+              borderRadius: "5px",
+              boxShadow: "0 10px 6px -6px black",
+            }}
+          />
         )}
       </ToggleIcon>
       {isOpen === "true" ? (
@@ -39,25 +48,65 @@ const Footer = () => {
               href="https://instagram.com/hollywood.barbers?igshid=MjEwN2IyYWYwYw=="
               key={"instagramLink"}
             >
-              <AiFillInstagram style={{ fontSize: "35px", color: "#035e3f" }} />
+              <AiFillInstagram
+                style={{
+                  fontSize: "35px",
+                  height: "30px",
+                  width: "30px",
+                  fill: "#035e3f",
+                  padding: "3px",
+                  borderRadius: "5px",
+                  backgroundColor: "whitesmoke",
+                }}
+              />
             </StyledLink>
           </SocialMediaLink>
           <SocialMediaLink>
             <StyledLink
-                href="https://www.facebook.com/hollywoodcutsbarbershop/"
-                key={"facebookLink"}
+              href="https://www.facebook.com/hollywoodcutsbarbershop/"
+              key={"facebookLink"}
             >
-              <BsFacebook style={{ fontSize: "29px", color: "#035e3f" }} />
+              <BsFacebook
+                style={{
+                  fontSize: "29px",
+                  height: "30px",
+                  width: "30px",
+                  fill: "#035e3f",
+                  padding: "3px",
+                  borderRadius: "5px",
+                  backgroundColor: "whitesmoke",
+                }}
+              />
             </StyledLink>
           </SocialMediaLink>
           <SocialMediaLink>
             <a href={shopLocationURL}>
-              <ImLocation2 style={{ fontSize: "27px", fill: "#035e3f" }} />
+              <ImLocation2
+                style={{
+                  fontSize: "27px",
+                  height: "30px",
+                  width: "30px",
+                  fill: "#035e3f",
+                  padding: "3px",
+                  borderRadius: "5px",
+                  backgroundColor: "whitesmoke",
+                }}
+              />
             </a>
           </SocialMediaLink>
           <SocialMediaLink>
             <StyledButton as="a" href="tel:+14389237297" key={"phoneLink"}>
-              <AiFillPhone style={{ fontSize: "30px", fill: "#035e3f" }} />
+              <AiFillPhone
+                style={{
+                  fontSize: "30px",
+                  height: "30px",
+                  width: "30px",
+                  fill: "#035e3f",
+                  padding: "3px",
+                  borderRadius: "5px",
+                  backgroundColor: "whitesmoke",
+                }}
+              />
             </StyledButton>
           </SocialMediaLink>
         </SocialMediaLinksWrapper>
@@ -85,7 +134,7 @@ const Wrapper = styled.div`
 const ToggleIcon = styled.div`
   width: 20%;
   text-align: center;
-  margin-left:10px;
+  margin-left: 10px;
 `;
 
 const SocialMediaLinksWrapper = styled.div`
@@ -94,10 +143,11 @@ const SocialMediaLinksWrapper = styled.div`
   align-items: center;
   opacity: ${(props) => (props.isopen === "true" ? 1 : 0)};
   background-color: ${(props) =>
-    props.isopen === "true" ? "whitesmoke" : "transparent"};
+    props.isopen === "true" ? "rgba(0,0,0,0.5)" : "transparent"};
   padding: 10px 0 10px 0;
   border-radius: 10px;
   transition: opacity 0.3s ease;
+  border: 0.5px solid rgba(255, 255, 255, 0.5);
 `;
 
 const SocialMediaLink = styled.div`
@@ -107,13 +157,12 @@ const SocialMediaLink = styled.div`
 
 const StyledButton = styled.button`
   background-color: transparent;
-  border: none;
   width: 100%;
   height: 40px;
 `;
 
 const StyledLink = styled.a`
-width: 100%;
-height: 40px;
-`
+  width: 100%;
+  height: 40px;
+`;
 export default Footer;

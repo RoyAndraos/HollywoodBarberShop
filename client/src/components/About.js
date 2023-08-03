@@ -13,13 +13,19 @@ const About = () => {
       </TitleWrapper>
       <StoryContainer>
         <Story>
-          the shop opened in 1957, and was run by the one and only Frederic
-          Lereve.
-          Amazed by the nice neighborhood and the even nicer people, Ralph
-          Boujaoude and Alain Boujaoude {" (father and son)"} decided to start
-          a family business and take over the shop in 2023.
-          Their goal is to keep the legacy of the shop going, while adding their
-          personal passionate touch to it.
+          Step through our doors and discover the magic of timeless style,
+          impeccable service, and an unforgettable grooming experience. We can't
+          wait to welcome you into our chair!
+          <br />
+          <br />
+          Your satisfaction is our top priority. And we look forward to
+          exceeding your expectations everytime you visit us.
+          {/* the shop opened in 1957, and was run by the one and only Frederic
+          Lereve. Amazed by the nice neighborhood and the even nicer people,
+          Ralph Boujaoude and Alain Boujaoude {" (father and son)"} decided to
+          start a family business and take over the shop in 2023. Their goal is
+          to keep the legacy of the shop going, while adding their personal
+          passionate touch to it. */}
         </Story>
         * * * * * * * * * * * * * * * * * * * * * * * * * * * *
         <ImageContainer>
@@ -47,13 +53,13 @@ const StoryContainer = styled.div`
   margin-bottom: 20px;
 `;
 const Story = styled.div`
-  width: 68vw;
+  width: 72vw;
   text-align: center;
   line-height: 1.4;
-  wrap:break-word;
   letter-spacing: 4px;
   margin: 2vh 0 2vh 0;
   font-family: "Brandon Grotesque Regular", sans-serif;
+  text-shadow: 7px 7px 7px black;
 `;
 const StyledImage = styled.img`
   width: 80vw;

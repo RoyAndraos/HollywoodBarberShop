@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 const Book = () => {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [numberError, setNumberError] = useState("");
-  const [error, setError] = useState(true);
+  const [formValid, setFormValid] = useState(false);
 
+  useEffect(() => {
+    setFormValid(validateForm());
+  }, [email, phoneNumber]);
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = { email, phoneNumber };
@@ -28,43 +29,21 @@ const Book = () => {
     e.preventDefault();
     switch (name) {
       case "email":
-        // Set email
         setEmail(e.target.value);
-        if (e.target.value.length === 0) {
-          setEmailError("");
-        } else {
-          if (!validEmail(e.target.value)) {
-            setEmailError("invalid email");
-            setError(true);
-          } else {
-            setEmailError("");
-            if (numberError === "") {
-              setError(false);
-            }
-          }
-        }
         break;
       case "number":
-        // Set phone number
         setPhoneNumber(e.target.value);
-        // Check number
-        if (e.target.value.length === 0) {
-          setNumberError("");
-        } else {
-          if (isNaN(e.target.value) || e.target.value.length !== 10) {
-            setNumberError("invalid phone number");
-            setError(true);
-          } else {
-            setNumberError("");
-            if (emailError === "") {
-              setError(false);
-            }
-          }
-        }
         break;
       default:
         break;
     }
+    setFormValid(validateForm());
+  };
+
+  const validateForm = () => {
+    const isEmailValid = validEmail(email);
+    const isPhoneNumberValid = !isNaN(phoneNumber) && phoneNumber.length === 10;
+    return isEmailValid | isPhoneNumberValid;
   };
 
   const validEmail = (email) => {
@@ -91,11 +70,14 @@ const Book = () => {
           <label>Email</label>
           <StyledInput
             type="text"
+            name="email"
+            autoComplete="email"
             key={"email"}
+            value={email}
             onChange={(e) => {
               handleChange(e, "email");
             }}
-          ></StyledInput>
+          />
         </LabelInputContainer>
         <LabelInputContainer>
           <label>Phone Number</label>
@@ -107,11 +89,11 @@ const Book = () => {
             onChange={(e) => {
               handleChange(e, "number");
             }}
-          ></StyledInput>
+          />
         </LabelInputContainer>
       </InputsContainer>
       <ButtonContainer>
-        <BookButton disabled={error} onClick={(e) => handleSubmit(e)}>
+        <BookButton disabled={!formValid} onClick={(e) => handleSubmit(e)}>
           Submit
         </BookButton>
       </ButtonContainer>
@@ -148,7 +130,7 @@ const SorryContainer = styled.div`
   width: 70vw;
   margin: 15vw;
 `;
-const InputsContainer = styled.div`
+const InputsContainer = styled.form`
   display: flex;
   flex-direction: column;
   height: 20vh;

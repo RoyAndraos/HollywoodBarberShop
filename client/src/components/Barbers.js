@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Title, Wrapper, TitleWrapper } from "./Menu";
+import { useNavigate } from "react-router-dom";
 const Barbers = () => {
   const [barberInfo, setBarberInfo] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     fetch("/getBarberInfo")
       .then((res) => res.json())
@@ -14,7 +16,7 @@ const Barbers = () => {
   return (
     <Wrapper id="barbers-section" key={"barbers-section"}>
       <TitleWrapper>
-        <Title>Barbers:</Title>
+        <Title>Barbers</Title>
       </TitleWrapper>
 
       {barberInfo.map((barber) => {
@@ -30,8 +32,10 @@ const Barbers = () => {
               <Avatar src="/assets/avatar.png" alt="avatar" />
             </ImageFrame>
             <Description> {barber.description}</Description>
-            <Book>Book Now!</Book>* * * * * * * * * * * * * * * * * * * * * * *
-            * * * * *
+            <Book key={barber._id} onClick={() => navigate("/book")}>
+              Book
+            </Book>
+            * * * * * * * * * * * * * * * * * * * * * * * * * * * *<br />
           </BarberWrapper>
         );
       })}
@@ -53,6 +57,7 @@ const Avatar = styled.img`
 const Description = styled.p`
   font-size: 1.2rem;
   font-family: "Brandon Grotesque Regular";
+  text-shadow: 7px 7px 7px black;
 `;
 const Book = styled.button`
   font-family: "arial", sans-serif;
@@ -60,8 +65,9 @@ const Book = styled.button`
   border-radius: 10px;
   border: none;
   font-size: 1.2rem;
-  padding: 7px 12px 7px 12px;
+  padding: 7px 30px 7px 30px;
   transition: all 0.3s ease-in-out;
+  border-bottom: 4px solid #035e3f;
   &:active {
     transform: scale(0.9);
   }
@@ -82,6 +88,7 @@ const Frame = styled.div`
   border-radius: 10px;
   width: 100%;
   text-align: center;
+  border-bottom: 6px solid rgba(0, 0, 0, 0.9);
 `;
 
 const ImageFrame = styled.div`
@@ -90,5 +97,6 @@ const ImageFrame = styled.div`
   width: 50%;
   text-align: center;
   padding: 10px;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.8);
 `;
 export default Barbers;

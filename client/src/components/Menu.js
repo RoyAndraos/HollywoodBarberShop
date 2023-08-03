@@ -46,6 +46,8 @@ export const Title = styled.p`
   background-color: #035e3f;
   justify-content: center;
   padding: 9px;
+  border-bottom: 6px solid rgba(0, 0, 0, 0.9);
+  text-shadow: 5px 5px 5px black;
 `;
 export const TitleWrapper = styled.div`
   display: flex;
@@ -63,6 +65,7 @@ const Appreciate = styled.p`
   font-style: italic;
   letter-spacing: 2px;
   color: #e7e7b0;
+  font-family: "Brandon Grotesque Regular", sans-serif;
 `;
 const ThanksWrapper = styled.div`
   display: flex;

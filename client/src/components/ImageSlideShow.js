@@ -1,13 +1,14 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from "styled-components";
- import {AiOutlineLeft, AiOutlineRight} from 'react-icons/ai';
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+import MiddleStylish from "./MiddleStylish";
+import { useNavigate } from "react-router-dom";
 const ImageSlideShow = () => {
   const [imagePos, setImagePos] = useState(0);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const interval = setInterval(() => {
-      // If imagePos reaches -400, reset it to 0, otherwise subtract 100
-      setImagePos(prev => (prev === -400 ? 0 : prev - 100));
+      setImagePos((prev) => (prev === -400 ? 0 : prev - 100));
     }, 5000);
 
     return () => {
@@ -16,54 +17,39 @@ const ImageSlideShow = () => {
   }, []);
 
   const handleSlideRight = () => {
-    if(imagePos !== -400){
-    setImagePos(prev => (prev - 100));} else{
-      setImagePos(prev => (prev + 400));
+    if (imagePos !== -400) {
+      setImagePos((prev) => prev - 100);
+    } else {
+      setImagePos((prev) => prev + 400);
     }
   };
 
   const handleSlideLeft = () => {
-    if(imagePos !== 0){
-    setImagePos(prev => (prev + 100));
-  } else{
-    setImagePos(prev => (prev - 400));
-  }
+    if (imagePos !== 0) {
+      setImagePos((prev) => prev + 100);
+    } else {
+      setImagePos((prev) => prev - 400);
+    }
   };
-
- 
 
   return (
     <Wrapper>
-      <BookButton>Book Now!</BookButton>
-      <StyledLeftButton onClick={()=>handleSlideLeft()} >
-        <AiOutlineLeft/>
+      <MiddleStylish />
+      <BookButton onClick={() => navigate("/book")}>Book Now!</BookButton>
+      <StyledLeftButton onClick={() => handleSlideLeft()}>
+        <AiOutlineLeft />
       </StyledLeftButton>
-      <StyledRightButton onClick={()=>handleSlideRight()} >
-        <AiOutlineRight/>
+      <StyledRightButton onClick={() => handleSlideRight()}>
+        <AiOutlineRight />
       </StyledRightButton>
       <ImageContainer imagepos={imagePos}>
-        <StyledImage
-          src="/assets/casualDay.jpg"
-          alt="slide1"
-        />
-        <StyledImage
-          src="/assets/chairCloseup.jpg"
-          alt="slide2"
-        />
-        <StyledImage
-          src="/assets/chairFarBack.jpg"
-          alt="slide3"
-        />
-        <StyledImage
-          src="/assets/storeFromOuts.jpg"
-          alt="slide4"
-        />
+        <StyledImage src="/assets/casualDay.jpg" alt="slide1" />
+        <StyledImage src="/assets/chairCloseup.jpg" alt="slide2" />
+        <StyledImage src="/assets/chairFarBack.jpg" alt="slide3" />
+        <StyledImage src="/assets/storeFromOuts.jpg" alt="slide4" />
 
-          <StyledImage
-          src="/assets/toolCloseUp.jpg"
-          alt="slide5"
-        />
-        </ImageContainer>
+        <StyledImage src="/assets/toolCloseUp.jpg" alt="slide5" />
+      </ImageContainer>
     </Wrapper>
   );
 };
@@ -114,30 +100,32 @@ const BookButton = styled.button`
   padding: 20px 15px;
   border-radius: 30px;
   border: none;
-  opacity: 0.9;
-  font-family: 'Brandon Grotesque Black', sans-serif;
+  font-family: sans-serif;
+  box-shadow: 5px 5px 5px black;
 `;
 const StyledLeftButton = styled.button`
   position: absolute;
   top: 50%;
   left: 30px;
-  transform: translateY(-50%) scaleY(2) scaleX(1.2);
+  transform: translateY(-50%) scaleY(1.7) scaleX(1.1);
   z-index: 100;
   font-size: 3rem;
   background-color: transparent;
   border: none;
-  color: grey;
-  `
+  color: whitesmoke;
+  z-index: 1001;
+`;
 const StyledRightButton = styled.button`
   position: absolute;
   top: 50%;
   right: 30px;
-  transform: translateY(-50%) scaleY(2) scaleX(1.2);
+  transform: translateY(-50%) scaleY(1.7) scaleX(1.1);
   z-index: 100;
   font-size: 3rem;
   background-color: transparent;
   border: none;
-  color: grey;
-  `
+  color: whitesmoke;
+  z-index: 1001;
+`;
 
 export default ImageSlideShow;
