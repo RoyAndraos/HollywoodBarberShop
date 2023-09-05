@@ -1,33 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import { styled } from "styled-components";
+import { TextContext } from "./contexts/TextContext";
 
 const MiddleStylish = () => {
+  const { text } = useContext(TextContext);
+  const StylishText = text.filter((text) => text._id === "slideshow")[0]
+    .content;
+  console.log(StylishText);
   return (
     <Wrapper>
       <WordContainer>
         * * *
         <FirstContainer>
-          <Modern>MODERN</Modern>
-
-          <Modern> CUTS </Modern>
+          <Modern key={StylishText[0]}>{StylishText[0]}</Modern>
         </FirstContainer>
         <SecondContainer>
-          <Modern>QUALITY</Modern>
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "150%",
-              transform: "translateX(-16%)",
-            }}
-          >
-            *<Modern>SERVICE</Modern>*
-          </div>
+          * <Modern key={StylishText[1]}>{StylishText[1]}</Modern> *
         </SecondContainer>
         <ThirdContainer>
-          <Modern>FRESH</Modern>
-          <Modern> LOOKS </Modern>
+          <Modern key={StylishText[2]}>{StylishText[2]}</Modern>
         </ThirdContainer>
         * * *
       </WordContainer>
@@ -53,32 +44,40 @@ const Wrapper = styled.div`
   align-items: center;
   width: 85vw;
   border: 0.1rem dotted grey;
-  box-shadow: 0 18px 6px -6px black;
+  box-shadow: 0 18px 6px -6px rgba(0, 0, 0, 0.6);
 `;
 
 const FirstContainer = styled.div`
   border-bottom: 5px double whitesmoke;
   padding-bottom: 20px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-shadow: 5px 5px 5px black;
   width: 100%;
 `;
 const SecondContainer = styled.div`
   border-bottom: 5px double whitesmoke;
   padding-bottom: 20px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-shadow: 5px 5px 5px black;
   width: 100%;
 `;
 const ThirdContainer = styled.div`
   padding: 20px 10px 20px 10px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-shadow: 5px 5px 5px black;
   width: 100%;
 `;
 const Modern = styled.p`
   font-family: serif;
   font-weight: 900;
+  text-align: center;
+  width: 50%;
 `;
 
 const WordContainer = styled.div`

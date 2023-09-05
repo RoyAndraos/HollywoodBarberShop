@@ -1,18 +1,21 @@
-import React from "react";
 import styled from "styled-components";
-
+import { useContext } from "react";
+import { ImageContext } from "./contexts/ImageContext";
+import { TextContext } from "./contexts/TextContext";
 const Menu = () => {
+  const { images } = useContext(ImageContext);
+  const menuImage = images.filter((image) => image.filename === "menu")[0];
+  const { text } = useContext(TextContext);
+  const menuText = text.filter((text) => text._id === "underMenu")[0].content;
   return (
     <Wrapper id="menu-section" key={"menu-section"}>
       <TitleWrapper>
         <Title>Menu</Title>
       </TitleWrapper>
-      <StyledMenu src="/assets/menu.jpg" alt="Menu" />
+      <StyledMenu src={menuImage.src} alt="Menu" />
       <ThanksWrapper>
         * <br />* <br />* <br />*<br /> * <br />* <br />* <br />* <br />*
-        <Appreciate>
-          payment with debit card or cash would be highly appreciated
-        </Appreciate>
+        <Appreciate>{menuText}</Appreciate>
         * <br />* <br />* <br />*<br /> * <br />* <br />* <br />* <br />*
       </ThanksWrapper>
     </Wrapper>
@@ -31,6 +34,7 @@ export const Wrapper = styled.div`
   justify-content: center;
   color: white;
   height: 100vh;
+  position: relative;
 `;
 const StyledMenu = styled.img`
   width: 94vw;

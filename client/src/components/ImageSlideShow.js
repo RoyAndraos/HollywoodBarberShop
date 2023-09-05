@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { styled } from "styled-components";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import MiddleStylish from "./MiddleStylish";
 import { useNavigate } from "react-router-dom";
+import { ImageContext } from "./contexts/ImageContext";
 const ImageSlideShow = () => {
   const [imagePos, setImagePos] = useState(0);
   const navigate = useNavigate();
+  const { images } = useContext(ImageContext);
+  const slideImages = images.filter((image) => image.filename === "slideShow");
   useEffect(() => {
     const interval = setInterval(() => {
       setImagePos((prev) => (prev === -400 ? 0 : prev - 100));
@@ -15,7 +18,6 @@ const ImageSlideShow = () => {
       clearInterval(interval);
     };
   }, []);
-
   const handleSlideRight = () => {
     if (imagePos !== -400) {
       setImagePos((prev) => prev - 100);
@@ -43,19 +45,22 @@ const ImageSlideShow = () => {
         <AiOutlineRight />
       </StyledRightButton>
       <ImageContainer imagepos={imagePos}>
-        <StyledImage src="/assets/casualDay.jpg" alt="slide1" />
-        <StyledImage src="/assets/chairCloseup.jpg" alt="slide2" />
-        <StyledImage src="/assets/chairFarBack.jpg" alt="slide3" />
-        <StyledImage src="/assets/storeFromOuts.jpg" alt="slide4" />
-
-        <StyledImage src="/assets/toolCloseUp.jpg" alt="slide5" />
+        {slideImages.map((image) => {
+          return (
+            <StyledImage
+              key={image._id}
+              src={image.src}
+              alt={"slide" + image._id}
+            />
+          );
+        })}
       </ImageContainer>
     </Wrapper>
   );
 };
 const Wrapper = styled.div`
   width: 100vw;
-  height: 89.5vh;
+  height: calc(85.7vh + 6px);
   position: relative;
   display: flex;
   flex-direction: column;

@@ -28,17 +28,31 @@ const Footer = () => {
         {isOpen === "true" ? (
           <MdKeyboardArrowLeft style={{ fontSize: "50px", color: "white" }} />
         ) : (
-          <BsGlobe2
-            style={{
-              border: "0.5px solid rgba(255,255,255,0.5)",
-              fontSize: "30px",
-              color: "white",
-              backgroundColor: "rgba(0,0,0,0.5)",
-              padding: "8px",
-              borderRadius: "5px",
-              boxShadow: "0 10px 6px -6px black",
-            }}
-          />
+          <div style={{ position: "relative" }}>
+            <p
+              style={{
+                position: "absolute",
+                left: "50%",
+                top: "50%",
+                transform: "translateX(-80%) translateY(-60%)",
+                color: "transparent",
+                textShadow: "20px 20px 20px black",
+              }}
+            >
+              AAA
+            </p>
+
+            <BsGlobe2
+              style={{
+                fontSize: "30px",
+                color: "white",
+                backgroundColor: "transparent",
+                padding: "8px",
+                borderRadius: "5px",
+                textShadow: "0 10px 6px -6px black",
+              }}
+            />
+          </div>
         )}
       </ToggleIcon>
       {isOpen === "true" ? (
@@ -50,13 +64,10 @@ const Footer = () => {
             >
               <AiFillInstagram
                 style={{
-                  fontSize: "35px",
-                  height: "30px",
-                  width: "30px",
-                  fill: "#035e3f",
+                  fontSize: "38px",
+                  fill: "whitesmoke",
                   padding: "3px",
                   borderRadius: "5px",
-                  backgroundColor: "whitesmoke",
                 }}
               />
             </StyledLink>
@@ -69,12 +80,9 @@ const Footer = () => {
               <BsFacebook
                 style={{
                   fontSize: "29px",
-                  height: "30px",
-                  width: "30px",
-                  fill: "#035e3f",
+                  fill: "whitesmoke",
                   padding: "3px",
                   borderRadius: "5px",
-                  backgroundColor: "whitesmoke",
                 }}
               />
             </StyledLink>
@@ -86,10 +94,10 @@ const Footer = () => {
                   fontSize: "27px",
                   height: "30px",
                   width: "30px",
-                  fill: "#035e3f",
+                  fill: "whitesmoke",
                   padding: "3px",
                   borderRadius: "5px",
-                  backgroundColor: "whitesmoke",
+                  transform: "scaleX(1.1)",
                 }}
               />
             </a>
@@ -98,13 +106,11 @@ const Footer = () => {
             <StyledButton as="a" href="tel:+14389237297" key={"phoneLink"}>
               <AiFillPhone
                 style={{
-                  fontSize: "30px",
-                  height: "30px",
-                  width: "30px",
-                  fill: "#035e3f",
+                  fontSize: "35px",
+                  transform: "scaleX(0.95)",
+                  fill: "whitesmoke",
                   padding: "3px",
                   borderRadius: "5px",
-                  backgroundColor: "whitesmoke",
                 }}
               />
             </StyledButton>
@@ -142,12 +148,10 @@ const SocialMediaLinksWrapper = styled.div`
   display: flex;
   align-items: center;
   opacity: ${(props) => (props.isopen === "true" ? 1 : 0)};
-  background-color: ${(props) =>
-    props.isopen === "true" ? "rgba(0,0,0,0.5)" : "transparent"};
+  background-color: transparent;
   padding: 10px 0 10px 0;
   border-radius: 10px;
   transition: opacity 0.3s ease;
-  border: 0.5px solid rgba(255, 255, 255, 0.5);
 `;
 
 const SocialMediaLink = styled.div`

@@ -1,24 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 import { Title, Wrapper, TitleWrapper } from "./Menu";
 import { useNavigate } from "react-router-dom";
+import { BarberContext } from "./contexts/BarberContext";
 const Barbers = () => {
-  const [barberInfo, setBarberInfo] = useState([]);
+  const { barberInfo } = useContext(BarberContext);
   const navigate = useNavigate();
-  useEffect(() => {
-    fetch("/getBarberInfo")
-      .then((res) => res.json())
-      .then((data) => setBarberInfo(data.data));
-  }, []);
-
-  !barberInfo.length && <div>Loading...</div>;
-
+  if (!barberInfo) return <div>Loading...</div>;
   return (
     <Wrapper id="barbers-section" key={"barbers-section"}>
       <TitleWrapper>
         <Title>Barbers</Title>
       </TitleWrapper>
-
       {barberInfo.map((barber) => {
         return (
           <BarberWrapper key={barber._id}>

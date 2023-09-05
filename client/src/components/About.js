@@ -1,7 +1,13 @@
-import React from "react";
+import { useContext } from "react";
 import { Title, Wrapper, TitleWrapper } from "./Menu";
 import { styled } from "styled-components";
+import { TextContext } from "./contexts/TextContext";
+import { ImageContext } from "./contexts/ImageContext";
 const About = () => {
+  const { text } = useContext(TextContext);
+  const aboutText = text.filter((text) => text._id === "about")[0].content;
+  const { images } = useContext(ImageContext);
+  const aboutImage = images.filter((image) => image.filename === "about")[0];
   return (
     <Wrapper
       id="about-section"
@@ -12,27 +18,10 @@ const About = () => {
         <Title>About</Title>
       </TitleWrapper>
       <StoryContainer>
-        <Story>
-          Step through our doors and discover the magic of timeless style,
-          impeccable service, and an unforgettable grooming experience. We can't
-          wait to welcome you into our chair!
-          <br />
-          <br />
-          Your satisfaction is our top priority. And we look forward to
-          exceeding your expectations everytime you visit us.
-          {/* the shop opened in 1957, and was run by the one and only Frederic
-          Lereve. Amazed by the nice neighborhood and the even nicer people,
-          Ralph Boujaoude and Alain Boujaoude {" (father and son)"} decided to
-          start a family business and take over the shop in 2023. Their goal is
-          to keep the legacy of the shop going, while adding their personal
-          passionate touch to it. */}
-        </Story>
-        * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+        <Story>{aboutText}</Story>* * * * * * * * * * * * * * * * * * * * * * *
+        * * * * *
         <ImageContainer>
-          <StyledImage
-            src="/assets/chairFarBack.jpg"
-            alt="shop image"
-          ></StyledImage>
+          <StyledImage src={aboutImage.src} alt="shop image"></StyledImage>
         </ImageContainer>
         * * * * * * * * * * * * * * * * * * * * * * * * * * * *
       </StoryContainer>
