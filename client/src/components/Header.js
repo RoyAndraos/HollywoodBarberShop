@@ -1,45 +1,36 @@
 import { styled } from "styled-components";
 import { FaUser } from "react-icons/fa";
 import BurgerMenu from "./BurgerMenu";
-import { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef } from "react";
 import DropDownMenu from "./DropDownMenu";
-import { NavLink, useLocation } from "react-router-dom";
-import { BarberContext } from "./contexts/BarberContext";
-import { TextContext } from "./contexts/TextContext";
-import { ImageContext } from "./contexts/ImageContext";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+
 const Header = () => {
   const [isOpen, setIsOpen] = useState("false");
-  const { setBarberInfo } = useContext(BarberContext);
-  const { setText } = useContext(TextContext);
-  const { setImages } = useContext(ImageContext);
   const location = useLocation();
   const menuRef = useRef(null);
   const barbersRef = useRef(null);
   const aboutRef = useRef(null);
+  const navigate = useNavigate();
   useEffect(() => {
     menuRef.current = document.getElementById("menu-section");
     barbersRef.current = document.getElementById("barbers-section");
     aboutRef.current = document.getElementById("about-section");
   }, []);
-  useEffect(() => {
-    fetch("/getWebsiteInfo")
-      .then((res) => res.json())
-      .then((data) => {
-        setBarberInfo(data.barbers);
-        setText(data.text);
-        setImages(data.images);
-      });
-  }, []);
 
   return (
     <div style={{ backgroundColor: "#011c13" }}>
       <Wrapper>
-        <StylecAccount />
+        <AccountButton onClick={() => navigate("/login")}>
+          <StylecAccount />
+        </AccountButton>
         <StyledNavLink to="/">
           <Logo src={"/assets/bg1.png"} />
         </StyledNavLink>
         {location.pathname !== "/book" && (
-          <BurgerMenu isopen={isOpen} setIsOpen={setIsOpen} />
+          <div>
+            <BurgerMenu isopen={isOpen} setIsOpen={setIsOpen} />
+          </div>
         )}
         {isOpen === "true" && (
           <DropDownMenu
@@ -47,6 +38,7 @@ const Header = () => {
             menuRef={menuRef}
             barbersRef={barbersRef}
             aboutRef={aboutRef}
+            isOpen={isOpen}
           />
         )}
       </Wrapper>
@@ -54,9 +46,6 @@ const Header = () => {
   );
 };
 const Wrapper = styled.div`
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
   width: 98vw;
   height: 14vh;
   position: relative;
@@ -75,23 +64,31 @@ const Logo = styled.img`
   transform: translateX(-50%);
   height: 100%;
   border-radius: 30%;
-  width: 33%;
+  width: auto;
 `;
 
 const StylecAccount = styled(FaUser)`
-  font-size: 25px;
+  font-size: 1.4rem;
   margin-left: 15px;
-  margin-bottom: 32px;
   opacity: 0.8;
   color: white;
 `;
 
 const StyledNavLink = styled(NavLink)`
   position: absolute;
-  height: 100%;
   width: 100%;
   height: 80%;
   top: 10%;
+`;
+
+const AccountButton = styled.button`
+  position: fixed;
+  position: fixed;
+  top: 5.4%;
+  left: 25px;
+  background-color: transparent;
+  border: none;
+  z-index: 1000;
 `;
 
 export default Header;

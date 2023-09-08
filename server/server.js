@@ -35,6 +35,7 @@ const getWebsiteInfo = async (req, res) => {
     const images = await db.collection("Images").find().toArray();
     const barbers = await db.collection("admin").find().toArray();
     const text = await db.collection("web_text").find().toArray();
+    console.log(images, barbers, text);
     res
       .status(200)
       .json({ status: 200, images: images, barbers: barbers, text: text });

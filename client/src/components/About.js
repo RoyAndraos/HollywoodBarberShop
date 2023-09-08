@@ -3,31 +3,35 @@ import { Title, Wrapper, TitleWrapper } from "./Menu";
 import { styled } from "styled-components";
 import { TextContext } from "./contexts/TextContext";
 import { ImageContext } from "./contexts/ImageContext";
+import Loader from "./Loader";
 const About = () => {
   const { text } = useContext(TextContext);
-  const aboutText = text.filter((text) => text._id === "about")[0].content;
   const { images } = useContext(ImageContext);
-  const aboutImage = images.filter((image) => image.filename === "about")[0];
-  return (
-    <Wrapper
-      id="about-section"
-      key={"about-section"}
-      style={{ paddingBottom: "20px" }}
-    >
-      <TitleWrapper>
-        <Title>About</Title>
-      </TitleWrapper>
-      <StoryContainer>
-        <Story>{aboutText}</Story>* * * * * * * * * * * * * * * * * * * * * * *
-        * * * * *
-        <ImageContainer>
-          <StyledImage src={aboutImage.src} alt="shop image"></StyledImage>
-        </ImageContainer>
-        * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-      </StoryContainer>
-      ***
-    </Wrapper>
-  );
+  if (!images || !text) return <Loader />;
+  else {
+    const aboutText = text.filter((text) => text._id === "about")[0].content;
+    const aboutImage = images.filter((image) => image.filename === "about")[0];
+    return (
+      <Wrapper
+        id="about-section"
+        key={"about-section"}
+        style={{ paddingBottom: "20px" }}
+      >
+        <TitleWrapper>
+          <Title>About</Title>
+        </TitleWrapper>
+        <StoryContainer>
+          <Story>{aboutText}</Story>* * * * * * * * * * * * * * * * * * * * * *
+          * * * * * *
+          <ImageContainer>
+            <StyledImage src={aboutImage.src} alt="shop image"></StyledImage>
+          </ImageContainer>
+          * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+        </StoryContainer>
+        ***
+      </Wrapper>
+    );
+  }
 };
 const StoryContainer = styled.div`
   width: 96vw;

@@ -1,29 +1,34 @@
 import React, { useContext } from "react";
 import { styled } from "styled-components";
 import { TextContext } from "./contexts/TextContext";
+import Loader from "./Loader";
 
 const MiddleStylish = () => {
   const { text } = useContext(TextContext);
-  const StylishText = text.filter((text) => text._id === "slideshow")[0]
-    .content;
-  console.log(StylishText);
-  return (
-    <Wrapper>
-      <WordContainer>
-        * * *
-        <FirstContainer>
-          <Modern key={StylishText[0]}>{StylishText[0]}</Modern>
-        </FirstContainer>
-        <SecondContainer>
-          * <Modern key={StylishText[1]}>{StylishText[1]}</Modern> *
-        </SecondContainer>
-        <ThirdContainer>
-          <Modern key={StylishText[2]}>{StylishText[2]}</Modern>
-        </ThirdContainer>
-        * * *
-      </WordContainer>
-    </Wrapper>
-  );
+  if (!text) {
+    return <Loader />;
+  } else {
+    const StylishText = text.filter((text) => text._id === "slideshow")[0]
+      .content;
+
+    return (
+      <Wrapper>
+        <WordContainer>
+          * * *
+          <FirstContainer>
+            <Modern key={StylishText[0]}>{StylishText[0]}</Modern>
+          </FirstContainer>
+          <SecondContainer>
+            * <Modern key={StylishText[1]}>{StylishText[1]}</Modern> *
+          </SecondContainer>
+          <ThirdContainer>
+            <Modern key={StylishText[2]}>{StylishText[2]}</Modern>
+          </ThirdContainer>
+          * * *
+        </WordContainer>
+      </Wrapper>
+    );
+  }
 };
 
 const Wrapper = styled.div`

@@ -11,11 +11,22 @@ const BurgerMenu = ({ isopen, setIsOpen }) => {
   };
 
   return (
-    <BurgerContainer onClick={toggleMenu}>
-      <BurgerBar isopen={isopen} style={{ width: "70%", left: "20%" }} />
-      <BurgerBar isopen={isopen} />
-      <BurgerBar isopen={isopen} style={{ width: "70%", left: "20%" }} />
-    </BurgerContainer>
+    <div
+      style={{
+        height: "30px",
+        position: "fixed",
+        right: "35px",
+        top: "5%",
+        display: "flex",
+        alignItems: "center",
+      }}
+    >
+      <BurgerContainer onClick={toggleMenu}>
+        <BurgerBar isopen={isopen} style={{ width: "70%", left: "20%" }} />
+        <BurgerBar isopen={isopen} />
+        <BurgerBar isopen={isopen} style={{ width: "70%", left: "20%" }} />
+      </BurgerContainer>
+    </div>
   );
 };
 
@@ -25,11 +36,9 @@ const BurgerContainer = styled.div`
   justify-content: space-between;
   width: 30px;
   height: 20px;
-  position: fixed;
+
   cursor: pointer;
   z-index: 1000;
-  right: 25px;
-  top: 5%;
 `;
 
 const BurgerBar = styled.div`

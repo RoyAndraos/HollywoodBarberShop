@@ -5,7 +5,25 @@ import HomePage from "./components/HomePage";
 import { Routes, Route } from "react-router-dom";
 import Footer from "./components/Footer";
 import Book from "./components/Book";
+import { useEffect, useContext } from "react";
+import { BarberContext } from "./components/contexts/BarberContext";
+import { TextContext } from "./components/contexts/TextContext";
+import { ImageContext } from "./components/contexts/ImageContext";
+import Signup from "./components/Signup";
+import Login from "./components/Login";
 const App = () => {
+  const { setBarberInfo } = useContext(BarberContext);
+  const { setText } = useContext(TextContext);
+  const { setImages } = useContext(ImageContext);
+  useEffect(() => {
+    fetch("/getWebsiteInfo")
+      .then((res) => res.json())
+      .then((data) => {
+        setBarberInfo(data.barbers);
+        setText(data.text);
+        setImages(data.images);
+      });
+  }, [setBarberInfo, setText, setImages]);
   return (
     <Container>
       <GlobalStyles />
@@ -13,6 +31,8 @@ const App = () => {
       <Routes>
         <Route path={"/"} element={<HomePage />} />
         <Route path={"/book"} element={<Book />} />
+        <Route path={"/signup"} element={<Signup />} />
+        <Route path={"/login"} element={<Login />} />
       </Routes>
       <Footer />
     </Container>

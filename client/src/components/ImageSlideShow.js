@@ -4,10 +4,12 @@ import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import MiddleStylish from "./MiddleStylish";
 import { useNavigate } from "react-router-dom";
 import { ImageContext } from "./contexts/ImageContext";
+import Loader from "./Loader";
 const ImageSlideShow = () => {
   const [imagePos, setImagePos] = useState(0);
   const navigate = useNavigate();
   const { images } = useContext(ImageContext);
+
   const slideImages = images.filter((image) => image.filename === "slideShow");
   useEffect(() => {
     const interval = setInterval(() => {
@@ -33,7 +35,7 @@ const ImageSlideShow = () => {
       setImagePos((prev) => prev - 400);
     }
   };
-
+  if (!images) return <Loader />;
   return (
     <Wrapper>
       <MiddleStylish />
