@@ -12,6 +12,17 @@ const Signup = () => {
   });
   const [errors, setErrors] = useState({});
   const [isValid, setIsValid] = useState(false);
+  const validateEmail = (email) => {
+    // Regular expression for a valid email address
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    return emailRegex.test(email);
+  };
+  const validatePhoneNumber = (phoneNumber) => {
+    // Regular expression for a valid Canadian phone number
+    const phoneRegex = /^(\+?1[-]?)?(\d{3}[-]?)?(\d{3}[-]?\d{4})$/;
+    return phoneRegex.test(phoneNumber);
+  };
+  
   const validatePassword = (password) => {
     // At least 1 uppercase letter, 1 lowercase letter, 1 special character, 1 number, and minimum 8 characters
     const passwordRegex =
@@ -22,45 +33,77 @@ const Signup = () => {
   useEffect(() => {
     const validateForm = () => {
       const newErrors = {};
-
+  
       // Validation rules
-      if (!formData.fname) {
+      if (formData.fname && !formData.fname.trim()) {
         newErrors.fname = "First Name is required";
       }
-      if (!formData.lname) {
+      if (formData.lname && !formData.lname.trim()) {
         newErrors.lname = "Last Name is required";
       }
-      if (!(formData.email || formData.number)) {
+      if (
+        (!formData.email || !formData.email.trim()) &&
+        (!formData.number || !formData.number.trim())
+      ) {
+        // Both email and number are empty
         newErrors.email = "Email or Phone Number is required";
         newErrors.number = "Email or Phone Number is required";
+      } else {
+        // Individual validation for email and phone number
+        if (formData.email && !validateEmail(formData.email.trim())) {
+          newErrors.email = "Please enter a valid email address";
+        }
+        if (formData.number && !validatePhoneNumber(formData.number.trim())) {
+          newErrors.number = "Please enter a valid Canadian phone number";
+        }
       }
-      if (!validatePassword(formData.password)) {
+      if (formData.password && !validatePassword(formData.password.trim())) {
         newErrors.password =
-          "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 special character, 1 number, and be at least 8 characters long";
+          "Password must contain at least 1 uppercase letter, 1 lowercase letter, 1 special character, 1 number, and minimum 8 characters";
       }
-      if (formData.password !== formData.confirmPassword) {
+
+      if (
+        formData.password &&
+        formData.confirmPassword &&
+        formData.password.trim() !== formData.confirmPassword.trim()
+      ) {
         newErrors.confirmPassword = "Passwords do not match";
       }
-
+  
       // Check if there are no errors
       const isValidForm = Object.keys(newErrors).length === 0;
-
+  
       setErrors(newErrors);
       setIsValid(isValidForm);
     };
-
+  
     validateForm();
   }, [formData]);
+
   const handleChange = (e) => {
     setFormData((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
   };
+
+  const handleSubmit =  (e) => {
+    e.preventDefault();
+    fetch("/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({formData: formData}),
+    }).then((res) => {
+      res.json();
+      }).then((data) => {console.log(data)});
+  }
+
   return (
     <Wrapper>
       <StyledStars>* * * * * * * * * * * * * * * * * * * *</StyledStars>
       <StyledStars>Enter your information below</StyledStars>
-      <StyledForm>
+      <StyledForm onSubmit={(e)=>{handleSubmit(e)}}>
         <StyledInput
           type="text"
           name="fname"

@@ -10,11 +10,27 @@ const Login = () => {
     });
   };
   const navigate = useNavigate();
+  const handleLogin = (e) => {
+    e.preventDefault();
+    fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ formData: formData }),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+      });
+  }
   return (
     <Wrapper>
       <StyledStars>* * * * * * * * * * * * * * * * * * * *</StyledStars>
       <StyledStars>Enter your information below</StyledStars>
-      <StyledForm>
+      <StyledForm onSubmit={(e)=>handleLogin(e)}>
         <StyledInput
           type="text"
           name="email"
@@ -25,7 +41,7 @@ const Login = () => {
         />
         <StyledInput
           type="password"
-          name="pass"
+          name="password"
           placeholder="Password"
           onChange={(e) => {
             handleChange(e);

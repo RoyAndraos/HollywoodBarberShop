@@ -7,6 +7,8 @@ const {
   addContact,
   getWebsiteInfo,
   sendEmail,
+  addClient,
+  login
 } = require("./server");
 const PORT = 4000;
 
@@ -29,6 +31,8 @@ express()
   .get("/getWebsiteInfo", getWebsiteInfo)
   .post("/addContact", addContact)
   .post("/sendEmail", sendEmail)
+  .post("/signup", addClient)
+  .post("/login", login)
   .listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
   });
