@@ -11,10 +11,11 @@ import { TextContext } from "./components/contexts/TextContext";
 import { ImageContext } from "./components/contexts/ImageContext";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
+import Loader from "./components/Loader";
 const App = () => {
-  const { setBarberInfo } = useContext(BarberContext);
-  const { setText } = useContext(TextContext);
-  const { setImages } = useContext(ImageContext);
+  const { setBarberInfo, barberInfo } = useContext(BarberContext);
+  const { setText, text } = useContext(TextContext);
+  const { setImages, images } = useContext(ImageContext);
   useEffect(() => {
     fetch("/getWebsiteInfo")
       .then((res) => res.json())
@@ -24,6 +25,7 @@ const App = () => {
         setImages(data.images);
       });
   }, [setBarberInfo, setText, setImages]);
+  if (!barberInfo || !text || !images) return <Loader />;
   return (
     <Container>
       <GlobalStyles />

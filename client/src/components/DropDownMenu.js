@@ -1,27 +1,15 @@
 import { keyframes } from "styled-components";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 const DropDownMenu = ({ menuRef, barbersRef, aboutRef, setIsOpen, isOpen }) => {
   const navigate = useNavigate();
-  const [isExiting, setIsExiting] = useState(false);
   const scrollToRef = (ref) => {
     ref.current.scrollIntoView({ behavior: "smooth" });
-    setIsOpen("false"); // Close the dropdown menu after scrolling
-    setIsExiting(true); // Start the slide-out animation
+    setIsOpen("false"); // Close the menu
   };
-  useEffect(() => {
-    if (isExiting) {
-      // After the duration of the slide-out animation (500ms in this case),
-      // set isOpen to false and allow the component to unmount
-      setTimeout(() => {
-        setIsOpen("false");
-      }, 500);
-    }
-  }, [isExiting, setIsOpen]);
 
   return (
-    <Wrapper isOpen={isOpen} className={isExiting ? "slide-out" : ""}>
+    <Wrapper isOpen={isOpen}>
       <Ul>
         <Li>
           <StyledButton
@@ -86,7 +74,7 @@ const slideOut = keyframes`
 `;
 const Wrapper = styled.div`
   position: fixed;
-  right: ${(props) => (props.isOpen ? "0" : "-100%")};
+  right: ${(props) => (props.isOpen === "true" ? "0" : "-100%")};
   top: 14vh;
   height: 25vh;
   padding: 0 20px 0 20px;
@@ -94,10 +82,6 @@ const Wrapper = styled.div`
   animation: ${(props) => (props.isOpen ? slideIn : slideOut)} 0.5s ease-in-out;
   transition: all 0.3s ease-in-out;
   background-color: #011c13;
-  &.slide-out {
-    animation: ${slideOut} 0.5s ease-in-out;
-    animation-fill-mode: forwards; /* Keep the final style of the animation */
-  }
 `;
 
 const Ul = styled.ul`

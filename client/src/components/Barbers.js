@@ -6,7 +6,6 @@ import { BarberContext } from "./contexts/BarberContext";
 const Barbers = () => {
   const { barberInfo } = useContext(BarberContext);
   const navigate = useNavigate();
-  if (!barberInfo) return <div>Loading...</div>;
   return (
     <Wrapper id="barbers-section" key={"barbers-section"}>
       <TitleWrapper>

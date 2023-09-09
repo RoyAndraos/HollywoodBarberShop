@@ -8,9 +8,9 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 const Header = () => {
   const [isOpen, setIsOpen] = useState("false");
   const location = useLocation();
-  const menuRef = useRef(null);
-  const barbersRef = useRef(null);
-  const aboutRef = useRef(null);
+  let menuRef = useRef(null);
+  let barbersRef = useRef(null);
+  let aboutRef = useRef(null);
   const navigate = useNavigate();
   useEffect(() => {
     menuRef.current = document.getElementById("menu-section");
@@ -32,19 +32,18 @@ const Header = () => {
             <BurgerMenu isopen={isOpen} setIsOpen={setIsOpen} />
           </div>
         )}
-        {isOpen === "true" && (
-          <DropDownMenu
-            setIsOpen={setIsOpen}
-            menuRef={menuRef}
-            barbersRef={barbersRef}
-            aboutRef={aboutRef}
-            isOpen={isOpen}
-          />
-        )}
+        <DropDownMenu
+          setIsOpen={setIsOpen}
+          menuRef={menuRef}
+          barbersRef={barbersRef}
+          aboutRef={aboutRef}
+          isOpen={isOpen}
+        />
       </Wrapper>
     </div>
   );
 };
+
 const Wrapper = styled.div`
   width: 98vw;
   height: 14vh;
