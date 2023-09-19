@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { styled } from "styled-components";
-import { TextContext } from "./contexts/TextContext";
-import Loader from "./Loader";
+import { TextContext } from "../contexts/TextContext";
+import Loader from "../float-fixed/Loader";
 
 const MiddleStylish = () => {
   const { text } = useContext(TextContext);
@@ -16,10 +16,20 @@ const MiddleStylish = () => {
         <WordContainer>
           * * *
           <FirstContainer>
-            <Modern key={StylishText[0]}>{StylishText[0]}</Modern>
+            <Modern key={StylishText[0]}>{StylishText[0].split(" ")[0]}</Modern>
+            <Modern key={StylishText[0] + ".1"}>
+              {StylishText[0].split(" ")[1]}
+            </Modern>
           </FirstContainer>
           <SecondContainer>
-            * <Modern key={StylishText[1]}>{StylishText[1]}</Modern> *
+            *
+            <SecondWrap>
+              <Modern key={StylishText[1]}>
+                {StylishText[1].split(" ")[0]}
+              </Modern>
+              <Modern> {StylishText[1].split(" ")[1]}</Modern>
+            </SecondWrap>
+            *
           </SecondContainer>
           <ThirdContainer>
             <Modern key={StylishText[2]}>{StylishText[2]}</Modern>
@@ -34,12 +44,11 @@ const MiddleStylish = () => {
 const Wrapper = styled.div`
   position: absolute;
   z-index: 1000;
-  top: 46%;
+  top: 40%;
   left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 1.5rem;
+  transform: translate(-50%, -40%);
+  font-size: 1.3rem;
   color: white;
-  background-color: rgba(0, 0, 0, 0.5);
   height: 76vh;
   padding: 20px;
   border-radius: 10px;
@@ -48,26 +57,32 @@ const Wrapper = styled.div`
   justify-content: space-evenly;
   align-items: center;
   width: 85vw;
-  border: 0.1rem dotted grey;
-  box-shadow: 0 18px 6px -6px rgba(0, 0, 0, 0.6);
+`;
+
+const SecondWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 `;
 
 const FirstContainer = styled.div`
-  border-bottom: 5px double whitesmoke;
+  border-bottom: 1px solid whitesmoke;
   padding-bottom: 20px;
+  font-size: 1.5rem;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  text-shadow: 5px 5px 5px black;
+  flex-direction: column;
+  justify-content: flex-start;
   width: 100%;
 `;
 const SecondContainer = styled.div`
-  border-bottom: 5px double whitesmoke;
+  border-bottom: 1px solid whitesmoke;
   padding-bottom: 20px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-shadow: 5px 5px 5px black;
+  justify-content: space-between;
+  text-shadow: 0 0 15px black;
   width: 100%;
 `;
 const ThirdContainer = styled.div`
@@ -75,14 +90,12 @@ const ThirdContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  text-shadow: 5px 5px 5px black;
   width: 100%;
 `;
 const Modern = styled.p`
-  font-family: serif;
   font-weight: 900;
   text-align: center;
-  width: 50%;
+  width: 100%;
 `;
 
 const WordContainer = styled.div`

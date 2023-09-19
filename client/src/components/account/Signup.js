@@ -22,7 +22,7 @@ const Signup = () => {
     const phoneRegex = /^(\+?1[-]?)?(\d{3}[-]?)?(\d{3}[-]?\d{4})$/;
     return phoneRegex.test(phoneNumber);
   };
-  
+
   const validatePassword = (password) => {
     // At least 1 uppercase letter, 1 lowercase letter, 1 special character, 1 number, and minimum 8 characters
     const passwordRegex =
@@ -33,7 +33,7 @@ const Signup = () => {
   useEffect(() => {
     const validateForm = () => {
       const newErrors = {};
-  
+
       // Validation rules
       if (formData.fname && !formData.fname.trim()) {
         newErrors.fname = "First Name is required";
@@ -69,14 +69,14 @@ const Signup = () => {
       ) {
         newErrors.confirmPassword = "Passwords do not match";
       }
-  
+
       // Check if there are no errors
       const isValidForm = Object.keys(newErrors).length === 0;
-  
+
       setErrors(newErrors);
       setIsValid(isValidForm);
     };
-  
+
     validateForm();
   }, [formData]);
 
@@ -86,24 +86,32 @@ const Signup = () => {
     });
   };
 
-  const handleSubmit =  (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     fetch("/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({formData: formData}),
-    }).then((res) => {
-      res.json();
-      }).then((data) => {console.log(data)});
-  }
+      body: JSON.stringify({ formData: formData }),
+    })
+      .then((res) => {
+        res.json();
+      })
+      .then((data) => {
+        console.log(data);
+      });
+  };
 
   return (
     <Wrapper>
       <StyledStars>* * * * * * * * * * * * * * * * * * * *</StyledStars>
       <StyledStars>Enter your information below</StyledStars>
-      <StyledForm onSubmit={(e)=>{handleSubmit(e)}}>
+      <StyledForm
+        onSubmit={(e) => {
+          handleSubmit(e);
+        }}
+      >
         <StyledInput
           type="text"
           name="fname"
@@ -173,7 +181,7 @@ export const StyledForm = styled.form`
   height: 70%;
 `;
 export const StyledInput = styled.input`
-  padding: 0.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
   border-radius: 10px;
   border: none;
   font-size: 1.2rem;

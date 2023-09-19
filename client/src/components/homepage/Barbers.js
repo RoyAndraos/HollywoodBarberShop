@@ -2,32 +2,34 @@ import { useContext } from "react";
 import styled from "styled-components";
 import { Title, Wrapper, TitleWrapper } from "./Menu";
 import { useNavigate } from "react-router-dom";
-import { BarberContext } from "./contexts/BarberContext";
+import { BarberContext } from "../contexts/BarberContext";
 const Barbers = () => {
   const { barberInfo } = useContext(BarberContext);
   const navigate = useNavigate();
   return (
-    <Wrapper id="barbers-section" key={"barbers-section"}>
+    <Wrapper
+      id="barbers-section"
+      key={"barbers-section"}
+      className="snap-element"
+    >
       <TitleWrapper>
         <Title>Barbers</Title>
       </TitleWrapper>
       {barberInfo.map((barber) => {
         return (
           <BarberWrapper key={barber._id}>
-            * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+            <ImageFrame key={barber.family_name}>
+              <Avatar src="/assets/avatar.png" alt="avatar" />
+            </ImageFrame>
             <Frame key={barber.given_name}>
               <BarberTitle>
                 {barber.given_name + " " + barber.family_name}
               </BarberTitle>
             </Frame>
-            <ImageFrame key={barber.family_name}>
-              <Avatar src="/assets/avatar.png" alt="avatar" />
-            </ImageFrame>
             <Description> {barber.description}</Description>
             <Book key={barber._id} onClick={() => navigate("/book")}>
               Book
             </Book>
-            * * * * * * * * * * * * * * * * * * * * * * * * * * * *<br />
           </BarberWrapper>
         );
       })}
@@ -38,55 +40,62 @@ const Barbers = () => {
 const BarberWrapper = styled.div`
   display: flex;
   height: 45vh;
+  width: 70vw;
+  font-size: 1.2rem;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+  color: #035e3f;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  &:last-of-type {
+    border-bottom: none;
+  }
 `;
 const Avatar = styled.img`
   width: 100px;
   height: 100px;
 `;
 const Description = styled.p`
-  font-size: 1.2rem;
-  font-family: "Brandon Grotesque Regular";
-  text-shadow: 7px 7px 7px black;
+  font-size: 1rem;
+  font-family: "poppins", sans-serif;
+  color: whitesmoke;
 `;
 const Book = styled.button`
   font-family: "arial", sans-serif;
-  background-color: whitesmoke;
+  background-color: #035e3f;
   border-radius: 10px;
+  color: whitesmoke;
   border: none;
   font-size: 1.2rem;
   padding: 7px 30px 7px 30px;
+  width: 45%;
   transition: all 0.3s ease-in-out;
-  border-bottom: 4px solid #035e3f;
+  margin: 30px 0 20px 0;
   &:active {
     transform: scale(0.9);
   }
 `;
 
 const BarberTitle = styled.p`
-  background-color: whitesmoke;
-  color: #035e3f;
-  font-size: 1.2rem;
+  background-color: transparent;
+  color: #e7e7b0;
+  font-size: 1.5rem;
   padding: 7px 12px 7px 12px;
-  border-radius: 5px;
-  border: 3px solid #035e3f;
   margin: 7px 7px 7px 7px;
+  font-family: "Brandon Grotesque Regular";
 `;
 
 const Frame = styled.div`
-  background-color: whitesmoke;
+  background-color: transparent;
   border-radius: 10px;
   width: 100%;
   text-align: center;
-  border-bottom: 6px solid rgba(0, 0, 0, 0.9);
 `;
 
 const ImageFrame = styled.div`
   background-color: #035e3f;
   border-radius: 10px;
-  width: 50%;
+  width: 45%;
   text-align: center;
   padding: 10px;
   border-bottom: 3px solid rgba(0, 0, 0, 0.8);

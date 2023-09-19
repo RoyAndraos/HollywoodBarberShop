@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { Title, Wrapper, TitleWrapper } from "./Menu";
 import { styled } from "styled-components";
-import { TextContext } from "./contexts/TextContext";
-import { ImageContext } from "./contexts/ImageContext";
+import { TextContext } from "../contexts/TextContext";
+import { ImageContext } from "../contexts/ImageContext";
 const About = () => {
   const { text } = useContext(TextContext);
   const { images } = useContext(ImageContext);
@@ -19,8 +19,17 @@ const About = () => {
         <Title>About</Title>
       </TitleWrapper>
       <StoryContainer>
-        <Story>{aboutText}</Story>* * * * * * * * * * * * * * * * * * * * * * *
-        * * * * *
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+          }}
+        >
+          <Story>{aboutText.split(".")[0]}.</Story>
+          <Story>{aboutText.split(".")[1]}.</Story>
+        </div>
+        * * * * * * * * * * * * * * * * * * * * * * * * * * * *
         <ImageContainer>
           <StyledImage src={aboutImage.src} alt="shop image"></StyledImage>
         </ImageContainer>
@@ -45,12 +54,16 @@ const StoryContainer = styled.div`
 `;
 const Story = styled.div`
   width: 72vw;
-  text-align: center;
-  line-height: 1.4;
-  letter-spacing: 4px;
-  margin: 2vh 0 2vh 0;
-  font-family: "Brandon Grotesque Regular", sans-serif;
-  text-shadow: 7px 7px 7px black;
+  display: inline-block;
+  text-align: left;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+  line-height: 1.1;
+  letter-spacing: 0.1rem;
+  font-family: "Lato", sans-serif;
+  &:last-of-type {
+    margin-bottom: 40px;
+  }
 `;
 const StyledImage = styled.img`
   width: 80vw;

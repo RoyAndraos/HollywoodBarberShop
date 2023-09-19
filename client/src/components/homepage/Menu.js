@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useContext } from "react";
-import { ImageContext } from "./contexts/ImageContext";
-import { TextContext } from "./contexts/TextContext";
+import { ImageContext } from "../contexts/ImageContext";
+import { TextContext } from "../contexts/TextContext";
 const Menu = () => {
   const { images } = useContext(ImageContext);
   const { text } = useContext(TextContext);
@@ -9,7 +9,7 @@ const Menu = () => {
   const menuImage = images.filter((image) => image.filename === "menu")[0];
   const menuText = text.filter((text) => text._id === "underMenu")[0].content;
   return (
-    <Wrapper id="menu-section" key={"menu-section"}>
+    <Wrapper id="menu-section" key={"menu-section"} className="snap-element">
       <TitleWrapper>
         <Title>Menu</Title>
       </TitleWrapper>
@@ -36,6 +36,7 @@ export const Wrapper = styled.div`
   color: white;
   height: 100vh;
   position: relative;
+  scroll-snap-align: start;
 `;
 const StyledMenu = styled.img`
   width: 94vw;
@@ -44,15 +45,17 @@ const StyledMenu = styled.img`
 export const Title = styled.p`
   color: white;
   margin: 10px 2vw 15px 2vw;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  letter-spacing: 2px;
   width: 100%;
   text-align: center;
   border-radius: 10px;
   background-color: #035e3f;
   justify-content: center;
-  padding: 9px;
+  height: 48px;
+  padding: 12px 0 0 0;
+  font-family: "roboto", sans-serif;
   border-bottom: 6px solid rgba(0, 0, 0, 0.9);
-  text-shadow: 5px 5px 5px black;
 `;
 export const TitleWrapper = styled.div`
   display: flex;

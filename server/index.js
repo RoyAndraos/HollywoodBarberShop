@@ -4,11 +4,13 @@ const express = require("express");
 const morgan = require("morgan");
 const {
   getBarberInfo,
-  addContact,
   getWebsiteInfo,
   sendEmail,
-  addClient,
-  login
+  verifyToken,
+  getUserInfo,
+  getReservations,
+  addReservation,
+  getReservationById,
 } = require("./server");
 const PORT = 4000;
 
@@ -28,11 +30,12 @@ express()
   .use(express.json())
   .use(express.static("public"))
   .get("/getBarberInfo", getBarberInfo)
+  .get("/getUserInfo", verifyToken, getUserInfo)
   .get("/getWebsiteInfo", getWebsiteInfo)
-  .post("/addContact", addContact)
+  .get("/getReservations", getReservations)
+  .get("/getRes/:_id", getReservationById)
   .post("/sendEmail", sendEmail)
-  .post("/signup", addClient)
-  .post("/login", login)
+  .post("/addReservation", addReservation)
   .listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
   });

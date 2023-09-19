@@ -1,8 +1,8 @@
 import { styled } from "styled-components";
-import ImageSlideShow from "./ImageSlideShow";
-import Menu from "./Menu";
-import Barbers from "./Barbers";
-import About from "./About";
+import ImageSlideShow from "./homepage/ImageSlideShow";
+import Menu from "./homepage/Menu";
+import Barbers from "./homepage/Barbers";
+import About from "./homepage/About";
 
 const HomePage = () => {
   return (
@@ -22,8 +22,9 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   position: relative;
-  border-bottom: 10px solid #011c13;
-
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  z-index: 0;
   @media screen and (min-width: 768px) {
     display: flex;
     flex-direction: column;

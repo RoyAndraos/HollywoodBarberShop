@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 const BurgerMenu = ({ isopen, setIsOpen }) => {
-  const toggleMenu = () => {
+  const toggleMenu = (e) => {
+    e.preventDefault();
     if (isopen === "true") {
       setIsOpen("false");
     } else {
@@ -16,12 +17,17 @@ const BurgerMenu = ({ isopen, setIsOpen }) => {
         height: "30px",
         position: "fixed",
         right: "35px",
-        top: "5%",
+        top: "4%",
         display: "flex",
         alignItems: "center",
+        zIndex: "1000",
       }}
     >
-      <BurgerContainer onClick={toggleMenu}>
+      <BurgerContainer
+        onClick={(e) => {
+          toggleMenu(e);
+        }}
+      >
         <BurgerBar isopen={isopen} style={{ width: "70%", left: "20%" }} />
         <BurgerBar isopen={isopen} />
         <BurgerBar isopen={isopen} style={{ width: "70%", left: "20%" }} />
@@ -34,24 +40,23 @@ const BurgerContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 30px;
-  height: 20px;
-
+  width: 32px;
+  height: 23px;
   cursor: pointer;
-  z-index: 1000;
 `;
 
 const BurgerBar = styled.div`
   position: relative;
   width: 100%;
   height: 3px;
-  background-color: #cddfd9;
+  background-color: whitesmoke;
+  border: none;
   border-radius: 10px;
   transition: all 0.3s ease-in-out;
   &:first-child {
     transition: all 0.3s ease-in-out;
     transform: ${(props) =>
-      props.isopen === "true" ? "translateY(9px) rotate(45deg);" : ""};
+      props.isopen === "true" ? "translateY(10px) rotate(45deg);" : ""};
   }
 
   &:nth-child(2) {
@@ -62,7 +67,7 @@ const BurgerBar = styled.div`
   &:last-child {
     transition: all 0.3s ease-in-out;
     transform: ${(props) =>
-      props.isopen === "true" ? "translateY(-8.2px) rotate(-45deg)" : ""};
+      props.isopen === "true" ? "translateY(-10px) rotate(-45deg)" : ""};
   }
 `;
 

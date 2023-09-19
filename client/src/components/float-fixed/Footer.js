@@ -29,27 +29,14 @@ const Footer = () => {
           <MdKeyboardArrowLeft style={{ fontSize: "50px", color: "white" }} />
         ) : (
           <div style={{ position: "relative" }}>
-            <p
-              style={{
-                position: "absolute",
-                left: "50%",
-                top: "50%",
-                transform: "translateX(-80%) translateY(-60%)",
-                color: "transparent",
-                textShadow: "20px 20px 20px black",
-              }}
-            >
-              AAA
-            </p>
-
             <BsGlobe2
               style={{
                 fontSize: "30px",
-                color: "white",
+                color: "whitesmoke",
                 backgroundColor: "transparent",
-                padding: "8px",
                 borderRadius: "5px",
                 textShadow: "0 10px 6px -6px black",
+                zIndex: 1000,
               }}
             />
           </div>
@@ -64,7 +51,7 @@ const Footer = () => {
             >
               <AiFillInstagram
                 style={{
-                  fontSize: "38px",
+                  fontSize: "48px",
                   fill: "whitesmoke",
                   padding: "3px",
                   borderRadius: "5px",
@@ -79,7 +66,7 @@ const Footer = () => {
             >
               <BsFacebook
                 style={{
-                  fontSize: "29px",
+                  fontSize: "38px",
                   fill: "whitesmoke",
                   padding: "3px",
                   borderRadius: "5px",
@@ -91,9 +78,7 @@ const Footer = () => {
             <a href={shopLocationURL}>
               <ImLocation2
                 style={{
-                  fontSize: "27px",
-                  height: "30px",
-                  width: "30px",
+                  fontSize: "40px",
                   fill: "whitesmoke",
                   padding: "3px",
                   borderRadius: "5px",
@@ -106,7 +91,7 @@ const Footer = () => {
             <StyledButton as="a" href="tel:+14389237297" key={"phoneLink"}>
               <AiFillPhone
                 style={{
-                  fontSize: "35px",
+                  fontSize: "45px",
                   transform: "scaleX(0.95)",
                   fill: "whitesmoke",
                   padding: "3px",
@@ -127,14 +112,14 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 10vh;
+  height: 30px;
   width: 90%;
   position: fixed;
-  bottom: 0;
-  left: 0.5%;
-  z-index: 100;
+  top: 4.2%;
+  left: 35px;
   transition: left 0.3s ease;
   left: 0.5%;
+  z-index: 1;
 `;
 
 const ToggleIcon = styled.div`
@@ -146,23 +131,27 @@ const ToggleIcon = styled.div`
 const SocialMediaLinksWrapper = styled.div`
   width: 100%;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   opacity: ${(props) => (props.isopen === "true" ? 1 : 0)};
   background-color: transparent;
   padding: 10px 0 10px 0;
   border-radius: 10px;
   transition: opacity 0.3s ease;
+  position: relative;
+  left: -22%;
+  top: 24.2vh;
 `;
 
 const SocialMediaLink = styled.div`
   width: 33.33%;
   text-align: center;
+  margin-bottom: 5px;
 `;
 
 const StyledButton = styled.button`
   background-color: transparent;
   width: 100%;
-  height: 40px;
+  height: 30px;
 `;
 
 const StyledLink = styled.a`

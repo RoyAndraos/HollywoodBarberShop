@@ -1,15 +1,20 @@
 import { keyframes } from "styled-components";
 import { styled } from "styled-components";
-import { useNavigate } from "react-router-dom";
-const DropDownMenu = ({ menuRef, barbersRef, aboutRef, setIsOpen, isOpen }) => {
-  const navigate = useNavigate();
+const DropDownMenu = ({
+  menuRef,
+  barbersRef,
+  aboutRef,
+  setIsOpen,
+  isopen,
+  slideshowRef,
+}) => {
   const scrollToRef = (ref) => {
     ref.current.scrollIntoView({ behavior: "smooth" });
     setIsOpen("false"); // Close the menu
   };
 
   return (
-    <Wrapper isOpen={isOpen}>
+    <Wrapper isopen={isopen}>
       <Ul>
         <Li>
           <StyledButton
@@ -41,11 +46,10 @@ const DropDownMenu = ({ menuRef, barbersRef, aboutRef, setIsOpen, isOpen }) => {
         <Li>
           <StyledButton
             onClick={() => {
-              setIsOpen("false");
-              navigate("/book");
+              scrollToRef(slideshowRef);
             }}
           >
-            Book Now
+            Back to Top
           </StyledButton>
         </Li>
       </Ul>
@@ -74,14 +78,14 @@ const slideOut = keyframes`
 `;
 const Wrapper = styled.div`
   position: fixed;
-  right: ${(props) => (props.isOpen === "true" ? "0" : "-100%")};
-  top: 14vh;
-  height: 25vh;
+  right: ${(props) => (props.isopen === "true" ? "0" : "-100%")};
+  top: 15.2vh;
+  height: 28vh;
   padding: 0 20px 0 20px;
-  z-index: 1000;
-  animation: ${(props) => (props.isOpen ? slideIn : slideOut)} 0.5s ease-in-out;
+  animation: ${(props) => (props.isopen ? slideIn : slideOut)} 0.5s ease-in-out;
   transition: all 0.3s ease-in-out;
-  background-color: #011c13;
+  background-color: transparent;
+  z-index: 1000;
 `;
 
 const Ul = styled.ul`
@@ -89,6 +93,7 @@ const Ul = styled.ul`
   display: flex;
   justify-content: space-evenly;
   flex-direction: column;
+
   align-items: center;
 `;
 
@@ -102,14 +107,18 @@ const StyledButton = styled.button`
   border-radius: 10px;
   border: none;
   width: 100%;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 600;
-  color: #035e3f;
+  color: #002b1c;
   padding: 7px 10px 7px 10px;
   transition: all 0.3s ease-in-out;
-  box-shadow: 5px 5px 5px black;
+  margin-bottom: 15px;
+
   &:active {
     transform: scale(0.9);
+  }
+  &:last-of-type {
+    margin-bottom: 0;
   }
 `;
 

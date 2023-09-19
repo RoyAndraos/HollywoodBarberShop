@@ -3,8 +3,9 @@ import { styled } from "styled-components";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import MiddleStylish from "./MiddleStylish";
 import { useNavigate } from "react-router-dom";
-import { ImageContext } from "./contexts/ImageContext";
-import Loader from "./Loader";
+import { ImageContext } from "../contexts/ImageContext";
+import Loader from "../float-fixed/Loader";
+import Header from "../Header";
 const ImageSlideShow = () => {
   const [imagePos, setImagePos] = useState(0);
   const navigate = useNavigate();
@@ -37,51 +38,61 @@ const ImageSlideShow = () => {
   };
   if (!images) return <Loader />;
   return (
-    <Wrapper>
-      <MiddleStylish />
-      <BookButton onClick={() => navigate("/book")}>Book Now!</BookButton>
-      <StyledLeftButton onClick={() => handleSlideLeft()}>
-        <AiOutlineLeft />
-      </StyledLeftButton>
-      <StyledRightButton onClick={() => handleSlideRight()}>
-        <AiOutlineRight />
-      </StyledRightButton>
-      <ImageContainer imagepos={imagePos}>
-        {slideImages.map((image) => {
-          return (
-            <StyledImage
-              key={image._id}
-              src={image.src}
-              alt={"slide" + image._id}
-            />
-          );
-        })}
-      </ImageContainer>
+    <Wrapper className="snap-element">
+      <Header />
+      <OtherWrapper>
+        <BackgroundFilter />
+        <MiddleStylish />
+        <BookButton onClick={() => navigate("/book")}>Book Now!</BookButton>
+        <StyledLeftButton onClick={() => handleSlideLeft()}>
+          <AiOutlineLeft />
+        </StyledLeftButton>
+        <StyledRightButton onClick={() => handleSlideRight()}>
+          <AiOutlineRight />
+        </StyledRightButton>
+        <ImageContainer imagepos={imagePos}>
+          {slideImages.map((image) => {
+            return (
+              <StyledImage
+                key={image._id}
+                src={image.src}
+                alt={"slide" + image._id}
+              />
+            );
+          })}
+        </ImageContainer>
+      </OtherWrapper>
     </Wrapper>
   );
 };
 const Wrapper = styled.div`
   width: 100vw;
-  height: calc(85.7vh + 6px);
+  height: 100vh;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #011c13;
-  z-index: 0;
-  border-bottom: 5px solid #011c13;
-  padding-top: 3px;
-  overflow: hidden;
+  background-color: rgba(3, 43, 30, 0.45);
+  scroll-snap-align: start;
+`;
+const OtherWrapper = styled.div`
+  height: 84vh;
+  position: relative;
 `;
 
+const BackgroundFilter = styled.div`
+  width: 100%;
+  height: 84vh;
+  background-color: rgba(3, 43, 30, 0.45);
+  z-index: 999;
+  position: absolute;
+`;
 const ImageContainer = styled.div`
   display: flex;
   flex-direction: row;
   width: fit-content;
   left: ${(props) => props.imagepos}vw;
-  height: 100%;
-  border-radius: 10px;
-  z-index: 1;
+  height: 85vh;
   position: relative;
   transition: 0.5s ease-in-out;
 `;
@@ -90,25 +101,22 @@ const StyledImage = styled.img`
   width: 100%;
   display: block;
   object-fit: cover;
-  border-right: 10px solid #011c13;
-  border-left: 10px solid #011c13;
 `;
 
 const BookButton = styled.button`
   position: absolute;
   top: 80%;
   left: 50%;
-  width: 60vw;
+  width: 76vw;
   transform: translate(-50%, -50%);
   z-index: 1000;
   background-color: #035e3f;
   color: whitesmoke;
-  font-size: 1.8rem;
-  padding: 20px 15px;
-  border-radius: 30px;
-  border: none;
+  font-size: 1.4rem;
+  padding: 20px 0 20px 0;
+  border-radius: 20px;
+  border: 3px solid #002b1c;
   font-family: sans-serif;
-  box-shadow: 5px 5px 5px black;
 `;
 const StyledLeftButton = styled.button`
   position: absolute;
