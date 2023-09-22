@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../float-fixed/Loader";
 import styled from "styled-components";
+import Header from "../Header";
 const YourRes = () => {
   const [res, setRes] = useState({});
   const params = useParams();
@@ -23,25 +24,28 @@ const YourRes = () => {
   console.log(res);
   return (
     <Wrapper>
-      <Message>
-        We sent you an email/text containing the information below.
-      </Message>
-      <StyledDiv>
-        Barber: <StyledInfo> {res.barber}</StyledInfo>
-      </StyledDiv>
-      <StyledDiv>
-        Date: <StyledInfo> {formatDate(new Date(res.date))}</StyledInfo>
-      </StyledDiv>
-      <StyledDiv>
-        TimeSlot: <StyledInfo> {res.slot[0].split("-")[1]}</StyledInfo>
-      </StyledDiv>
-      <StyledDiv>
-        Service: <StyledInfo> {res.service.name}</StyledInfo>
-      </StyledDiv>
-      <StyledDiv>
-        Price: <StyledInfo> {res.service.price}</StyledInfo>
-      </StyledDiv>
-      <Message>Thank you for booking with hollywood barbers!</Message>
+      <Header />
+      <Wrapper>
+        <Message>
+          We sent you an email/text containing the information below.
+        </Message>
+        <StyledDiv>
+          Barber <StyledInfo> {res.barber}</StyledInfo>
+        </StyledDiv>
+        <StyledDiv>
+          Date <StyledInfo> {formatDate(new Date(res.date))}</StyledInfo>
+        </StyledDiv>
+        <StyledDiv>
+          TimeSlot <StyledInfo> {res.slot[0].split("-")[1]}</StyledInfo>
+        </StyledDiv>
+        <StyledDiv>
+          Service <StyledInfo> {res.service.name}</StyledInfo>
+        </StyledDiv>
+        <StyledDiv>
+          Price <StyledInfo> {res.service.price}</StyledInfo>
+        </StyledDiv>
+        <Message>Thank you for booking with hollywood barbers!</Message>
+      </Wrapper>
     </Wrapper>
   );
 };
@@ -68,6 +72,7 @@ const StyledDiv = styled.div`
 const StyledInfo = styled.p`
   margin-left: 20px;
   color: #e7e797;
+  font-style: italic;
 `;
 const Message = styled.p`
   width: 70%;

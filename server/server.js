@@ -8,7 +8,7 @@ const uuid = require("uuid").v4;
 // ---------------------------------------------------------------------------------------------
 
 const brevo = require("@getbrevo/brevo");
-const htmlContent = require("./templates/Welcome");
+const { htmlContent } = require("./templates/Welcome");
 let defaultClient = brevo.ApiClient.instance;
 let apiKey = defaultClient.authentications["api-key"];
 apiKey.apiKey = process.env.EMAIL_API_KEY;
@@ -31,7 +31,6 @@ const jwt = require("jsonwebtoken");
 const JWT_TOKEN_KEY = process.env.JWT_TOKEN_KEY;
 const verifyToken = (req, res, next) => {
   const token = req.headers.authorization;
-  console.log(token);
   if (!token) {
     return res.status(401).json({ message: "Token is missing" });
   }
@@ -107,7 +106,6 @@ const getProfileInfo = async (req, res) => {
 const getReservationById = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const _id = req.params._id;
-  console.log(req.params._id);
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
@@ -179,7 +177,16 @@ const addReservation = async (req, res) => {
     await db.collection("reservations").insertOne(reservation);
 
     // send an email to the user
-    await sendEmail(req, res, userInfo.email);
+    await sendEmail(
+      userInfo.email,
+      reservation.barber,
+      userInfo.fname,
+      userInfo.lname,
+      reservation.date,
+      reservation.slot[0].split("-")[1],
+      reservation.service.name,
+      reservation.service.price
+    );
 
     res.status(200).json({
       status: 200,
@@ -202,31 +209,39 @@ const addReservation = async (req, res) => {
   }
 };
 
-const sendEmail = async (req, res, email) => {
-  console.log(email);
+const sendEmail = async (
+  email,
+  fname,
+  userFName,
+  userLName,
+  date,
+  time,
+  service,
+  price
+) => {
+  const formattedDate = new Date(date).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
   let apiInstance = new brevo.TransactionalEmailsApi();
   let sendSmtpEmail = new brevo.SendSmtpEmail();
 
-  sendSmtpEmail.subject = "My love";
-  sendSmtpEmail.htmlContent = htmlContent;
+  sendSmtpEmail.subject = "Your reservation at Hollywood Barbershop";
+  sendSmtpEmail.htmlContent = htmlContent(
+    userFName,
+    formattedDate,
+    time,
+    service,
+    price
+  );
   sendSmtpEmail.sender = {
-    name: "John Doe",
+    name: fname,
     email: "roy_andraos@live.fr",
   };
-  sendSmtpEmail.to = [{ email: email, name: "Jane Doe" }];
-  sendSmtpEmail.params = {
-    parameter: "My param value",
-    subject: "common subject",
-  };
 
-  apiInstance.sendTransacEmail(sendSmtpEmail).then(
-    (data) => {
-      res.status(200).json({ status: 200, data: data });
-    },
-    (error) => {
-      console.error(error);
-    }
-  );
+  sendSmtpEmail.to = [{ email: email, name: `${userFName + " " + userLName}` }];
+  await apiInstance.sendTransacEmail(sendSmtpEmail);
 };
 
 module.exports = {
