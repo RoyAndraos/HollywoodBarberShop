@@ -9,7 +9,7 @@ const RSVP = () => {
   const { userInfo } = useContext(UserContext);
   return (
     <Wrapper>
-      <Header />
+      <Header isShowing={false} />
       <StyledStars style={{ marginTop: "30px" }}>* * *</StyledStars>
       {!userInfo ? <GuestFormRsvp /> : <Booking />}
       <StyledStars style={{ margin: "30px 0 30px 0" }}>* * *</StyledStars>

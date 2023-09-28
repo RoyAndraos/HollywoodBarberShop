@@ -3,9 +3,11 @@ import styled from "styled-components";
 import { Title, Wrapper, TitleWrapper } from "./Menu";
 import { useNavigate } from "react-router-dom";
 import { BarberContext } from "../contexts/BarberContext";
+import { LanguageContext } from "../contexts/LanguageContext";
 const Barbers = () => {
   const { barberInfo } = useContext(BarberContext);
   const navigate = useNavigate();
+  const { language } = useContext(LanguageContext);
   return (
     <Wrapper
       id="barbers-section"
@@ -28,7 +30,7 @@ const Barbers = () => {
             </Frame>
             <Description> {barber.description}</Description>
             <Book key={barber._id} onClick={() => navigate("/book")}>
-              Book
+              {language === "en" ? "Book" : "Reservez"}
             </Book>
           </BarberWrapper>
         );

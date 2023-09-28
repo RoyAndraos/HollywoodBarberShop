@@ -3,9 +3,11 @@ import { useState, useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { StyledInput, Submit } from "../account/Signup";
 import { FaArrowRight } from "react-icons/fa";
+import { LanguageContext } from "../contexts/LanguageContext";
 const FormRsvp = () => {
   const { setUserInfo } = useContext(UserContext);
   const [formData, setFormData] = useState({});
+  const { language } = useContext(LanguageContext);
   const handleChange = (e) => {
     setFormData((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
@@ -23,14 +25,14 @@ const FormRsvp = () => {
     >
       <StyledInput
         name="fname"
-        placeholder="First Name"
+        placeholder={language === "en" ? "First Name" : "Prenom"}
         onChange={(e) => {
           handleChange(e);
         }}
       ></StyledInput>
       <StyledInput
         name="lname"
-        placeholder="Last Name"
+        placeholder={language === "en" ? "Last Name" : "Nom de Famille"}
         onChange={(e) => {
           handleChange(e);
         }}
@@ -41,7 +43,7 @@ const FormRsvp = () => {
       </AdviceWrap>
       <StyledInput
         name="email"
-        placeholder="Email"
+        placeholder={language === "en" ? "Email" : "Addresse Courriel"}
         onChange={(e) => {
           handleChange(e);
         }}
@@ -49,7 +51,7 @@ const FormRsvp = () => {
       ></StyledInput>
       <StyledInput
         name="number"
-        placeholder="Phone Number"
+        placeholder={language === "en" ? "Phone Number" : "Numero de Telephone"}
         onChange={(e) => {
           handleChange(e);
         }}
@@ -71,7 +73,7 @@ const FormRsvp = () => {
             : true
         }
       >
-        Next Step
+        {language === "en" ? "Next Step" : "Prochaine Etape"}
         <FaArrowRight style={{ marginLeft: "10px", color: "#035e3f" }} />
       </Submit>
     </StyledForm>

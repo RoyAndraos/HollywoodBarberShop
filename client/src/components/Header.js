@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import DropDownMenu from "./float-fixed/DropDownMenu";
 import { NavLink, useLocation } from "react-router-dom";
 import Footer from "../components/float-fixed/Footer";
-const Header = () => {
+const Header = ({ isShowing }) => {
   const [isOpen, setIsOpen] = useState("false");
   const location = useLocation();
   let menuRef = useRef(null);
@@ -28,7 +28,7 @@ const Header = () => {
         <StyledNavLink to="/">
           <Logo src={"/assets/hello.jpg"} />
         </StyledNavLink>
-        {location.pathname !== "/book" && (
+        {isShowing === true && (
           <BurgerMenu isopen={isOpen} setIsOpen={setIsOpen} />
         )}
         <DropDownMenu

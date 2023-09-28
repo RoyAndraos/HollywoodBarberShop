@@ -9,8 +9,8 @@ import moment from "moment";
 import { filterSlotBeforeFor2Duration } from "../helpers";
 import Loader from "../float-fixed/Loader";
 import { UserContext } from "../contexts/UserContext";
-import { NotificationContext } from "../contexts/Notification";
 import { useNavigate } from "react-router-dom";
+import { LanguageContext } from "../contexts/LanguageContext";
 const Booking = () => {
   const [reservations, setReservations] = useState([]);
   const [formData, setFormData] = useState({ date: new Date() });
@@ -23,7 +23,7 @@ const Booking = () => {
   const { barberInfo } = useContext(BarberContext);
   const { services } = useContext(ServiceContext);
   const { userInfo, setUserInfo } = useContext(UserContext);
-  const { setNotification } = useContext(NotificationContext);
+  const { language } = useContext(LanguageContext);
   const navigate = useNavigate();
   const handleFormatDateForSlots = (date) => {
     const options = { weekday: "short" };
@@ -180,7 +180,7 @@ const Booking = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ data: [formData, userInfo] }),
+      body: JSON.stringify({ data: [formData, userInfo, language] }),
     })
       .then((res) => {
         return res.json();
@@ -192,11 +192,9 @@ const Booking = () => {
               ...userInfo,
               reservations: [...reservations, data.data],
             });
-            setNotification("Appointment booked successfully");
             navigate(`/yourReservation/${data.data._id}`);
             break;
           case 500:
-            setNotification("reservation could not be booked");
             break;
           default:
             alert("Something went wrong please try again later");
@@ -227,13 +225,13 @@ const Booking = () => {
               onClick={() => handleServiceClick(service)}
               className={isSelected ? "isSelected" : ""}
             >
-              {service.name}
+              {language === "en" ? service.english : service.name}
             </BarberBox>
           );
         })}
       </LabelInputWrapper>
       <LabelInputWrapper key={"barbers"}>
-        <StyledLabel>Barber</StyledLabel>
+        <StyledLabel>{language === "en" ? "Barber" : "Barbier"}</StyledLabel>
         {barberInfo.map((barber) => {
           const isSelected = selectedBarber === barber;
           return (
@@ -273,7 +271,7 @@ const Booking = () => {
         </LabelInputWrapper>
       )}
       <Submit key={"booking"} type="submit">
-        Submit
+        {language === "en" ? "Submit" : "Valider"}
       </Submit>
     </StyledForm>
   );

@@ -11,18 +11,19 @@ import { UserContext } from "./components/contexts/UserContext";
 import Signup from "./components/account/Signup";
 import Login from "./components/account/Login";
 import Loader from "./components/float-fixed/Loader";
-import Cookies from "js-cookie";
 import { ServiceContext } from "./components/contexts/ServiceContext";
 import Profile from "./components/account/Profile";
 import YourRes from "./components/rsvp/YourRes";
 import { useRef } from "react";
-
+import { LanguageContext } from "./components/contexts/LanguageContext";
+import ChooseLanguage from "./components/homepage/ChooseLanguage";
 const App = () => {
   const { setBarberInfo, barberInfo } = useContext(BarberContext);
   const { setText, text } = useContext(TextContext);
   const { setImages, images } = useContext(ImageContext);
   const { setUserInfo } = useContext(UserContext);
-  const { setServices } = useContext(ServiceContext);
+  const { setServices, services } = useContext(ServiceContext);
+  const { language } = useContext(LanguageContext);
   const containerRef = useRef(null);
   const handleScroll = (e) => {
     e.preventDefault();
@@ -40,7 +41,7 @@ const App = () => {
     });
   };
   useEffect(() => {
-    const token = Cookies.get("token");
+    if (language === "") return;
     fetch("/getWebsiteInfo")
       .then((res) => res.json())
       .then((data) => {
@@ -48,26 +49,14 @@ const App = () => {
         setText(data.text);
         setImages(data.images);
         setServices(data.services);
-      })
-      .then(() => {
-        // Check if the token exists
-        if (token) {
-          // Include the token in the headers of the requests
-          const headers = {
-            Authorization: token,
-          };
-          fetch("/getUserInfo", { headers })
-            .then((res) => res.json())
-            .then((data) => {
-              setUserInfo(data.data);
-            });
-        }
       });
-  }, [setBarberInfo, setText, setImages, setUserInfo, setServices]);
-  if (!barberInfo || !text || !images) return <Loader />;
+  }, [setBarberInfo, setText, setImages, setUserInfo, setServices, language]);
+  if (!language) return <ChooseLanguage />;
+  if (!barberInfo || !text || !images || !services) return <Loader />;
   return (
     <Container ref={containerRef} onScroll={handleScroll}>
       <GlobalStyles />
+      {!language && <ChooseLanguage>hi</ChooseLanguage>}
       <Routes>
         <Route path={"/"} element={<HomePage />} />
         <Route path={"/book"} element={<RSVP />} />

@@ -6,11 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { ImageContext } from "../contexts/ImageContext";
 import Loader from "../float-fixed/Loader";
 import Header from "../Header";
+import { LanguageContext } from "../contexts/LanguageContext";
 const ImageSlideShow = () => {
   const [imagePos, setImagePos] = useState(0);
   const navigate = useNavigate();
   const { images } = useContext(ImageContext);
-
+  const { language } = useContext(LanguageContext);
   const slideImages = images.filter((image) => image.filename === "slideShow");
   useEffect(() => {
     const interval = setInterval(() => {
@@ -39,11 +40,13 @@ const ImageSlideShow = () => {
   if (!images) return <Loader />;
   return (
     <Wrapper className="snap-element">
-      <Header />
+      <Header isShowing={true} />
+      <BackgroundFilter />
       <OtherWrapper>
-        <BackgroundFilter />
         <MiddleStylish />
-        <BookButton onClick={() => navigate("/book")}>Book Now!</BookButton>
+        <BookButton onClick={() => navigate("/book")}>
+          {language === "en" ? "Book Now!" : "Reservez Ici!"}
+        </BookButton>
         <StyledLeftButton onClick={() => handleSlideLeft()}>
           <AiOutlineLeft />
         </StyledLeftButton>
@@ -84,8 +87,9 @@ const BackgroundFilter = styled.div`
   width: 100%;
   height: 84vh;
   background-color: rgba(3, 43, 30, 0.45);
-  z-index: 999;
+  z-index: 1;
   position: absolute;
+  top: 17vh;
 `;
 const ImageContainer = styled.div`
   display: flex;

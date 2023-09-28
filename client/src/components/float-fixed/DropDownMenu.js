@@ -1,5 +1,7 @@
 import { keyframes } from "styled-components";
 import { styled } from "styled-components";
+import { useContext } from "react";
+import { LanguageContext } from "../contexts/LanguageContext";
 const DropDownMenu = ({
   menuRef,
   barbersRef,
@@ -12,6 +14,8 @@ const DropDownMenu = ({
     ref.current.scrollIntoView({ behavior: "smooth" });
     setIsOpen("false"); // Close the menu
   };
+
+  const { language } = useContext(LanguageContext);
 
   return (
     <Wrapper isopen={isopen}>
@@ -31,7 +35,7 @@ const DropDownMenu = ({
               scrollToRef(barbersRef);
             }}
           >
-            Barbers
+            {language === "en" ? "Barbers" : "Coiffeurs"}
           </StyledButton>
         </Li>
         <Li>
@@ -40,7 +44,7 @@ const DropDownMenu = ({
               scrollToRef(aboutRef);
             }}
           >
-            About
+            {language === "en" ? "About" : "A propos"}
           </StyledButton>
         </Li>
         <Li>
@@ -49,7 +53,7 @@ const DropDownMenu = ({
               scrollToRef(slideshowRef);
             }}
           >
-            Back to Top
+            {language === "en" ? "Back to Top" : "Retour en haut"}
           </StyledButton>
         </Li>
       </Ul>
@@ -85,7 +89,7 @@ const Wrapper = styled.div`
   animation: ${(props) => (props.isopen ? slideIn : slideOut)} 0.5s ease-in-out;
   transition: all 0.3s ease-in-out;
   background-color: transparent;
-  z-index: 1000;
+  z-index: 9999;
 `;
 
 const Ul = styled.ul`
@@ -113,6 +117,7 @@ const StyledButton = styled.button`
   padding: 7px 10px 7px 10px;
   transition: all 0.3s ease-in-out;
   margin-bottom: 15px;
+  z-index: 9999;
 
   &:active {
     transform: scale(0.9);

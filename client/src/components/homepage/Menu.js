@@ -2,12 +2,15 @@ import styled from "styled-components";
 import { useContext } from "react";
 import { ImageContext } from "../contexts/ImageContext";
 import { TextContext } from "../contexts/TextContext";
+import { LanguageContext } from "../contexts/LanguageContext";
 const Menu = () => {
   const { images } = useContext(ImageContext);
   const { text } = useContext(TextContext);
-
+  const { language } = useContext(LanguageContext);
   const menuImage = images.filter((image) => image.filename === "menu")[0];
   const menuText = text.filter((text) => text._id === "underMenu")[0].content;
+  const frenchMenuText = text.filter((text) => text._id === "underMenu")[0]
+    .french;
   return (
     <Wrapper id="menu-section" key={"menu-section"} className="snap-element">
       <TitleWrapper>
@@ -16,7 +19,7 @@ const Menu = () => {
       <StyledMenu src={menuImage.src} alt="Menu" />
       <ThanksWrapper>
         * <br />* <br />* <br />*<br /> * <br />* <br />* <br />* <br />*
-        <Appreciate>{menuText}</Appreciate>
+        <Appreciate>{language === "en" ? menuText : frenchMenuText}</Appreciate>
         * <br />* <br />* <br />*<br /> * <br />* <br />* <br />* <br />*
       </ThanksWrapper>
     </Wrapper>

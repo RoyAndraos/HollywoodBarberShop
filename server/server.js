@@ -1,6 +1,5 @@
 require("dotenv").config();
 const { MongoClient } = require("mongodb");
-const bcrypt = require("bcrypt");
 const uuid = require("uuid").v4;
 
 // ---------------------------------------------------------------------------------------------
@@ -243,6 +242,38 @@ const sendEmail = async (
   sendSmtpEmail.to = [{ email: email, name: `${userFName + " " + userLName}` }];
   await apiInstance.sendTransacEmail(sendSmtpEmail);
 };
+
+const sendSMS = async (
+  number,
+  fname,
+  userFName,
+  userLName,
+  date,
+  time,
+  service,
+  price
+) => {
+  let apiInstance = new brevo.TransactionalSMSApi();
+  let sendTransacSms = new brevo.SendTransacSms();
+  sendTransacSms = {
+    sender: "RoyDev",
+    recipient: "5144304287",
+    content: "hello",
+  };
+
+  apiInstance.sendTransacSms(sendTransacSms).then(
+    function (data) {
+      console.log(
+        "API called successfully. Returned data: " + JSON.stringify(data)
+      );
+    },
+    function (error) {
+      console.error(error);
+    }
+  );
+};
+
+sendSMS();
 
 module.exports = {
   getBarberInfo,

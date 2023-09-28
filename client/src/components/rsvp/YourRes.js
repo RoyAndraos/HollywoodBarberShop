@@ -24,7 +24,7 @@ const YourRes = () => {
   console.log(res);
   return (
     <Wrapper>
-      <Header />
+      <Header isShowing={false} />
       <Wrapper>
         <Message>
           We sent you an email/text containing the information below.

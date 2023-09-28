@@ -2,37 +2,62 @@ import React, { useContext } from "react";
 import { styled } from "styled-components";
 import { TextContext } from "../contexts/TextContext";
 import Loader from "../float-fixed/Loader";
+import { LanguageContext } from "../contexts/LanguageContext";
 
 const MiddleStylish = () => {
   const { text } = useContext(TextContext);
+  const { language } = useContext(LanguageContext);
   if (!text) {
     return <Loader />;
   } else {
     const StylishText = text.filter((text) => text._id === "slideshow")[0]
       .content;
-
+    const frenchStylishText = text.filter((text) => text._id === "slideshow")[0]
+      .french;
     return (
       <Wrapper>
         <WordContainer>
           * * *
           <FirstContainer>
-            <Modern key={StylishText[0]}>{StylishText[0].split(" ")[0]}</Modern>
-            <Modern key={StylishText[0] + ".1"}>
-              {StylishText[0].split(" ")[1]}
+            <Modern key={StylishText[0]}>
+              {language === "en"
+                ? StylishText[0].split(" ")[0]
+                : frenchStylishText[0].split(" ")[0]}
+            </Modern>
+            <Modern>
+              {language === "en"
+                ? StylishText[0].split(" ")[1]
+                : frenchStylishText[0].split(" ")[1]}
             </Modern>
           </FirstContainer>
           <SecondContainer>
             *
             <SecondWrap>
               <Modern key={StylishText[1]}>
-                {StylishText[1].split(" ")[0]}
+                {language === "en"
+                  ? StylishText[1].split(" ")[0]
+                  : frenchStylishText[1].split(" ")[0]}
               </Modern>
-              <Modern> {StylishText[1].split(" ")[1]}</Modern>
+              <Modern key={StylishText[1] + ".1"}>
+                {language === "en"
+                  ? StylishText[1].split(" ")[1]
+                  : frenchStylishText[1].split(" ")[1]}
+              </Modern>
             </SecondWrap>
             *
           </SecondContainer>
           <ThirdContainer>
-            <Modern key={StylishText[2]}>{StylishText[2]}</Modern>
+            <Modern key={StylishText[2]}>
+              {language === "en"
+                ? StylishText[2].split(" ")[0]
+                : frenchStylishText[2].split(" ")[0]}
+            </Modern>
+            <Modern key={StylishText[2] + ".1"}>
+              {" "}
+              {language === "en"
+                ? StylishText[2].split(" ")[1]
+                : frenchStylishText[2].split(" ")[1]}
+            </Modern>
           </ThirdContainer>
           * * *
         </WordContainer>
@@ -43,7 +68,7 @@ const MiddleStylish = () => {
 
 const Wrapper = styled.div`
   position: absolute;
-  z-index: 1000;
+  z-index: 999;
   top: 40%;
   left: 50%;
   transform: translate(-50%, -40%);
@@ -90,6 +115,7 @@ const ThirdContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
   width: 100%;
 `;
 const Modern = styled.p`

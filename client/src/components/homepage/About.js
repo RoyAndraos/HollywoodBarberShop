@@ -3,11 +3,13 @@ import { Title, Wrapper, TitleWrapper } from "./Menu";
 import { styled } from "styled-components";
 import { TextContext } from "../contexts/TextContext";
 import { ImageContext } from "../contexts/ImageContext";
+import { LanguageContext } from "../contexts/LanguageContext";
 const About = () => {
   const { text } = useContext(TextContext);
   const { images } = useContext(ImageContext);
-
+  const { language } = useContext(LanguageContext);
   const aboutText = text.filter((text) => text._id === "about")[0].content;
+  const frenchAboutText = text.filter((text) => text._id === "about")[0].french;
   const aboutImage = images.filter((image) => image.filename === "about")[0];
   return (
     <Wrapper
@@ -16,7 +18,7 @@ const About = () => {
       style={{ paddingBottom: "20px" }}
     >
       <TitleWrapper>
-        <Title>About</Title>
+        <Title>{language === "en" ? "About" : "A propos"}</Title>
       </TitleWrapper>
       <StoryContainer>
         <div
@@ -26,8 +28,18 @@ const About = () => {
             justifyContent: "space-evenly",
           }}
         >
-          <Story>{aboutText.split(".")[0]}.</Story>
-          <Story>{aboutText.split(".")[1]}.</Story>
+          <Story>
+            {language === "en"
+              ? aboutText.split(".")[0]
+              : frenchAboutText.split(".")[0]}
+            .
+          </Story>
+          <Story>
+            {language === "en"
+              ? aboutText.split(".")[1]
+              : frenchAboutText.split(".")[1]}
+            .
+          </Story>
         </div>
         * * * * * * * * * * * * * * * * * * * * * * * * * * * *
         <ImageContainer>

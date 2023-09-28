@@ -8,7 +8,7 @@ import { BarberProvider } from "./components/contexts/BarberContext";
 import { TextProvider } from "./components/contexts/TextContext";
 import { UserProvider } from "./components/contexts/UserContext";
 import { ServiceProvider } from "./components/contexts/ServiceContext";
-import { NotificationProvider } from "./components/contexts/Notification";
+import { LanguageProvider } from "./components/contexts/LanguageContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -19,9 +19,9 @@ root.render(
           <ImageProvider>
             <TextProvider>
               <ServiceProvider>
-                <NotificationProvider>
+                <LanguageProvider>
                   <App>{Children}</App>
-                </NotificationProvider>
+                </LanguageProvider>
               </ServiceProvider>
             </TextProvider>
           </ImageProvider>
