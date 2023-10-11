@@ -77,6 +77,7 @@ const Wrapper = styled.div`
   align-items: center;
   background-color: rgba(3, 43, 30, 0.45);
   scroll-snap-align: start;
+  z-index: 1;
 `;
 const OtherWrapper = styled.div`
   height: 84vh;
@@ -85,7 +86,7 @@ const OtherWrapper = styled.div`
 
 const BackgroundFilter = styled.div`
   width: 100%;
-  height: 84vh;
+  height: 83vh;
   background-color: rgba(3, 43, 30, 0.45);
   z-index: 1;
   position: absolute;
@@ -96,7 +97,7 @@ const ImageContainer = styled.div`
   flex-direction: row;
   width: fit-content;
   left: ${(props) => props.imagepos}vw;
-  height: 85vh;
+  height: 83vh;
   position: relative;
   transition: 0.5s ease-in-out;
 `;

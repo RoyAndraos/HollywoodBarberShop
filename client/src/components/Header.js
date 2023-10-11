@@ -20,7 +20,7 @@ const Header = ({ isShowing }) => {
   }, [location]);
   return (
     <div
-      style={{ backgroundColor: "whitesmoke", zIndex: "1" }}
+      style={{ backgroundColor: "whitesmoke", zIndex: "10" }}
       id="slideshow-section"
       className="snap-element"
     >
@@ -51,6 +51,7 @@ const Wrapper = styled.div`
   position: relative;
   top: 0;
   background-color: #035e3f;
+  z-index: 2;
 `;
 const Logo = styled.img`
   position: relative;
@@ -59,7 +60,6 @@ const Logo = styled.img`
   top: 0.6vh;
   border-radius: 30%;
   width: 55%;
-  border: 3px solid #002b1c;
 `;
 
 const StyledNavLink = styled(NavLink)`

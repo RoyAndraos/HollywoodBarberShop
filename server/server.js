@@ -150,19 +150,32 @@ const getReservations = async (req, res) => {
 // ---------------------------------------------------------------------------------------------
 // POST ENDPOINTS
 // ---------------------------------------------------------------------------------------------
+const formatDate = (inputDate) => {
+  const options = {
+    weekday: "short", // abbreviated weekday (e.g., "Fri")
+    year: "numeric", // 4-digit year (e.g., "2023")
+    month: "short", // abbreviated month name (e.g., "Sep")
+    day: "2-digit", // zero-padded day of the month (e.g., "29")
+  };
 
+  const formattedDate = new Date(inputDate).toLocaleDateString(
+    "en-US",
+    options
+  );
+  return formattedDate;
+};
 const addReservation = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const formData = req.body.data[0];
   const userInfo = req.body.data[1];
   const _id = uuid();
-
+  const formattedDate = formatDate(formData.date);
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
     const reservation = {
       _id: _id,
-      date: formData.date,
+      date: formattedDate,
       barber: formData.barber,
       service: formData.service,
       slot: formData.slot,
@@ -272,8 +285,6 @@ const sendSMS = async (
     }
   );
 };
-
-sendSMS();
 
 module.exports = {
   getBarberInfo,

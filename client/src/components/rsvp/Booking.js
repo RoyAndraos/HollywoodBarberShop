@@ -267,7 +267,6 @@ const Booking = () => {
               {selectedSlot[0].split("-")[1]}
             </BarberBox>
           )}
-          {}
         </LabelInputWrapper>
       )}
       <Submit key={"booking"} type="submit">

@@ -89,7 +89,7 @@ const Wrapper = styled.div`
   animation: ${(props) => (props.isopen ? slideIn : slideOut)} 0.5s ease-in-out;
   transition: all 0.3s ease-in-out;
   background-color: transparent;
-  z-index: 9999;
+  z-index: 10;
 `;
 
 const Ul = styled.ul`
@@ -97,7 +97,6 @@ const Ul = styled.ul`
   display: flex;
   justify-content: space-evenly;
   flex-direction: column;
-
   align-items: center;
 `;
 
