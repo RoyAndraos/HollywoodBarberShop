@@ -7,7 +7,14 @@ import { LanguageContext } from "../contexts/LanguageContext";
 import ReCAPTCHA from "react-google-recaptcha";
 const FormRsvp = () => {
   const { setUserInfo } = useContext(UserContext);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    fname: "",
+    lname: "",
+    email: "",
+    number: "",
+    reservations: [],
+    note: "",
+  });
   const { language } = useContext(LanguageContext);
   const handleChangeCaptcha = (e) => {};
   const handleChange = (e) => {

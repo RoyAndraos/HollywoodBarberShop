@@ -168,8 +168,10 @@ const addReservation = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options);
   const formData = req.body.data[0];
   const userInfo = req.body.data[1];
+  console.log(userInfo);
   const _id = uuid();
   const formattedDate = formatDate(formData.date);
+  const client_id = uuid();
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
@@ -187,6 +189,27 @@ const addReservation = async (req, res) => {
 
     // add the reservation to the database
     await db.collection("reservations").insertOne(reservation);
+
+    //check if client exists
+    const isClient = await db
+      .collection("Clients")
+      .findOne({ email: reservation.email });
+    //if client does not exist, create client
+    if (isClient === null) {
+      await db.collection("Clients").insertOne({
+        _id: client_id,
+        email: reservation.email,
+        fname: reservation.fname,
+        lname: reservation.lname,
+        number: reservation.number,
+        note: "",
+        reservations: [reservation],
+      });
+    } else {
+      await db
+        .collection("Clients")
+        .updateOne({ _id: isClient._id }, { $push: { reservations: _id } });
+    }
 
     // send an email to the user
     await sendEmail(

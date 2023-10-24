@@ -23,6 +23,7 @@ const Booking = () => {
   const { barberInfo } = useContext(BarberContext);
   const { services } = useContext(ServiceContext);
   const { userInfo, setUserInfo } = useContext(UserContext);
+  console.log(userInfo);
   const { language } = useContext(LanguageContext);
   const navigate = useNavigate();
   const handleFormatDateForSlots = (date) => {
@@ -190,7 +191,7 @@ const Booking = () => {
           case 200:
             setUserInfo({
               ...userInfo,
-              reservations: [...reservations, data.data],
+              reservations: [...userInfo.reservations, data.data],
             });
             navigate(`/yourReservation/${data.data._id}`);
             break;
