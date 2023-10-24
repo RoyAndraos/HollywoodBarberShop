@@ -114,7 +114,7 @@ const StyledForm = styled.form`
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  height: 66vh;
+  height: 80vh;
 `;
 const Advice = styled.span`
   color: #e7e797;

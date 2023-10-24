@@ -23,7 +23,6 @@ const Booking = () => {
   const { barberInfo } = useContext(BarberContext);
   const { services } = useContext(ServiceContext);
   const { userInfo, setUserInfo } = useContext(UserContext);
-  console.log(userInfo);
   const { language } = useContext(LanguageContext);
   const navigate = useNavigate();
   const handleFormatDateForSlots = (date) => {
@@ -82,25 +81,27 @@ const Booking = () => {
         });
       });
       // if the services in reservations need 2 slots, remove the slot that comes after the one reserved
-      if (selectedService.duration === "2") {
-        const removedBeforeSlotsFor2Duration = todayReservations.map(
-          (reservation) => {
-            return filterSlotBeforeFor2Duration(reservation.slot[0]);
-          }
-        );
-        setAvailableSlots(
-          filteredSlots
-            .filter((slot) => {
+      if (selectedService !== null) {
+        if (selectedService.duration === "2") {
+          const removedBeforeSlotsFor2Duration = todayReservations.map(
+            (reservation) => {
+              return filterSlotBeforeFor2Duration(reservation.slot[0]);
+            }
+          );
+          setAvailableSlots(
+            filteredSlots
+              .filter((slot) => {
+                return slot !== "";
+              })
+              .filter((item) => !removedBeforeSlotsFor2Duration.includes(item))
+          );
+        } else {
+          setAvailableSlots(
+            filteredSlots.filter((slot) => {
               return slot !== "";
             })
-            .filter((item) => !removedBeforeSlotsFor2Duration.includes(item))
-        );
-      } else {
-        setAvailableSlots(
-          filteredSlots.filter((slot) => {
-            return slot !== "";
-          })
-        );
+          );
+        }
       }
     }
   }, [
@@ -218,33 +219,52 @@ const Booking = () => {
       </LabelInputWrapper>
       <LabelInputWrapper key={"services"}>
         <StyledLabel>Service</StyledLabel>
-        {services.map((service) => {
-          const isSelected = selectedService === service;
-          return (
-            <BarberBox
-              key={service._id}
-              onClick={() => handleServiceClick(service)}
-              className={isSelected ? "isSelected" : ""}
-            >
-              {language === "en" ? service.english : service.name}
-            </BarberBox>
-          );
-        })}
+        {selectedService === null ? (
+          services.map((service) => {
+            return (
+              <BarberBox
+                key={service._id}
+                onClick={() => handleServiceClick(service)}
+              >
+                {language === "en" ? service.english : service.name}
+              </BarberBox>
+            );
+          })
+        ) : (
+          <BarberBox
+            key={selectedService._id}
+            onClick={() => {
+              setSelectedService(null);
+              setSelectedSlot([]);
+            }}
+            className={"isSelected"}
+          >
+            {language === "en" ? selectedService.english : selectedService.name}
+          </BarberBox>
+        )}
       </LabelInputWrapper>
       <LabelInputWrapper key={"barbers"}>
         <StyledLabel>{language === "en" ? "Barber" : "Barbier"}</StyledLabel>
-        {barberInfo.map((barber) => {
-          const isSelected = selectedBarber === barber;
-          return (
-            <BarberBox
-              key={barber._id}
-              onClick={() => handleBarberClick(barber)}
-              className={isSelected ? "isSelected" : ""}
-            >
-              {barber.given_name + " " + barber.family_name}
-            </BarberBox>
-          );
-        })}
+        {selectedBarber === null ? (
+          barberInfo.map((barber) => {
+            return (
+              <BarberBox
+                key={barber._id}
+                onClick={() => handleBarberClick(barber)}
+              >
+                {barber.given_name + " " + barber.family_name}
+              </BarberBox>
+            );
+          })
+        ) : (
+          <BarberBox
+            key={selectedBarber._id}
+            onClick={() => setSelectedBarber(null)}
+            className={"isSelected"}
+          >
+            {selectedBarber.given_name + " " + selectedBarber.family_name}
+          </BarberBox>
+        )}
       </LabelInputWrapper>
       {availableSlots.length && (
         <LabelInputWrapper key={"slots"}>
@@ -325,8 +345,8 @@ const LabelInputWrapper = styled.div`
   align-items: center;
   width: 70%;
   margin: 1rem;
-  padding-bottom: 1%;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 3%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 `;
 
 const Slot = styled.div`
