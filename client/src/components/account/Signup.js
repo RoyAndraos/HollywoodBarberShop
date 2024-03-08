@@ -94,13 +94,7 @@ const Signup = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ formData: formData }),
-    })
-      .then((res) => {
-        res.json();
-      })
-      .then((data) => {
-        console.log(data);
-      });
+    }).catch((err) => console.error(err));
   };
 
   return (

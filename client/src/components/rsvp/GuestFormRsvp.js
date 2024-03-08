@@ -4,7 +4,6 @@ import { UserContext } from "../contexts/UserContext";
 import { StyledInput, Submit } from "../account/Signup";
 import { FaArrowRight } from "react-icons/fa";
 import { LanguageContext } from "../contexts/LanguageContext";
-import ReCAPTCHA from "react-google-recaptcha";
 const FormRsvp = () => {
   const { setUserInfo } = useContext(UserContext);
   const [formData, setFormData] = useState({
@@ -16,7 +15,6 @@ const FormRsvp = () => {
     note: "",
   });
   const { language } = useContext(LanguageContext);
-  const handleChangeCaptcha = (e) => {};
   const handleChange = (e) => {
     setFormData((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
@@ -46,13 +44,13 @@ const FormRsvp = () => {
           handleChange(e);
         }}
       ></StyledInput>
-      <AdviceWrap>
+      {/* <AdviceWrap>
         <Advice>
           {language === "en"
             ? "Enter either your email or your phone number"
             : "Entrez soit votre adresse courriel, soit votre numéro de téléphone"}
         </Advice>
-      </AdviceWrap>
+      </AdviceWrap> */}
       <StyledInput
         name="email"
         placeholder={language === "en" ? "Email" : "Addresse Courriel"}
@@ -61,30 +59,32 @@ const FormRsvp = () => {
         }}
         disabled={formData.number ? true : false}
       ></StyledInput>
-      <StyledInput
+      {/* <StyledInput
         name="number"
         placeholder={language === "en" ? "Phone Number" : "Numero de Telephone"}
         onChange={(e) => {
           handleChange(e);
         }}
         disabled={formData.email ? true : false}
-      ></StyledInput>
+      ></StyledInput> */}
       <div style={{ width: "75%", color: "#e7e797", textAlign: "center" }}>
         <input
           type="checkbox"
+          required
           style={{ position: "relative", left: "0" }}
         ></input>
         <label>
           {language === "en"
-            ? "I agree to receive automated confirmation and reminder messages/email to this number/email. Contact us to opt out."
-            : "J'accepte de recevoir des messages/e-mails automatiques de confirmation et de rappel à ce numéro/e-mail. Contactez-nous pour vous désinscrire."}
+            ? "I agree to receive automated confirmation and reminder emails to this email address."
+            : "J'accepte de recevoir des courriels automatiques de confirmation et de rappel à cette adresse courriel."}
         </label>
       </div>
 
-      <ReCAPTCHA
+      {/* <ReCAPTCHA
         sitekey="6LdBM3MoAAAAABznpzpyxD_Nxku-ynPSDiV3u-bH"
         onChange={handleChangeCaptcha}
-      />
+        required
+      /> */}
 
       <Submit
         type="submit"
@@ -95,11 +95,7 @@ const FormRsvp = () => {
           alignItems: "center",
         }}
         disabled={
-          formData.fname &&
-          formData.lname &&
-          (formData.email || formData.number)
-            ? false
-            : true
+          formData.fname && formData.lname && formData.email ? false : true
         }
       >
         {language === "en" ? "Next Step" : "Prochaine Etape"}
@@ -116,14 +112,14 @@ const StyledForm = styled.form`
   justify-content: space-evenly;
   height: 80vh;
 `;
-const Advice = styled.span`
-  color: #e7e797;
-`;
-const AdviceWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-evenly;
-  width: 80%;
-`;
+// const Advice = styled.span`
+//   color: #e7e797;
+// `;
+// const AdviceWrap = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: space-evenly;
+//   width: 80%;
+// `;
 export default FormRsvp;

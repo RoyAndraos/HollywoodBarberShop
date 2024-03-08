@@ -4,15 +4,18 @@ import { Title, Wrapper, TitleWrapper } from "./Menu";
 import { useNavigate } from "react-router-dom";
 import { BarberContext } from "../contexts/BarberContext";
 import { LanguageContext } from "../contexts/LanguageContext";
+import { IsMobileContext } from "../contexts/IsMobileContext";
 const Barbers = () => {
   const { barberInfo } = useContext(BarberContext);
   const navigate = useNavigate();
   const { language } = useContext(LanguageContext);
+  const { isMobile } = useContext(IsMobileContext);
   return (
     <Wrapper
       id="barbers-section"
       key={"barbers-section"}
       className="snap-element"
+      $isMobile={isMobile}
     >
       <TitleWrapper>
         <Title>Barbers</Title>
@@ -20,9 +23,11 @@ const Barbers = () => {
       {barberInfo.map((barber) => {
         return (
           <BarberWrapper key={barber._id}>
-            <ImageFrame key={barber.family_name}>
-              <Avatar src="/assets/avatar.png" alt="avatar" />
-            </ImageFrame>
+            {barber.picture !== "" && (
+              <ImageFrame key={barber.family_name}>
+                <Avatar src="/assets/avatar.png" alt="avatar" />
+              </ImageFrame>
+            )}
             <Frame key={barber.given_name}>
               <BarberTitle>
                 {barber.given_name + " " + barber.family_name}
@@ -35,6 +40,7 @@ const Barbers = () => {
           </BarberWrapper>
         );
       })}
+      {barberInfo.length === 1 && <BarberWrapper />}
     </Wrapper>
   );
 };

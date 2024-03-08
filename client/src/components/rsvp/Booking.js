@@ -206,7 +206,10 @@ const Booking = () => {
   };
 
   return (
-    <StyledForm onSubmit={(e) => handleSubmit(e)}>
+    <StyledForm
+      onSubmit={(e) => handleSubmit(e)}
+      style={{ backgroundColor: "#011c13" }}
+    >
       <LabelInputWrapper key={"date"}>
         <StyledLabel>Date</StyledLabel>
         <StyledDatePicker
@@ -266,9 +269,10 @@ const Booking = () => {
           </BarberBox>
         )}
       </LabelInputWrapper>
+      <StyledLabel>Time slot</StyledLabel>
+
       {availableSlots.length && (
-        <LabelInputWrapper key={"slots"}>
-          <StyledLabel>Time slot</StyledLabel>
+        <SlotWrapper key={"slots"}>
           {selectedSlot.length === 0 ? (
             availableSlots.map((slot) => {
               return (
@@ -280,6 +284,7 @@ const Booking = () => {
           ) : (
             <BarberBox
               className="isSelected"
+              style={{ position: "relative", left: "47%" }}
               key={"selectedslotman"}
               onClick={() => {
                 setSelectedSlot([]);
@@ -288,9 +293,18 @@ const Booking = () => {
               {selectedSlot[0].split("-")[1]}
             </BarberBox>
           )}
-        </LabelInputWrapper>
+        </SlotWrapper>
       )}
-      <Submit key={"booking"} type="submit">
+      <Submit
+        style={{ marginBottom: "50px" }}
+        key={"booking"}
+        type="submit"
+        disabled={
+          selectedSlot.length === 0 ||
+          selectedBarber === null ||
+          selectedService === null
+        }
+      >
         {language === "en" ? "Submit" : "Valider"}
       </Submit>
     </StyledForm>
@@ -354,7 +368,7 @@ const Slot = styled.div`
   font-size: 1rem;
   padding: 0.5rem;
   background-color: whitesmoke;
-  width: 70%;
+  width: 80%;
   text-align: center;
   border-radius: 10px;
   margin: 0.3rem 0 0.3rem 0;
@@ -362,5 +376,16 @@ const Slot = styled.div`
   &:first-of-type {
     margin-top: 1rem;
   }
+`;
+
+const SlotWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 45% 45%;
+  align-items: flex-end;
+  justify-content: flex-end;
+  width: 70%;
+  padding-bottom: 3%;
+  margin-bottom: 3%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 `;
 export default Booking;

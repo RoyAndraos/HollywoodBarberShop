@@ -68,7 +68,7 @@ const MiddleStylish = () => {
 
 const Wrapper = styled.div`
   position: absolute;
-  z-index: 999;
+  z-index: 9;
   top: 40%;
   left: 50%;
   transform: translate(-50%, -40%);
@@ -84,49 +84,65 @@ const Wrapper = styled.div`
   width: 85vw;
 `;
 
-const SecondWrap = styled.div`
+export const SecondWrap = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
 `;
 
-const FirstContainer = styled.div`
+export const FirstContainer = styled.div`
   border-bottom: 1px solid whitesmoke;
-  padding-bottom: 20px;
-  font-size: 1.5rem;
+  font-family: "nexa-rust-slab-black-2", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+  letter-spacing: 3px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  width: 100%;
-`;
-const SecondContainer = styled.div`
-  border-bottom: 1px solid whitesmoke;
-  padding-bottom: 20px;
-  display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-between;
+  height: 30%;
   text-shadow: 0 0 15px black;
   width: 100%;
 `;
-const ThirdContainer = styled.div`
-  padding: 20px 10px 20px 10px;
+export const SecondContainer = styled.div`
+  border-bottom: 1px solid whitesmoke;
+  font-family: "nexa-rust-slab-black-2", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+  letter-spacing: 3px;
   display: flex;
+  height: 30%;
   align-items: center;
   justify-content: center;
+  text-shadow: 0 0 15px black;
+  width: 100%;
+`;
+export const ThirdContainer = styled.div`
+  display: flex;
+  font-family: "nexa-rust-slab-black-2", sans-serif;
+  font-weight: 900;
+  font-style: normal;
+  letter-spacing: 3px;
+  height: 30%;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 0 0 15px black;
   flex-direction: column;
   width: 100%;
 `;
-const Modern = styled.p`
-  font-weight: 900;
+export const Modern = styled.p`
   text-align: center;
+  display: block;
   width: 100%;
+  padding: 0 20px;
+  font-size: clamp(1rem, 1.5vw, 1.6rem);
 `;
 
-const WordContainer = styled.div`
+export const WordContainer = styled.div`
   height: 70%;
-  transform: translateY(-10%);
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;

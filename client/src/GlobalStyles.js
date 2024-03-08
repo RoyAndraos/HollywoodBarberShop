@@ -52,4 +52,3 @@ export default createGlobalStyle`
 // font-family: 'Brandon Grotesque Light', sans-serif;
 // font-family: 'Brandon Grotesque Medium', sans-serif;
 // font-family: 'Brandon Grotesque Bold', sans-serif;
-// font-family: "poppins", sans-serif;

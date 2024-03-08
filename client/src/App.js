@@ -16,7 +16,8 @@ import Profile from "./components/account/Profile";
 import YourRes from "./components/rsvp/YourRes";
 import { useRef } from "react";
 import { LanguageContext } from "./components/contexts/LanguageContext";
-import ChooseLanguage from "./components/homepage/ChooseLanguage";
+import Header from "./components/Header";
+import { IsMobileContext } from "./components/contexts/IsMobileContext";
 const App = () => {
   const { setBarberInfo, barberInfo } = useContext(BarberContext);
   const { setText, text } = useContext(TextContext);
@@ -24,6 +25,7 @@ const App = () => {
   const { setUserInfo } = useContext(UserContext);
   const { setServices, services } = useContext(ServiceContext);
   const { language } = useContext(LanguageContext);
+  const { isMobile } = useContext(IsMobileContext);
   const containerRef = useRef(null);
   const handleScroll = (e) => {
     e.preventDefault();
@@ -51,12 +53,11 @@ const App = () => {
         setServices(data.services);
       });
   }, [setBarberInfo, setText, setImages, setUserInfo, setServices, language]);
-  if (!language) return <ChooseLanguage />;
   if (!barberInfo || !text || !images || !services) return <Loader />;
   return (
     <Container ref={containerRef} onScroll={handleScroll}>
       <GlobalStyles />
-      {!language && <ChooseLanguage>hi</ChooseLanguage>}
+      {!isMobile && <Header />}
       <Routes>
         <Route path={"/"} element={<HomePage />} />
         <Route path={"/book"} element={<RSVP />} />

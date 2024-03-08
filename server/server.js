@@ -16,34 +16,12 @@ apiKey.apiKey = process.env.EMAIL_API_KEY;
 //Mongo stuff
 // ---------------------------------------------------------------------------------------------
 
-const MONGO_URI = process.env.MONGO_URI;
+const MONGO_URI_RALF = process.env.MONGO_URI_RALF;
 const options = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 };
 
-// ---------------------------------------------------------------------------------------------
-// Token stuff
-// ---------------------------------------------------------------------------------------------
-
-const jwt = require("jsonwebtoken");
-const JWT_TOKEN_KEY = process.env.JWT_TOKEN_KEY;
-const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization;
-  if (!token) {
-    return res.status(401).json({ message: "Token is missing" });
-  }
-
-  jwt.verify(token, JWT_TOKEN_KEY, (err, decoded) => {
-    if (err) {
-      return res.status(401).json({ message: "Invalid token" });
-    }
-
-    // Token is valid; user identification is available in decoded.userId
-    req.userId = decoded.userId;
-    next();
-  });
-};
 // ---------------------------------------------------------------------------------------------
 //endpoints
 // ---------------------------------------------------------------------------------------------
@@ -51,7 +29,7 @@ const verifyToken = (req, res, next) => {
 // ---------------------------------------------------------------------------------------------
 
 const getWebsiteInfo = async (req, res) => {
-  const client = new MongoClient(MONGO_URI, options);
+  const client = new MongoClient(MONGO_URI_RALF, options);
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
@@ -74,7 +52,7 @@ const getWebsiteInfo = async (req, res) => {
 };
 
 const getBarberInfo = async (req, res) => {
-  const client = new MongoClient(MONGO_URI, options);
+  const client = new MongoClient(MONGO_URI_RALF, options);
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
@@ -87,23 +65,8 @@ const getBarberInfo = async (req, res) => {
   }
 };
 
-const getProfileInfo = async (req, res) => {
-  const client = new MongoClient(MONGO_URI, options);
-  const _id = req.params._id;
-  try {
-    await client.connect();
-    const db = client.db("HollywoodBarberShop");
-    const data = await db.collection("Clients").findOne({ _id: _id });
-    res.status(200).json({ status: 200, data: data });
-  } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
-  } finally {
-    client.close();
-  }
-};
-
 const getReservationById = async (req, res) => {
-  const client = new MongoClient(MONGO_URI, options);
+  const client = new MongoClient(MONGO_URI_RALF, options);
   const _id = req.params._id;
   try {
     await client.connect();
@@ -117,24 +80,8 @@ const getReservationById = async (req, res) => {
   }
 };
 
-const getUserInfo = async (req, res) => {
-  const client = new MongoClient(MONGO_URI, options);
-  try {
-    await client.connect();
-    const db = client.db("HollywoodBarberShop");
-    const user = await db
-      .collection("Clients")
-      .findOne({ _id: req.userId }, { projection: { password: 0 } });
-    res.status(200).json({ status: 200, data: user });
-  } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
-  } finally {
-    client.close();
-  }
-};
-
 const getReservations = async (req, res) => {
-  const client = new MongoClient(MONGO_URI, options);
+  const client = new MongoClient(MONGO_URI_RALF, options);
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
@@ -150,12 +97,13 @@ const getReservations = async (req, res) => {
 // ---------------------------------------------------------------------------------------------
 // POST ENDPOINTS
 // ---------------------------------------------------------------------------------------------
+//FOR DATE FORMAT BEFORE SAVING IN DB
 const formatDate = (inputDate) => {
   const options = {
-    weekday: "short", // abbreviated weekday (e.g., "Fri")
-    year: "numeric", // 4-digit year (e.g., "2023")
-    month: "short", // abbreviated month name (e.g., "Sep")
-    day: "2-digit", // zero-padded day of the month (e.g., "29")
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
   };
 
   const formattedDate = new Date(inputDate).toLocaleDateString(
@@ -165,12 +113,11 @@ const formatDate = (inputDate) => {
   return formattedDate;
 };
 const addReservation = async (req, res) => {
-  const client = new MongoClient(MONGO_URI, options);
+  const client = new MongoClient(MONGO_URI_RALF, options);
   const formData = req.body.data[0];
   const userInfo = req.body.data[1];
-  console.log(userInfo);
   const _id = uuid();
-  const formattedDate = formatDate(formData.date);
+  const formattedDate = formatDate(formData.date).replace(/,/g, "");
   const client_id = uuid();
   try {
     await client.connect();
@@ -203,7 +150,7 @@ const addReservation = async (req, res) => {
         lname: reservation.lname,
         number: reservation.number,
         note: "",
-        reservations: [reservation],
+        reservations: [_id],
       });
     } else {
       await db
@@ -272,51 +219,48 @@ const sendEmail = async (
   );
   sendSmtpEmail.sender = {
     name: fname,
-    email: "roy_andraos@live.fr",
+    email: "hollywoodfairmount@gmail.com",
   };
 
   sendSmtpEmail.to = [{ email: email, name: `${userFName + " " + userLName}` }];
   await apiInstance.sendTransacEmail(sendSmtpEmail);
 };
 
-const sendSMS = async (
-  number,
-  fname,
-  userFName,
-  userLName,
-  date,
-  time,
-  service,
-  price
-) => {
-  let apiInstance = new brevo.TransactionalSMSApi();
-  let sendTransacSms = new brevo.SendTransacSms();
-  sendTransacSms = {
-    sender: "RoyDev",
-    recipient: "5144304287",
-    content: "hello",
-  };
+// const sendSMS = async (
+//   number,
+//   fname,
+//   userFName,
+//   userLName,
+//   date,
+//   time,
+//   service,
+//   price
+// ) => {
+//   let apiInstance = new brevo.TransactionalSMSApi();
+//   let sendTransacSms = new brevo.SendTransacSms();
+//   sendTransacSms = {
+//     sender: "RoyDev",
+//     recipient: "5144304287",
+//     content: "hello",
+//   };
 
-  apiInstance.sendTransacSms(sendTransacSms).then(
-    function (data) {
-      console.log(
-        "API called successfully. Returned data: " + JSON.stringify(data)
-      );
-    },
-    function (error) {
-      console.error(error);
-    }
-  );
-};
+//   apiInstance.sendTransacSms(sendTransacSms).then(
+//     function (data) {
+//       console.log(
+//         "API called successfully. Returned data: " + JSON.stringify(data)
+//       );
+//     },
+//     function (error) {
+//       console.error(error);
+//     }
+//   );
+// };
 
 module.exports = {
   getBarberInfo,
   getWebsiteInfo,
   sendEmail,
-  verifyToken,
-  getUserInfo,
   getReservations,
   addReservation,
-  getProfileInfo,
   getReservationById,
 };

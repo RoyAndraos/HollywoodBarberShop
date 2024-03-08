@@ -64,7 +64,7 @@ const Footer = () => {
         </SocialMediaLink>
         <SocialMediaLink>
           <StyledLink
-            href="https://www.facebook.com/hollywoodcutsbarbershop/"
+            href="https://www.facebook.com/profile.php?id=100095015610230"
             key={"facebookLink"}
           >
             <BsFacebook
@@ -124,6 +124,7 @@ const Wrapper = styled.div`
   height: 30px;
   position: fixed;
   top: 4.2%;
+  z-index: 10;
 `;
 
 const ToggleIcon = styled.div`

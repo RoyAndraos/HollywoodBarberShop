@@ -7,26 +7,30 @@ import { ImageContext } from "../contexts/ImageContext";
 import Loader from "../float-fixed/Loader";
 import Header from "../Header";
 import { LanguageContext } from "../contexts/LanguageContext";
+import { IsMobileContext } from "../contexts/IsMobileContext";
 const ImageSlideShow = () => {
   const [imagePos, setImagePos] = useState(0);
   const navigate = useNavigate();
   const { images } = useContext(ImageContext);
   const { language } = useContext(LanguageContext);
+  const { isMobile } = useContext(IsMobileContext);
   const slideImages = images.filter((image) => image.filename === "slideShow");
   useEffect(() => {
     const interval = setInterval(() => {
-      setImagePos((prev) => (prev === -400 ? 0 : prev - 100));
+      setImagePos((prev) =>
+        prev === -((slideImages.length - 1) * 100) ? 0 : prev - 100
+      );
     }, 5000);
 
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [slideImages.length]);
   const handleSlideRight = () => {
-    if (imagePos !== -400) {
+    if (imagePos !== -((slideImages.length - 1) * 100)) {
       setImagePos((prev) => prev - 100);
     } else {
-      setImagePos((prev) => prev + 400);
+      setImagePos((prev) => prev + (slideImages.length - 1) * 100);
     }
   };
 
@@ -34,14 +38,14 @@ const ImageSlideShow = () => {
     if (imagePos !== 0) {
       setImagePos((prev) => prev + 100);
     } else {
-      setImagePos((prev) => prev - 400);
+      setImagePos((prev) => prev - (slideImages.length - 1) * 100);
     }
   };
   if (!images) return <Loader />;
   return (
-    <Wrapper className="snap-element">
-      <Header isShowing={true} />
-      <BackgroundFilter />
+    <Wrapper className="snap-element" $isMobile={isMobile}>
+      {isMobile && <Header isShowing={true} />}
+      <BackgroundFilter $isMobile={isMobile} />
       <OtherWrapper>
         <MiddleStylish />
         <BookButton onClick={() => navigate("/book")}>
@@ -53,13 +57,13 @@ const ImageSlideShow = () => {
         <StyledRightButton onClick={() => handleSlideRight()}>
           <AiOutlineRight />
         </StyledRightButton>
-        <ImageContainer imagepos={imagePos}>
+        <ImageContainer imagepos={imagePos} $isMobile={isMobile}>
           {slideImages.map((image) => {
             return (
               <StyledImage
                 key={image._id}
                 src={image.src}
-                alt={"slide" + image._id}
+                alt={"slideshow image" + image._id}
               />
             );
           })}
@@ -69,35 +73,34 @@ const ImageSlideShow = () => {
   );
 };
 const Wrapper = styled.div`
-  width: 100vw;
   height: 100vh;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   background-color: rgba(3, 43, 30, 0.45);
-  scroll-snap-align: start;
+  scroll-snap-align: ${(props) => (props.$isMobile ? "start" : "none")};
   z-index: 1;
 `;
 const OtherWrapper = styled.div`
   height: 84vh;
+  width: 100%;
   position: relative;
 `;
 
 const BackgroundFilter = styled.div`
   width: 100%;
-  height: 83vh;
+  height: 85vh;
   background-color: rgba(3, 43, 30, 0.45);
   z-index: 1;
   position: absolute;
-  top: 17vh;
+  top: 10vh;
 `;
 const ImageContainer = styled.div`
   display: flex;
   flex-direction: row;
-  width: fit-content;
   left: ${(props) => props.imagepos}vw;
-  height: 83vh;
+  height: 85vh;
   position: relative;
   transition: 0.5s ease-in-out;
 `;
@@ -140,7 +143,7 @@ const StyledRightButton = styled.button`
   top: 50%;
   right: 30px;
   transform: translateY(-50%) scaleY(1.7) scaleX(1.1);
-  z-index: 100;
+  z-index: 1000;
   font-size: 3rem;
   background-color: transparent;
   border: none;

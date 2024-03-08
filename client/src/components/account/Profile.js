@@ -16,7 +16,6 @@ const Profile = () => {
   if (!userReservations) {
     return <Loader />;
   }
-  console.log(userReservations);
   return <div>Your reservations:</div>;
 };
 

@@ -6,16 +6,14 @@ const {
   getBarberInfo,
   getWebsiteInfo,
   sendEmail,
-  verifyToken,
-  getUserInfo,
   getReservations,
   addReservation,
   getReservationById,
 } = require("./server");
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 express()
-  .use(function (req, res, next) {
+  .use((req, res, next) => {
     res.header(
       "Access-Control-Allow-Methods",
       "OPTIONS, HEAD, GET, PUT, POST, DELETE"
@@ -30,7 +28,6 @@ express()
   .use(express.json())
   .use(express.static("public"))
   .get("/getBarberInfo", getBarberInfo)
-  .get("/getUserInfo", verifyToken, getUserInfo)
   .get("/getWebsiteInfo", getWebsiteInfo)
   .get("/getReservations", getReservations)
   .get("/getRes/:_id", getReservationById)

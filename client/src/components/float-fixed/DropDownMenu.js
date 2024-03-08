@@ -1,7 +1,8 @@
 import { keyframes } from "styled-components";
 import { styled } from "styled-components";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { LanguageContext } from "../contexts/LanguageContext";
+
 const DropDownMenu = ({
   menuRef,
   barbersRef,
@@ -14,8 +15,7 @@ const DropDownMenu = ({
     ref.current.scrollIntoView({ behavior: "smooth" });
     setIsOpen("false"); // Close the menu
   };
-
-  const { language } = useContext(LanguageContext);
+  const { language, setLanguage } = useContext(LanguageContext);
 
   return (
     <Wrapper isopen={isopen}>
@@ -45,6 +45,19 @@ const DropDownMenu = ({
             }}
           >
             {language === "en" ? "About" : "A propos"}
+          </StyledButton>
+        </Li>
+        <Li>
+          <StyledButton
+            onClick={() => {
+              if (language === "en") {
+                setLanguage("fr");
+              } else {
+                setLanguage("en");
+              }
+            }}
+          >
+            Fr | En
           </StyledButton>
         </Li>
         <Li>
@@ -98,10 +111,12 @@ const Ul = styled.ul`
   justify-content: space-evenly;
   flex-direction: column;
   align-items: center;
+  z-index: 10;
 `;
 
 const Li = styled.li`
   width: 100%;
+  z-index: 10;
 `;
 
 const StyledButton = styled.button`
@@ -116,7 +131,7 @@ const StyledButton = styled.button`
   padding: 7px 10px 7px 10px;
   transition: all 0.3s ease-in-out;
   margin-bottom: 15px;
-  z-index: 9999;
+  z-index: 10;
 
   &:active {
     transform: scale(0.9);

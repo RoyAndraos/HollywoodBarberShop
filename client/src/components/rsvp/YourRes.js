@@ -10,7 +10,6 @@ const YourRes = () => {
     fetch(`/getRes/${params._id}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         setRes(data.data);
       });
   }, [params]);
@@ -21,7 +20,6 @@ const YourRes = () => {
   if (Object.keys(res).length === 0) {
     return <Loader />;
   }
-  console.log(res);
   return (
     <Wrapper>
       <Header isShowing={false} />

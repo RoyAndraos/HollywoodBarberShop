@@ -3,14 +3,17 @@ import ImageSlideShow from "./homepage/ImageSlideShow";
 import Menu from "./homepage/Menu";
 import Barbers from "./homepage/Barbers";
 import About from "./homepage/About";
-
+import { useContext } from "react";
+import { IsMobileContext } from "./contexts/IsMobileContext";
+import PCHomePage from "./PCHomePage";
 const HomePage = () => {
+  const { isMobile } = useContext(IsMobileContext);
   return (
     <Container>
-      <ImageSlideShow />
+      {isMobile ? <ImageSlideShow /> : <PCHomePage />}
+      <About />
       <Menu />
       <Barbers />
-      <About />
     </Container>
   );
 };
@@ -25,12 +28,9 @@ const Container = styled.div`
   scroll-snap-type: y mandatory;
   overflow-y: scroll;
   z-index: 0;
-  @media screen and (min-width: 768px) {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+  @media (min-width: 768px) {
+    overflow-y: unset;
+    scroll-snap-type: unset;
   }
 `;
 
