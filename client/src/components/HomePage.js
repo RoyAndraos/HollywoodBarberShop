@@ -6,14 +6,19 @@ import About from "./homepage/About";
 import { useContext } from "react";
 import { IsMobileContext } from "./contexts/IsMobileContext";
 import PCHomePage from "./PCHomePage";
+import AboutPC from "./AboutPC";
+import MenuPC from "./MenuPC";
+import BarbersPC from "./BarbersPc";
+import FooterPc from "./FooterPc";
 const HomePage = () => {
   const { isMobile } = useContext(IsMobileContext);
   return (
     <Container>
       {isMobile ? <ImageSlideShow /> : <PCHomePage />}
-      <About />
-      <Menu />
-      <Barbers />
+      {isMobile ? <About /> : <AboutPC />}
+      {isMobile ? <Menu /> : <MenuPC />}
+      {isMobile ? <Barbers /> : <BarbersPC />}
+      {!isMobile && <FooterPc />}
     </Container>
   );
 };
@@ -31,6 +36,7 @@ const Container = styled.div`
   @media (min-width: 768px) {
     overflow-y: unset;
     scroll-snap-type: unset;
+    background-color: black;
   }
 `;
 

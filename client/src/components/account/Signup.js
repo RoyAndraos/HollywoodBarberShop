@@ -181,6 +181,7 @@ export const StyledInput = styled.input`
   font-size: 1.2rem;
   border-bottom: 4px solid #035e3f;
   outline: none;
+  z-index: 2;
 `;
 export const Submit = styled.button`
   font-family: sans-serif;
@@ -191,6 +192,7 @@ export const Submit = styled.button`
   padding: 7px 30px 7px 30px;
   transition: all 0.3s ease-in-out;
   border-bottom: 4px solid #035e3f;
+  z-index: 2;
   &:active {
     transform: scale(0.9);
   }

@@ -5,7 +5,6 @@ import { TextContext } from "../contexts/TextContext";
 import { ImageContext } from "../contexts/ImageContext";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
-import AboutPC from "../AboutPC";
 const About = () => {
   const { text } = useContext(TextContext);
   const { images } = useContext(ImageContext);
@@ -21,49 +20,43 @@ const About = () => {
       $isMobile={isMobile}
       id="about-section"
     >
-      {isMobile ? (
-        <>
-          <TitleWrapper style={{ marginTop: "-15px" }}>
-            <Title>{language === "en" ? "About" : "A propos"}</Title>
-          </TitleWrapper>
-          <StoryContainer>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-evenly",
-                alignItems: "center",
-                marginTop: "100px",
-              }}
-            >
-              <Story>
-                {language === "en"
-                  ? aboutText.split(".")[0]
-                  : frenchAboutText.split(".")[0]}
-                .
-              </Story>
-              <Story>
-                {language === "en"
-                  ? aboutText.split(".")[1]
-                  : frenchAboutText.split(".")[1]}
-                .
-              </Story>
-            </div>
-            {isMobile
-              ? "* * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-              : ""}
-            <ImageContainer>
-              <StyledImage src={aboutImage.src} alt="shop image"></StyledImage>
-            </ImageContainer>
-            {isMobile
-              ? "* * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-              : ""}
-          </StoryContainer>
-          ***
-        </>
-      ) : (
-        <AboutPC />
-      )}
+      <TitleWrapper style={{ marginTop: "-15px" }}>
+        <Title>{language === "en" ? "About" : "A propos"}</Title>
+      </TitleWrapper>
+      <StoryContainer>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+            marginTop: "100px",
+          }}
+        >
+          <Story>
+            {language === "en"
+              ? aboutText.split(".")[0]
+              : frenchAboutText.split(".")[0]}
+            .
+          </Story>
+          <Story>
+            {language === "en"
+              ? aboutText.split(".")[1]
+              : frenchAboutText.split(".")[1]}
+            .
+          </Story>
+        </div>
+        {isMobile
+          ? "* * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+          : ""}
+        <ImageContainer>
+          <StyledImage src={aboutImage.src} alt="shop image"></StyledImage>
+        </ImageContainer>
+        {isMobile
+          ? "* * * * * * * * * * * * * * * * * * * * * * * * * * * *"
+          : ""}
+      </StoryContainer>
+      ***
     </Wrapper>
   );
 };

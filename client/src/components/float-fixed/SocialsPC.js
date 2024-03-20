@@ -1,9 +1,9 @@
 import { ImLocation2 } from "react-icons/im";
-import { AiFillInstagram } from "react-icons/ai";
+import { SiInstagram } from "react-icons/si";
 import { BsFacebook } from "react-icons/bs";
-import { AiFillPhone } from "react-icons/ai";
+import { FaMobileAlt } from "react-icons/fa";
 import styled from "styled-components";
-const SocialsPC = () => {
+const SocialsPC = ({ headerHeight }) => {
   const address =
     "Hollywood fairmount salon de barbier, 18 Av. Fairmount O, Montreal, Quebec H2T 2M1";
   const shopLocationURL = `https://www.google.com/maps?q=${encodeURIComponent(
@@ -11,7 +11,7 @@ const SocialsPC = () => {
   )}`;
   return (
     <Wrapper>
-      <SocialMediaLink>
+      <SocialMediaLink $headerHeight={headerHeight}>
         <a
           href="https://www.facebook.com/profile.php?id=100095015610230"
           style={{ all: "unset" }}
@@ -19,23 +19,23 @@ const SocialsPC = () => {
           <BsFacebook />
         </a>
       </SocialMediaLink>
-      <SocialMediaLink>
+      <SocialMediaLink $headerHeight={headerHeight}>
         <a href={shopLocationURL} style={{ all: "unset" }}>
           <ImLocation2 />
         </a>
       </SocialMediaLink>
-      <SocialMediaLink style={{ fontSize: "clamp(2.1rem,2.3rem,2.5rem)" }}>
+      <SocialMediaLink $headerHeight={headerHeight}>
         <a
           href="https://instagram.com/hollywood.barbers?igshid=MjEwN2IyYWYwYw=="
           style={{ all: "unset" }}
         >
-          <AiFillInstagram />
+          <SiInstagram />
         </a>
       </SocialMediaLink>
 
-      <SocialMediaLink style={{ fontSize: "1.9rem,2.1rem,2.3rem" }}>
+      <SocialMediaLink $headerHeight={headerHeight}>
         <a href="tel:+14389237297" style={{ all: "unset" }}>
-          <AiFillPhone />
+          <FaMobileAlt />
         </a>
       </SocialMediaLink>
     </Wrapper>
@@ -53,7 +53,7 @@ const Wrapper = styled.div`
   gap: 0.5vw;
 `;
 const SocialMediaLink = styled.div`
-  font-size: clamp(1.8rem, 2rem, 2.2rem);
+  font-size: ${(props) => (props.$headerHeight === "4vh" ? "1.5rem" : "2rem")};
   color: whitesmoke;
   margin: 0 0.5rem;
   transition: all 0.3s ease-in-out;

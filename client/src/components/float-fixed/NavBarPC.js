@@ -7,6 +7,7 @@ const NavBarPC = ({
   aboutRef,
   slideshowRef,
   scrollToRef,
+  headerHeight,
 }) => {
   const [isSelected, setIsSelected] = useState("");
   const { language, setLanguage } = useContext(LanguageContext);
@@ -56,15 +57,17 @@ const NavBarPC = ({
           scrollToRef(menuRef);
           handleSelect("menu");
         }}
+        $headerHeight={headerHeight}
         $isselected={isSelected === "menu" ? true : false}
       >
-        Prices
+        {language === "en" ? "Prices" : "Prix"}
       </NavButton>
       <NavButton
         onClick={() => {
           scrollToRef(barbersRef);
           handleSelect("barbers");
         }}
+        $headerHeight={headerHeight}
         $isselected={isSelected === "barbers" ? true : false}
       >
         {language === "en" ? "Barbers" : "Coiffeurs"}
@@ -74,6 +77,7 @@ const NavBarPC = ({
           scrollToRef(aboutRef);
           handleSelect("about");
         }}
+        $headerHeight={headerHeight}
         $isselected={isSelected === "about" ? true : false}
       >
         {language === "en" ? "About Us" : "A propos"}
@@ -82,6 +86,7 @@ const NavBarPC = ({
         onClick={() => {
           setLanguage(language === "en" ? "fr" : "en");
         }}
+        $headerHeight={headerHeight}
       >
         Fr | En
       </NavButton>
@@ -100,7 +105,7 @@ const NavButton = styled.button`
   background-color: transparent;
   border: none;
   color: ${(props) => (props.$isselected ? "#e7e7b0" : "whitesmoke")};
-  font-size: clamp(1rem, 1.2rem, 1.4rem);
+  font-size: ${(props) => (props.$headerHeight === "4vh" ? "1rem" : "1.2rem")};
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   border-bottom: ${(props) =>

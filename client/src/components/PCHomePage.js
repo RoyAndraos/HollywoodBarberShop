@@ -13,7 +13,6 @@ import {
 } from "./homepage/MiddleStylish";
 import { TextContext } from "./contexts/TextContext";
 import Loader from "./float-fixed/Loader";
-import { gsap } from "gsap";
 
 const PCHomePage = () => {
   const navigate = useNavigate();
@@ -34,13 +33,6 @@ const PCHomePage = () => {
 
   const main = useRef(null);
 
-  const hoverEffect = () => {
-    gsap.to(imgRef.current, { filter: "blur(0px)", duration: 0.7 });
-  };
-  const leaveEffect = () => {
-    gsap.to(imgRef.current, { filter: "blur(5px)", duration: 0.7 });
-  };
-
   if (!text) {
     return <Loader />;
   } else {
@@ -50,7 +42,7 @@ const PCHomePage = () => {
       .french;
     return (
       <Wrapper ref={main}>
-        <Filter $offsetY={offsetY} />
+        <Filter />
         <StyledImage ref={imgRef} $offsetY={offsetY} />
         <StylishBookWrapper>
           <WordContainer>
@@ -98,15 +90,7 @@ const PCHomePage = () => {
             </ThirdContainer>
             * * *
           </WordContainer>
-          <BookButton
-            onClick={() => navigate("/book")}
-            onMouseEnter={() => {
-              hoverEffect();
-            }}
-            onMouseLeave={() => {
-              leaveEffect();
-            }}
-          >
+          <BookButton onClick={() => navigate("/book")}>
             {language === "en" ? "Book Now" : "Reserver"}
           </BookButton>
         </StylishBookWrapper>
@@ -118,7 +102,10 @@ const Wrapper = styled.div`
   height: 85vh;
   width: 100%;
   position: relative;
-  top: 7vh;
+  top: 4vh;
+  margin-bottom: 4vh;
+  z-index: 10;
+  background-color: black;
 `;
 
 const StyledImage = styled.div.attrs((props) => ({
@@ -127,13 +114,10 @@ const StyledImage = styled.div.attrs((props) => ({
     backgroundSize: "cover",
     behavior: "smooth",
     backgroundPosition: `center ${props.$offsetY * -0.3}px`,
-    clipPath: `polygon(0 0, 100% 0%, ${95 + props.$offsetY * 0.01}% 95%, ${
-      props.$offsetY * 0.005
-    }% 83%)`,
-    filter: "blur(5px) brightness(0.5)",
   },
 }))`
-  height: 95%;
+  background-repeat: no-repeat;
+  height: 100%;
   width: 100%;
 `;
 
@@ -162,8 +146,8 @@ const BookButton = styled.button`
 
 const StylishBookWrapper = styled.div`
   position: absolute;
-  right: 10%;
-  top: 10%;
+  right: 15%;
+  top: 50%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -176,20 +160,14 @@ const StylishBookWrapper = styled.div`
   background-color: rgba(0, 0, 0, 0.7);
   padding: 20px;
   border-radius: 10px;
+  transform: translateY(-50%);
 `;
-const Filter = styled.div.attrs((props) => ({
-  style: {
-    clipPath: `polygon(0 0, 100% 0%, ${95 + props.$offsetY * 0.01}% 95%, ${
-      props.$offsetY * 0.005
-    }% 83%)`,
-  },
-}))`
+
+const Filter = styled.div`
   position: absolute;
-  top: 0;
-  height: 95%;
+  height: 100%;
   width: 100%;
-  background-color: rgba(47, 36, 23, 0.5);
+  background-color: rgba(47, 36, 23, 0.45);
   z-index: 1;
-  transition: all 0.1s ease-in-out smooth;
 `;
 export default PCHomePage;

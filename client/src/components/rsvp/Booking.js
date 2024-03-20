@@ -11,6 +11,9 @@ import Loader from "../float-fixed/Loader";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { LanguageContext } from "../contexts/LanguageContext";
+import { Filter, StyledBg } from "./GuestFormRsvp";
+import { IsMobileContext } from "../contexts/IsMobileContext";
+
 const Booking = () => {
   const [reservations, setReservations] = useState([]);
   const [formData, setFormData] = useState({ date: new Date() });
@@ -24,6 +27,7 @@ const Booking = () => {
   const { services } = useContext(ServiceContext);
   const { userInfo, setUserInfo } = useContext(UserContext);
   const { language } = useContext(LanguageContext);
+  const { isMobile } = useContext(IsMobileContext);
   const navigate = useNavigate();
   const handleFormatDateForSlots = (date) => {
     const options = { weekday: "short" };
@@ -207,115 +211,125 @@ const Booking = () => {
 
   return (
     <StyledForm
+      $isMobile={isMobile}
       onSubmit={(e) => handleSubmit(e)}
       style={{ backgroundColor: "#011c13" }}
     >
-      <LabelInputWrapper key={"date"}>
-        <StyledLabel>Date</StyledLabel>
-        <StyledDatePicker
-          selected={selectedDate}
-          name="date"
-          onChange={handleDateChange}
-          dateFormat="MMMM d, yyyy"
-          minDate={new Date()}
-        />
-      </LabelInputWrapper>
-      <LabelInputWrapper key={"services"}>
-        <StyledLabel>Service</StyledLabel>
-        {selectedService === null ? (
-          services.map((service) => {
-            return (
-              <BarberBox
-                key={service._id}
-                onClick={() => handleServiceClick(service)}
-              >
-                {language === "en" ? service.english : service.name}
-              </BarberBox>
-            );
-          })
-        ) : (
-          <BarberBox
-            key={selectedService._id}
-            onClick={() => {
-              setSelectedService(null);
-              setSelectedSlot([]);
-            }}
-            className={"isSelected"}
-          >
-            {language === "en" ? selectedService.english : selectedService.name}
-          </BarberBox>
-        )}
-      </LabelInputWrapper>
-      <LabelInputWrapper key={"barbers"}>
-        <StyledLabel>{language === "en" ? "Barber" : "Barbier"}</StyledLabel>
-        {selectedBarber === null ? (
-          barberInfo.map((barber) => {
-            return (
-              <BarberBox
-                key={barber._id}
-                onClick={() => handleBarberClick(barber)}
-              >
-                {barber.given_name + " " + barber.family_name}
-              </BarberBox>
-            );
-          })
-        ) : (
-          <BarberBox
-            key={selectedBarber._id}
-            onClick={() => setSelectedBarber(null)}
-            className={"isSelected"}
-          >
-            {selectedBarber.given_name + " " + selectedBarber.family_name}
-          </BarberBox>
-        )}
-      </LabelInputWrapper>
-      <StyledLabel>Time slot</StyledLabel>
-
-      {availableSlots.length && (
-        <SlotWrapper key={"slots"}>
-          {selectedSlot.length === 0 ? (
-            availableSlots.map((slot) => {
+      <SmallWrapper $isMobile={isMobile}>
+        <LabelInputWrapper key={"date"}>
+          <StyledLabel>Date</StyledLabel>
+          <StyledDatePicker
+            selected={selectedDate}
+            name="date"
+            onChange={handleDateChange}
+            dateFormat="MMMM d, yyyy"
+            minDate={new Date()}
+          />
+        </LabelInputWrapper>
+        <LabelInputWrapper key={"services"}>
+          <StyledLabel>Service</StyledLabel>
+          {selectedService === null ? (
+            services.map((service) => {
               return (
-                <Slot key={slot} onClick={() => handleSlotClick(slot)}>
-                  {slot.split("-")[1]}
-                </Slot>
+                <BarberBox
+                  key={service._id}
+                  onClick={() => handleServiceClick(service)}
+                >
+                  {language === "en" ? service.english : service.name}
+                </BarberBox>
               );
             })
           ) : (
             <BarberBox
-              className="isSelected"
-              style={{ position: "relative", left: "47%" }}
-              key={"selectedslotman"}
+              key={selectedService._id}
               onClick={() => {
+                setSelectedService(null);
                 setSelectedSlot([]);
               }}
+              className={"isSelected"}
             >
-              {selectedSlot[0].split("-")[1]}
+              {language === "en"
+                ? selectedService.english
+                : selectedService.name}
             </BarberBox>
           )}
-        </SlotWrapper>
-      )}
-      <Submit
-        style={{ marginBottom: "50px" }}
-        key={"booking"}
-        type="submit"
-        disabled={
-          selectedSlot.length === 0 ||
-          selectedBarber === null ||
-          selectedService === null
-        }
-      >
-        {language === "en" ? "Submit" : "Valider"}
-      </Submit>
+        </LabelInputWrapper>
+        <LabelInputWrapper key={"barbers"}>
+          <StyledLabel>{language === "en" ? "Barber" : "Barbier"}</StyledLabel>
+          {selectedBarber === null ? (
+            barberInfo.map((barber) => {
+              return (
+                <BarberBox
+                  key={barber._id}
+                  onClick={() => handleBarberClick(barber)}
+                >
+                  {barber.given_name + " " + barber.family_name}
+                </BarberBox>
+              );
+            })
+          ) : (
+            <BarberBox
+              key={selectedBarber._id}
+              onClick={() => setSelectedBarber(null)}
+              className={"isSelected"}
+            >
+              {selectedBarber.given_name + " " + selectedBarber.family_name}
+            </BarberBox>
+          )}
+        </LabelInputWrapper>
+        <StyledLabel>Time slot</StyledLabel>
+        {availableSlots.length && (
+          <SlotWrapper key={"slots"} $isMobile={isMobile}>
+            {selectedSlot.length === 0 ? (
+              availableSlots.map((slot) => {
+                return (
+                  <Slot key={slot} onClick={() => handleSlotClick(slot)}>
+                    {slot.split("-")[1]}
+                  </Slot>
+                );
+              })
+            ) : (
+              <BarberBox
+                className="isSelected"
+                style={{ position: "relative", left: "47%" }}
+                key={"selectedslotman"}
+                onClick={() => {
+                  setSelectedSlot([]);
+                }}
+              >
+                {selectedSlot[0].split("-")[1]}
+              </BarberBox>
+            )}
+          </SlotWrapper>
+        )}
+        <Submit
+          style={{ marginBottom: "50px" }}
+          key={"booking"}
+          type="submit"
+          disabled={
+            selectedSlot.length === 0 ||
+            selectedBarber === null ||
+            selectedService === null
+          }
+        >
+          {language === "en" ? "Submit" : "Valider"}
+        </Submit>
+      </SmallWrapper>
+      {!isMobile && <StyledBg />}
+      {!isMobile && <Filter />}
     </StyledForm>
   );
 };
+
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
   font-family: sans-serif;
+  position: ${(props) => (props.$isMobile ? "" : "relative")};
+  height: ${(props) => (props.$isMobile ? "unset" : "100%")};
+  margin-top: ${(props) => (props.$isMobile ? "0" : "8vh")};
 `;
 const StyledDatePicker = styled(DatePicker)`
   font-family: sans-serif;
@@ -329,6 +343,9 @@ const StyledDatePicker = styled(DatePicker)`
   border-radius: 10px;
   width: 92%;
   outline: none;
+  position: relative;
+  z-index: 999;
+  cursor: pointer;
 `;
 const BarberBox = styled.div`
   font-family: sans-serif;
@@ -341,6 +358,7 @@ const BarberBox = styled.div`
   margin: 0.5rem;
   border-bottom: 4px solid #035e3f;
   transition: all 0.3s ease-in-out;
+  cursor: pointer;
   &.isSelected {
     background-color: #035e3f;
     color: whitesmoke;
@@ -355,6 +373,7 @@ const StyledLabel = styled.label`
 `;
 const LabelInputWrapper = styled.div`
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: center;
   width: 70%;
@@ -373,6 +392,7 @@ const Slot = styled.div`
   border-radius: 10px;
   margin: 0.3rem 0 0.3rem 0;
   border-bottom: 3px solid #035e3f;
+  cursor: pointer;
   &:first-of-type {
     margin-top: 1rem;
   }
@@ -380,12 +400,25 @@ const Slot = styled.div`
 
 const SlotWrapper = styled.div`
   display: grid;
-  grid-template-columns: 45% 45%;
+  grid-template-columns: ${(props) =>
+    props.$isMobile ? "45% 45%" : "25% 25% 25% 25%"};
   align-items: flex-end;
   justify-content: flex-end;
   width: 70%;
   padding-bottom: 3%;
   margin-bottom: 3%;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+`;
+
+const SmallWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  height: ${(props) => (props.$isMobile ? "100%" : "unset")};
+  width: ${(props) => (props.$isMobile ? "100%" : "30%")};
+  z-index: 1;
+  background-color: ${(props) => (props.$isMobile ? "" : "rgba(0,0,0,0.7)")};
+  border-radius: 10px;
 `;
 export default Booking;

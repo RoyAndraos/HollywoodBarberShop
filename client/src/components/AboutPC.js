@@ -15,40 +15,33 @@ const AboutPC = () => {
     <Wrapper id="about-section">
       <Left>
         <Title>Hollywood Barber Shop</Title>
-        <Story>
-          {language === "en"
-            ? aboutText.split(".")[0]
-            : frenchAboutText.split(".")[0]}
-          .
-        </Story>
-        <Story>
-          {language === "en"
-            ? aboutText.split(".")[1]
-            : frenchAboutText.split(".")[1]}
-          .
-        </Story>
+        <StoryWrapper>
+          <Story>
+            {language === "en"
+              ? aboutText.split(".")[0]
+              : frenchAboutText.split(".")[0]}
+            .
+          </Story>
+          <Story>
+            {language === "en"
+              ? aboutText.split(".")[1]
+              : frenchAboutText.split(".")[1]}
+            .
+          </Story>
+        </StoryWrapper>
       </Left>
       <Right>
-        <StyledImg src={aboutImage.src} alt="shop image" />
+        <StyledImg $src={aboutImage.src} alt="shop image"></StyledImg>
       </Right>
       <StyledBG />
-      <Filter
-        style={{
-          clipPath:
-            "polygon(50% 0%, 100% 0, 100% 34%, 100% 89%,0 100%,0 12%,32% 15%)",
-          top: "10vh",
-          width: "100%",
-          height: "100%",
-        }}
-      />
+      <Filter />
     </Wrapper>
   );
 };
 const Wrapper = styled.div`
   border-left: ${(props) => (props.$isMobile ? "5px solid #011c13" : "none")};
   border-right: ${(props) => (props.$isMobile ? "5px solid #011c13" : "none")};
-  background-color: ${(props) => (props.$isMobile ? "#011c13" : "whitesmoke")};
-  padding-top: 3px;
+  background-color: ${(props) => (props.$isMobile ? "#011c13" : "transparent")};
   display: grid;
   justify-content: space-around;
   grid-template-columns: 30% 30%;
@@ -57,21 +50,23 @@ const Wrapper = styled.div`
   min-height: 70vh;
   position: relative;
   scroll-snap-align: start;
-  min-width: 99vw;
-  top: -15vh;
+  top: -8vh;
+  width: 100%;
+  background-color: black;
+  margin-bottom: 4vh;
 `;
 const Story = styled.p`
-  font-size: clamp(1.3rem, 1.5rem, 1.8rem);
   text-align: left;
+  font-size: clamp(1.3rem, 1.5rem, 1.8rem);
   line-height: 1.5;
-  padding: 0 20px 0 20px;
   color: whitesmoke;
+  padding: 0 20px 0 20px;
 `;
 const Title = styled.h1`
-  color: #035e3f;
+  color: #079061;
   display: flex;
   margin: 0 2vw 5vh 2vw;
-  font-size: clamp(1.8rem, 2rem, 2.2rem);
+  font-size: clamp(1.8rem, 3rem, 3.4rem);
 `;
 const Left = styled.div`
   position: relative;
@@ -81,52 +76,50 @@ const Left = styled.div`
 const Right = styled.div`
   z-index: 2;
 `;
-const StyledImg = styled.img`
-  object-fit: cover;
-  max-height: 50vh;
+const StyledImg = styled.div`
   position: relative;
-  top: 25%;
-  border: 5px solid #011c13;
+  background-image: ${(props) => `url(${props.$src})`};
+  background-size: cover;
+  background-position: right 35% bottom 65%;
+  top: 30%;
   border-radius: 20px;
+  width: 25vw;
+  height: 50vh;
+  box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.5);
 `;
 const StyledBG = styled.div`
   width: 100%;
   height: 100%;
   background-image: url(${bg});
-  background-color: rgba(3, 43, 30, 0.45);
   background-size: cover;
   background-position: right 35% bottom 45%;
   z-index: 1;
   position: absolute;
-
   top: 10vh;
-  clip-path: polygon(
-    50% 0%,
-    100% 0,
-    100% 34%,
-    100% 89%,
-    0 100%,
-    0 12%,
-    32% 15%
-  );
+  clip-path: polygon(38% 16%, 48% 0, 100% 0, 100% 100%, 0 100%, 0% 60%, 0 20%);
   z-index: 1;
 `;
 const Filter = styled.div`
   position: absolute;
-  top: 0;
-  height: 95%;
+  height: 100%;
   width: 100%;
   background-color: rgba(47, 36, 23, 0.5);
   z-index: 1;
-  clip-path: polygon(
-    50% 0%,
-    100% 0,
-    100% 34%,
-    100% 89%,
-    0 100%,
-    0 12%,
-    32% 15%
-  );
+  clip-path: polygon(38% 16%, 48% 0, 100% 0, 100% 100%, 0 100%, 0% 60%, 0 20%);
   transition: all 0.1s ease-in-out smooth;
+  top: 10vh;
+`;
+const StoryWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 20px;
+  left: 50%;
+  top: 20%;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 50px 30px;
+  border-radius: 10px;
 `;
 export default AboutPC;
