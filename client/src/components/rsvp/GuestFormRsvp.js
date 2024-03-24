@@ -49,21 +49,27 @@ const FormRsvp = () => {
           }}
         ></StyledInput>
         <StyledInput
-          name="email"
-          placeholder={language === "en" ? "Email" : "Addresse Courriel"}
+          name="number"
+          placeholder={
+            language === "en" ? "Phone Number" : "Numero de Telephone"
+          }
           onChange={(e) => {
             handleChange(e);
           }}
-          disabled={formData.number ? true : false}
+          required
         ></StyledInput>
-        {/* <StyledInput
-        name="number"
-        placeholder={language === "en" ? "Phone Number" : "Numero de Telephone"}
-        onChange={(e) => {
-          handleChange(e);
-        }}
-        disabled={formData.email ? true : false}
-      ></StyledInput> */}
+        <StyledInput
+          name="email"
+          placeholder={
+            language === "en"
+              ? "Email (optional)"
+              : "Addresse Courriel (optionnel)"
+          }
+          onChange={(e) => {
+            handleChange(e);
+          }}
+        ></StyledInput>
+
         <div
           style={{
             width: "75%",
@@ -79,8 +85,8 @@ const FormRsvp = () => {
           ></input>
           <label style={{ zIndex: "2" }}>
             {language === "en"
-              ? "I agree to receive automated confirmation and reminder emails to this email address."
-              : "J'accepte de recevoir des courriels automatiques de confirmation et de rappel à cette adresse courriel."}
+              ? "I agree to receive automated confirmation SMS to this mobile number."
+              : "Je consens à recevoir des SMS de confirmation automatisés à ce numéro de téléphone."}
           </label>
         </div>
 
@@ -93,7 +99,7 @@ const FormRsvp = () => {
             alignItems: "center",
           }}
           disabled={
-            formData.fname && formData.lname && formData.email ? false : true
+            formData.fname && formData.lname && formData.number ? false : true
           }
         >
           {language === "en" ? "Next Step" : "Prochaine Etape"}

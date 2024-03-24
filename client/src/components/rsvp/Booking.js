@@ -21,13 +21,15 @@ const Booking = () => {
   const [selectedBarber, setSelectedBarber] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
   const [barberIsOff, setBarberIsOff] = useState(false);
-  const [availableSlots, setAvailableSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState([]);
   const { barberInfo } = useContext(BarberContext);
   const { services } = useContext(ServiceContext);
   const { userInfo, setUserInfo } = useContext(UserContext);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
+  //remove the 15min/45min slots from the available slots, save them in new state for the rendering, keep the other state for the logic
+  //(check select next slot function)
+  const [filteredAvailableSlots, setFilteredAvailableSlots] = useState([]);
   const navigate = useNavigate();
   const handleFormatDateForSlots = (date) => {
     const options = { weekday: "short" };
@@ -84,25 +86,36 @@ const Booking = () => {
           }
         });
       });
-      // if the services in reservations need 2 slots, remove the slot that comes after the one reserved
+      //1-filter out the now empty elements
       if (selectedService !== null) {
         if (selectedService.duration === "2") {
           const removedBeforeSlotsFor2Duration = todayReservations.map(
             (reservation) => {
+              //2-if the services in reservations need 2 slots, remove the slot that comes after the one reserved
               return filterSlotBeforeFor2Duration(reservation.slot[0]);
             }
           );
-          setAvailableSlots(
-            filteredSlots
-              .filter((slot) => {
-                return slot !== "";
-              })
-              .filter((item) => !removedBeforeSlotsFor2Duration.includes(item))
+          const finalAvailableSlots = filteredSlots
+            .filter((slot) => {
+              return slot !== "";
+            })
+            .filter((item) => !removedBeforeSlotsFor2Duration.includes(item));
+          // setFilteredAvailableSlots(
+          setFilteredAvailableSlots(
+            finalAvailableSlots.filter((slot) => {
+              const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
+              return minutes !== "45" && minutes !== "15";
+            })
+            // )
           );
         } else {
-          setAvailableSlots(
-            filteredSlots.filter((slot) => {
-              return slot !== "";
+          const finalAvailableSlots = filteredSlots.filter((slot) => {
+            return slot !== "";
+          });
+          setFilteredAvailableSlots(
+            finalAvailableSlots.filter((slot) => {
+              const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
+              return minutes !== "45" && minutes !== "15";
             })
           );
         }
@@ -278,10 +291,10 @@ const Booking = () => {
           )}
         </LabelInputWrapper>
         <StyledLabel>Time slot</StyledLabel>
-        {availableSlots.length && (
+        {filteredAvailableSlots.length && (
           <SlotWrapper key={"slots"} $isMobile={isMobile}>
             {selectedSlot.length === 0 ? (
-              availableSlots.map((slot) => {
+              filteredAvailableSlots.map((slot) => {
                 return (
                   <Slot key={slot} onClick={() => handleSlotClick(slot)}>
                     {slot.split("-")[1]}

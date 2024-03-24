@@ -13,14 +13,21 @@ import {
 } from "./homepage/MiddleStylish";
 import { TextContext } from "./contexts/TextContext";
 import Loader from "./float-fixed/Loader";
-
+import { Blurhash } from "react-blurhash";
 const PCHomePage = () => {
   const navigate = useNavigate();
   const { text } = useContext(TextContext);
   const { language } = useContext(LanguageContext);
   const imgRef = useRef(null);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const [offsetY, setOffsetY] = useState(0);
-
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => {
+      setImageLoaded(true);
+    };
+    img.src = bg;
+  }, [imageLoaded]);
   const handleScroll = () => {
     requestAnimationFrame(() => {
       setOffsetY(window.pageYOffset);
@@ -42,8 +49,20 @@ const PCHomePage = () => {
       .french;
     return (
       <Wrapper ref={main}>
-        <Filter />
-        <StyledImage ref={imgRef} $offsetY={offsetY} />
+        {imageLoaded && <Filter />}
+
+        {!imageLoaded && (
+          <Blurhash
+            hash="L6BM*z00W002~p4n%MM}M}xtt3WW"
+            width="100%"
+            height="85vh"
+            resolutionX={32}
+            resolutionY={32}
+            punch={1}
+          />
+        )}
+        {imageLoaded && <StyledImage ref={imgRef} $offsetY={offsetY} />}
+
         <StylishBookWrapper>
           <WordContainer>
             * * *
@@ -113,7 +132,7 @@ const StyledImage = styled.div.attrs((props) => ({
     backgroundImage: `url(${bg})`,
     backgroundSize: "cover",
     behavior: "smooth",
-    backgroundPosition: `center ${props.$offsetY * -0.3}px`,
+    backgroundPosition: `center ${props.$offsetY * -0.13}px`,
   },
 }))`
   background-repeat: no-repeat;

@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import Loader from "../float-fixed/Loader";
 import styled from "styled-components";
 import Header from "../Header";
+import { StyledBg, Filter } from "./GuestFormRsvp";
+import { IsMobileContext } from "../contexts/IsMobileContext";
 const YourRes = () => {
   const [res, setRes] = useState({});
   const params = useParams();
+  const { isMobile } = useContext(IsMobileContext);
   useEffect(() => {
     fetch(`/getRes/${params._id}`)
       .then((res) => res.json())
@@ -22,8 +25,8 @@ const YourRes = () => {
   }
   return (
     <Wrapper>
-      <Header isShowing={false} />
-      <Wrapper>
+      {isMobile && <Header isShowing={false} />}
+      <SmallWrapper $isMobile={isMobile}>
         <Message>
           We sent you an email/text containing the information below.
         </Message>
@@ -43,20 +46,37 @@ const YourRes = () => {
           Price <StyledInfo> {res.service.price}</StyledInfo>
         </StyledDiv>
         <Message>Thank you for booking with hollywood barbers!</Message>
-      </Wrapper>
+      </SmallWrapper>
+      <StyledBg />
+      <Filter />
     </Wrapper>
   );
 };
 const Wrapper = styled.div`
-  background-color: #002b1c;
   color: whitesmoke;
   font-family: sans-serif;
+  background-color: ${({ $isMobile }) =>
+    $isMobile ? "#011c13" : "rgba(0, 0, 0, 0.8)"};
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
   position: relative;
+  z-index: 3;
+`;
+const SmallWrapper = styled.div`
+  color: whitesmoke;
+  font-family: sans-serif;
+  background-color: ${({ $isMobile }) =>
+    $isMobile ? "#011c13" : "rgba(0, 0, 0, 0.8)"};
+  height: ${({ $isMobile }) => ($isMobile ? "100vh" : "60vh")};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  position: relative;
+  z-index: 3;
 `;
 const StyledDiv = styled.div`
   display: flex;

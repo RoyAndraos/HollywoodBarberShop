@@ -1,9 +1,10 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TextContext } from "./contexts/TextContext";
 import { ImageContext } from "./contexts/ImageContext";
 import { LanguageContext } from "./contexts/LanguageContext";
 import styled from "styled-components";
 import bg from "../assets/AboutBG.jpg";
+import { Blurhash } from "react-blurhash";
 const AboutPC = () => {
   const { text } = useContext(TextContext);
   const { images } = useContext(ImageContext);
@@ -11,6 +12,14 @@ const AboutPC = () => {
   const aboutText = text.filter((text) => text._id === "about")[0].content;
   const frenchAboutText = text.filter((text) => text._id === "about")[0].french;
   const aboutImage = images.filter((image) => image.filename === "about")[0];
+  const [imageLoaded, setImageLoaded] = useState(false);
+  useEffect(() => {
+    const img = new Image();
+    img.onload = () => {
+      setImageLoaded(true);
+    };
+    img.src = bg;
+  }, []);
   return (
     <Wrapper id="about-section">
       <Left>
@@ -33,8 +42,23 @@ const AboutPC = () => {
       <Right>
         <StyledImg $src={aboutImage.src} alt="shop image"></StyledImg>
       </Right>
-      <StyledBG />
-      <Filter />
+      {imageLoaded && <Filter />}
+      {!imageLoaded && (
+        <Blurhash
+          hash="LBCF|y~q?a?a-;a*.8%M?Gxu.8i|"
+          width="99.4vw"
+          height="70vh"
+          resolutionX={32}
+          resolutionY={32}
+          punch={1}
+          style={{
+            clipPath:
+              "polygon(38% 16%, 48% 0, 100% 0, 100% 100%, 0 100%, 0% 60%, 0 20%)",
+            transform: "translateX(-8.8vw) translateY(-44vh)",
+          }}
+        />
+      )}
+      {imageLoaded && <StyledBG />}
     </Wrapper>
   );
 };
@@ -47,7 +71,7 @@ const Wrapper = styled.div`
   grid-template-columns: 30% 30%;
   gap: 5%;
   color: white;
-  min-height: 70vh;
+  height: 70vh;
   position: relative;
   scroll-snap-align: start;
   top: -8vh;
@@ -66,15 +90,15 @@ const Title = styled.h1`
   color: #079061;
   display: flex;
   margin: 0 2vw 5vh 2vw;
-  font-size: clamp(1.8rem, 3rem, 3.4rem);
+  font-size: clamp(1.8rem, 2.5rem, 3.2rem);
 `;
 const Left = styled.div`
   position: relative;
   top: 20%;
-  z-index: 2;
+  z-index: 3;
 `;
 const Right = styled.div`
-  z-index: 2;
+  z-index: 3;
 `;
 const StyledImg = styled.div`
   position: relative;
@@ -104,7 +128,7 @@ const Filter = styled.div`
   height: 100%;
   width: 100%;
   background-color: rgba(47, 36, 23, 0.5);
-  z-index: 1;
+  z-index: 2;
   clip-path: polygon(38% 16%, 48% 0, 100% 0, 100% 100%, 0 100%, 0% 60%, 0 20%);
   transition: all 0.1s ease-in-out smooth;
   top: 10vh;

@@ -1,13 +1,15 @@
 require("dotenv").config();
 const { MongoClient } = require("mongodb");
 const uuid = require("uuid").v4;
+const accountSid = process.env.SMS_SSID;
+const authToken = process.env.SMS_AUTH_TOKEN;
+const twilioClient = require("twilio")(accountSid, authToken);
 
 // ---------------------------------------------------------------------------------------------
 //brevo stuff, email + TODO:sms
 // ---------------------------------------------------------------------------------------------
 
 const brevo = require("@getbrevo/brevo");
-const { htmlContent } = require("./templates/Welcome");
 let defaultClient = brevo.ApiClient.instance;
 let apiKey = defaultClient.authentications["api-key"];
 apiKey.apiKey = process.env.EMAIL_API_KEY;
@@ -132,16 +134,17 @@ const addReservation = async (req, res) => {
       lname: userInfo.lname,
       email: userInfo.email,
       number: userInfo.number,
+      client_id: client_id,
     };
-
     // add the reservation to the database
     await db.collection("reservations").insertOne(reservation);
 
-    //check if client exists
+    // check if client exists
     const isClient = await db
       .collection("Clients")
-      .findOne({ email: reservation.email });
-    //if client does not exist, create client
+      .findOne({ number: reservation.number });
+
+    // if client does not exist, create client
     if (isClient === null) {
       await db.collection("Clients").insertOne({
         _id: client_id,
@@ -158,18 +161,20 @@ const addReservation = async (req, res) => {
         .updateOne({ _id: isClient._id }, { $push: { reservations: _id } });
     }
 
-    // send an email to the user
-    await sendEmail(
-      userInfo.email,
-      reservation.barber,
-      userInfo.fname,
-      userInfo.lname,
-      reservation.date,
-      reservation.slot[0].split("-")[1],
-      reservation.service.name,
-      reservation.service.price
-    );
+    // send SMS to the user
+    await twilioClient.messages.create({
+      body: `Hello ${reservation.fname} ${
+        reservation.lname
+      }, your reservation at Hollywood Barbershop is confirmed for ${formattedDate} at ${
+        reservation.slot[0].split("-")[1]
+      }. You will be getting a ${reservation.service.name} for ${
+        reservation.service.price
+      }. ~${reservation.barber}`,
+      messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
+      to: userInfo.number,
+    });
 
+    // send response to the client
     res.status(200).json({
       status: 200,
       data: {
@@ -185,81 +190,17 @@ const addReservation = async (req, res) => {
       },
     });
   } catch (err) {
+    // handle errors
+    console.log(err);
     res.status(500).json({ status: 500, message: err.message });
   } finally {
     client.close();
   }
 };
 
-const sendEmail = async (
-  email,
-  fname,
-  userFName,
-  userLName,
-  date,
-  time,
-  service,
-  price
-) => {
-  const formattedDate = new Date(date).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-  let apiInstance = new brevo.TransactionalEmailsApi();
-  let sendSmtpEmail = new brevo.SendSmtpEmail();
-
-  sendSmtpEmail.subject = "Your reservation at Hollywood Barbershop";
-  sendSmtpEmail.htmlContent = htmlContent(
-    userFName,
-    formattedDate,
-    time,
-    service,
-    price
-  );
-  sendSmtpEmail.sender = {
-    name: fname,
-    email: "hollywoodfairmount@gmail.com",
-  };
-
-  sendSmtpEmail.to = [{ email: email, name: `${userFName + " " + userLName}` }];
-  await apiInstance.sendTransacEmail(sendSmtpEmail);
-};
-
-// const sendSMS = async (
-//   number,
-//   fname,
-//   userFName,
-//   userLName,
-//   date,
-//   time,
-//   service,
-//   price
-// ) => {
-//   let apiInstance = new brevo.TransactionalSMSApi();
-//   let sendTransacSms = new brevo.SendTransacSms();
-//   sendTransacSms = {
-//     sender: "RoyDev",
-//     recipient: "5144304287",
-//     content: "hello",
-//   };
-
-//   apiInstance.sendTransacSms(sendTransacSms).then(
-//     function (data) {
-//       console.log(
-//         "API called successfully. Returned data: " + JSON.stringify(data)
-//       );
-//     },
-//     function (error) {
-//       console.error(error);
-//     }
-//   );
-// };
-
 module.exports = {
   getBarberInfo,
   getWebsiteInfo,
-  sendEmail,
   getReservations,
   addReservation,
   getReservationById,

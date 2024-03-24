@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const {
   getBarberInfo,
   getWebsiteInfo,
-  sendEmail,
+
   getReservations,
   addReservation,
   getReservationById,
@@ -31,7 +31,6 @@ express()
   .get("/getWebsiteInfo", getWebsiteInfo)
   .get("/getReservations", getReservations)
   .get("/getRes/:_id", getReservationById)
-  .post("/sendEmail", sendEmail)
   .post("/addReservation", addReservation)
   .listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
