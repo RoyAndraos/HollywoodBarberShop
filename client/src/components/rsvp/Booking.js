@@ -27,6 +27,12 @@ const Booking = () => {
   const { userInfo, setUserInfo } = useContext(UserContext);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
+  const todayDate = new Date();
+  // format date for Wed Mar 27 2024
+  const formattedDate = moment(todayDate).format("ddd MMM DD YYYY").toString();
+  const isToday =
+    formattedDate ===
+    moment(selectedDate).format("ddd MMM DD YYYY").toString().slice(0, 15);
   //remove the 15min/45min slots from the available slots, save them in new state for the rendering, keep the other state for the logic
   //(check select next slot function)
   const [filteredAvailableSlots, setFilteredAvailableSlots] = useState([]);
@@ -100,23 +106,58 @@ const Booking = () => {
               return slot !== "";
             })
             .filter((item) => !removedBeforeSlotsFor2Duration.includes(item));
-          // setFilteredAvailableSlots(
-          setFilteredAvailableSlots(
-            finalAvailableSlots.filter((slot) => {
-              const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
-              return minutes !== "45" && minutes !== "15";
-            })
-            // )
-          );
+          if (isToday) {
+            const dailyAvailabilityFilteredSlots =
+              selectedBarber.dailyAvailability
+                .filter((slot) => {
+                  return slot.available === false;
+                })
+                .map((slot) => {
+                  return slot.slot;
+                });
+            setFilteredAvailableSlots(
+              finalAvailableSlots
+                .filter((slot) => {
+                  const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
+                  return minutes !== "45" && minutes !== "15";
+                })
+                .filter((item) => {
+                  return !dailyAvailabilityFilteredSlots.some((slot) =>
+                    item.includes(slot)
+                  );
+                })
+            );
+          } else {
+            setFilteredAvailableSlots(
+              finalAvailableSlots.filter((slot) => {
+                const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
+                return minutes !== "45" && minutes !== "15";
+              })
+            );
+          }
         } else {
           const finalAvailableSlots = filteredSlots.filter((slot) => {
             return slot !== "";
           });
+          const dailyAvailabilityFilteredSlots =
+            selectedBarber.dailyAvailability
+              .filter((slot) => {
+                return slot.available === false;
+              })
+              .map((slot) => {
+                return slot.slot;
+              });
           setFilteredAvailableSlots(
-            finalAvailableSlots.filter((slot) => {
-              const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
-              return minutes !== "45" && minutes !== "15";
-            })
+            finalAvailableSlots
+              .filter((slot) => {
+                const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
+                return minutes !== "45" && minutes !== "15";
+              })
+              .filter((item) => {
+                return !dailyAvailabilityFilteredSlots.some((slot) =>
+                  item.includes(slot)
+                );
+              })
           );
         }
       }
@@ -127,6 +168,7 @@ const Booking = () => {
     selectedDate,
     selectedService,
     barberIsOff,
+    isToday,
   ]);
 
   const selectNextSlot = (slot) => {
@@ -291,7 +333,7 @@ const Booking = () => {
           )}
         </LabelInputWrapper>
         <StyledLabel>Time slot</StyledLabel>
-        {filteredAvailableSlots.length && (
+        {filteredAvailableSlots.length && selectedBarber !== null && (
           <SlotWrapper key={"slots"} $isMobile={isMobile}>
             {selectedSlot.length === 0 ? (
               filteredAvailableSlots.map((slot) => {

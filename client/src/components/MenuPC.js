@@ -4,13 +4,19 @@ import { LanguageContext } from "./contexts/LanguageContext";
 import { ServiceContext } from "./contexts/ServiceContext";
 import bg from "../assets/MenuPC.jpg";
 import { useNavigate } from "react-router-dom";
+import { TextContext } from "./contexts/TextContext";
 const MenuPC = () => {
   const { services } = useContext(ServiceContext);
   const { language } = useContext(LanguageContext);
+  const { text } = useContext(TextContext);
+  const underMenu = text.filter((item) => item._id === "underMenu");
   const navigate = useNavigate();
   return (
     <Wrapper id="menu-section">
       <Title>{language === "en" ? "Our Services" : "Nos Services"}</Title>
+      <Message>
+        {language === "en" ? underMenu[0].content : underMenu[0].french}
+      </Message>
       <MenuWrapper>
         {services.map((service) => {
           return (
@@ -85,6 +91,14 @@ const ServicePrice = styled.p`
   margin-left: 20%;
   color: #e7e7b0;
   font-weight: bold;
+  z-index: 3;
+`;
+const Message = styled.p`
+  font-size: clamp(1.1rem, 1.3rem, 1.6rem);
+  margin-left: 13%;
+  color: #e7e7b0;
+  margin-bottom: 1rem;
+  z-index: 3;
 `;
 const MenuWrapper = styled.div`
   display: flex;
