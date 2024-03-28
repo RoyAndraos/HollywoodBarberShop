@@ -163,8 +163,16 @@ const addReservation = async (req, res) => {
 
     // send SMS to the user
     await twilioClient.messages.create({
-      body: `Hello ${reservation.fname} ${
-        reservation.lname
+      body: `Bonjour ${reservation.fname} ${
+        reservation.lname !== "" && reservation.lname
+      }, votre réservation au Hollywood Barbershop est confirmée pour ${
+        reservation.date
+      } à ${reservation.slot[0].split("-")[1]}. Vous recevrez un ${
+        reservation.service.name
+      } pour ${reservation.service.price} CAD. ~${reservation.barber}
+      
+      Hello ${reservation.fname} ${
+        reservation.lname !== "" && reservation.lname
       }, your reservation at Hollywood Barbershop is confirmed for ${formattedDate} at ${
         reservation.slot[0].split("-")[1]
       }. You will be getting a ${reservation.service.name} for ${

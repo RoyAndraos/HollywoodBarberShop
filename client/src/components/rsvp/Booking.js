@@ -218,11 +218,22 @@ const Booking = () => {
 
   const handleSlotClick = (slot) => {
     if (selectedService.duration === "2") {
+      setSelectedSlot([slot, selectNextSlot(slot)]);
+    } else if (selectedService.duration === "1") {
       setSelectedSlot([slot]);
-      handleChange("slot", [slot, selectNextSlot(slot)]);
+    } else if (selectedService.duration === "3") {
+      setSelectedSlot([
+        slot,
+        selectNextSlot(slot),
+        selectNextSlot(selectNextSlot(slot)),
+      ]);
     } else {
-      setSelectedSlot([slot]);
-      handleChange("slot", [slot]);
+      setSelectedSlot([
+        slot,
+        selectNextSlot(slot),
+        selectNextSlot(selectNextSlot(slot)),
+        selectNextSlot(selectNextSlot(selectNextSlot(slot))),
+      ]);
     }
   };
 
@@ -264,6 +275,7 @@ const Booking = () => {
       });
   };
 
+  console.log("selectedSlot", selectedSlot);
   return (
     <StyledForm
       $isMobile={isMobile}
