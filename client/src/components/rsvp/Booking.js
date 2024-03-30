@@ -170,7 +170,6 @@ const Booking = () => {
     barberIsOff,
     isToday,
   ]);
-
   const selectNextSlot = (slot) => {
     const day = slot.split("-")[0];
     const timeToEdit = slot.split("-")[1].split(":")[1].slice(0, -2);
