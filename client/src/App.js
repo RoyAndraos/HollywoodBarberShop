@@ -15,7 +15,6 @@ import { ServiceContext } from "./components/contexts/ServiceContext";
 import Profile from "./components/account/Profile";
 import YourRes from "./components/rsvp/YourRes";
 import { useRef } from "react";
-import { LanguageContext } from "./components/contexts/LanguageContext";
 import Header from "./components/Header";
 import { IsMobileContext } from "./components/contexts/IsMobileContext";
 const App = () => {
@@ -24,7 +23,6 @@ const App = () => {
   const { setImages, images } = useContext(ImageContext);
   const { setUserInfo } = useContext(UserContext);
   const { setServices, services } = useContext(ServiceContext);
-  const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
   const containerRef = useRef(null);
   const handleScroll = (e) => {
@@ -43,7 +41,6 @@ const App = () => {
     });
   };
   useEffect(() => {
-    if (language === "") return;
     fetch("/getWebsiteInfo")
       .then((res) => res.json())
       .then((data) => {
@@ -52,7 +49,7 @@ const App = () => {
         setImages(data.images);
         setServices(data.services);
       });
-  }, [setBarberInfo, setText, setImages, setUserInfo, setServices, language]);
+  }, [setBarberInfo, setText, setImages, setUserInfo, setServices]);
   if (!barberInfo || !text || !images || !services) return <Loader />;
   return (
     <Container ref={containerRef} onScroll={handleScroll}>

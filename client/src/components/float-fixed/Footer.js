@@ -123,7 +123,7 @@ const Wrapper = styled.div`
   justify-content: center;
   height: 30px;
   position: fixed;
-  top: 4.2%;
+  top: 5%;
   z-index: 10;
 `;
 

@@ -17,7 +17,7 @@ const BurgerMenu = ({ isopen, setIsOpen }) => {
         height: "30px",
         position: "fixed",
         right: "35px",
-        top: "4%",
+        top: "5%",
         display: "flex",
         alignItems: "center",
         zIndex: "1000",

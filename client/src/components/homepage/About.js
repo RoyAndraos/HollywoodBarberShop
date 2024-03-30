@@ -20,7 +20,7 @@ const About = () => {
       $isMobile={isMobile}
       id="about-section"
     >
-      <TitleWrapper style={{ marginTop: "-15px" }}>
+      <TitleWrapper>
         <Title>{language === "en" ? "About" : "A propos"}</Title>
       </TitleWrapper>
       <StoryContainer>
@@ -28,9 +28,7 @@ const About = () => {
           style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-evenly",
             alignItems: "center",
-            marginTop: "100px",
           }}
         >
           <Story>
@@ -70,13 +68,10 @@ const StoryContainer = styled.div`
   background-color: #035e3f;
   padding: 20px 0;
   border-radius: 20px;
-  height: 80vh;
   margin-bottom: 20px;
 `;
 const Story = styled.div`
   width: 90%;
-  display: inline-block;
-  text-align: left;
   font-size: 1.1rem;
   line-height: 1.1;
   letter-spacing: 0.1rem;
@@ -89,6 +84,8 @@ const Story = styled.div`
 const StyledImage = styled.img`
   border-radius: 20px;
   max-height: 30vh;
+  width: 70vw;
+  object-fit: cover;
 `;
 const ImageContainer = styled.div`
   background-color: transparent;

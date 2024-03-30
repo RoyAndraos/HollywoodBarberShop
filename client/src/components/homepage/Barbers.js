@@ -18,24 +18,20 @@ const Barbers = () => {
       $isMobile={isMobile}
     >
       <TitleWrapper>
-        <Title>Barbers</Title>
+        <Title>{language === "en" ? "Our Team" : "Notre Equipe"}</Title>
       </TitleWrapper>
       {barberInfo.map((barber) => {
         return (
           <BarberWrapper key={barber._id}>
             {barber.picture !== "" && (
-              <ImageFrame key={barber.family_name}>
-                <Avatar src="/assets/avatar.png" alt="avatar" />
-              </ImageFrame>
+              <Avatar src={barber.picture} alt="barber"></Avatar>
             )}
-            <Frame key={barber.given_name}>
-              <BarberTitle>
-                {barber.given_name + " " + barber.family_name}
-              </BarberTitle>
-            </Frame>
+            <BarberTitle>
+              {barber.given_name + " " + barber.family_name}
+            </BarberTitle>
             <Description> {barber.description}</Description>
             <Book key={barber._id} onClick={() => navigate("/book")}>
-              {language === "en" ? "Book" : "Reservez"}
+              {language === "en" ? "Book" : "Reserver"}
             </Book>
           </BarberWrapper>
         );
@@ -60,13 +56,16 @@ const BarberWrapper = styled.div`
   }
 `;
 const Avatar = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  border-radius: 10%;
 `;
 const Description = styled.p`
   font-size: 1rem;
   font-family: "poppins", sans-serif;
+  line-height: 1.2;
+  letter-spacing: 0.1rem;
   color: whitesmoke;
+  margin-top: 10px;
 `;
 const Book = styled.button`
   font-family: "arial", sans-serif;
@@ -89,23 +88,8 @@ const BarberTitle = styled.p`
   color: #e7e7b0;
   font-size: 1.5rem;
   padding: 7px 12px 7px 12px;
-  margin: 7px 7px 7px 7px;
+  margin-top: 20px;
   font-family: "Brandon Grotesque Regular";
 `;
 
-const Frame = styled.div`
-  background-color: transparent;
-  border-radius: 10px;
-  width: 100%;
-  text-align: center;
-`;
-
-const ImageFrame = styled.div`
-  background-color: #035e3f;
-  border-radius: 10px;
-  width: 45%;
-  text-align: center;
-  padding: 10px;
-  border-bottom: 3px solid rgba(0, 0, 0, 0.8);
-`;
 export default Barbers;

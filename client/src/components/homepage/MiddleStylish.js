@@ -139,6 +139,7 @@ export const Modern = styled.p`
   width: 100%;
   padding: 0 20px;
   font-size: clamp(1rem, 1.5vw, 1.6rem);
+  text-shadow: 7px 7px 3px black;
 `;
 
 export const WordContainer = styled.div`

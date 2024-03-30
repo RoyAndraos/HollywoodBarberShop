@@ -49,7 +49,7 @@ const ImageSlideShow = () => {
       <OtherWrapper>
         <MiddleStylish />
         <BookButton onClick={() => navigate("/book")}>
-          {language === "en" ? "Book Now!" : "Reservez Ici!"}
+          {language === "en" ? "Book Now!" : "Reserver Ici!"}
         </BookButton>
         <StyledLeftButton onClick={() => handleSlideLeft()}>
           <AiOutlineLeft />

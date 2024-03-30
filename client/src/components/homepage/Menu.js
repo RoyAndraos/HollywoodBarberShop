@@ -1,18 +1,17 @@
 import styled from "styled-components";
 import { useContext } from "react";
-import { ImageContext } from "../contexts/ImageContext";
 import { TextContext } from "../contexts/TextContext";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
+import { ServiceContext } from "../contexts/ServiceContext";
 const Menu = () => {
-  const { images } = useContext(ImageContext);
   const { text } = useContext(TextContext);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
-  const menuImage = images.filter((image) => image.filename === "menu")[0];
   const menuText = text.filter((text) => text._id === "underMenu")[0].content;
   const frenchMenuText = text.filter((text) => text._id === "underMenu")[0]
     .french;
+  const { services } = useContext(ServiceContext);
   return (
     <Wrapper
       id="menu-section"
@@ -21,14 +20,23 @@ const Menu = () => {
       $isMobile={isMobile}
     >
       <TitleWrapper>
-        <Title>Our Services</Title>
+        <Title>{language === "eng" ? "Our Prices" : "Nos Prix"}</Title>
       </TitleWrapper>
-      <StyledMenu $isMobile={isMobile} src={menuImage.src} alt="Menu" />
       <ThanksWrapper>
         * <br />* <br />* <br />*<br /> * <br />* <br />* <br />* <br />*
         <Appreciate>{language === "en" ? menuText : frenchMenuText}</Appreciate>
         * <br />* <br />* <br />*<br /> * <br />* <br />* <br />* <br />*
       </ThanksWrapper>
+      <MenuWrapper>
+        {services.map((service) => {
+          return (
+            <Service key={service._id}>
+              <p>{language === "en" ? service.english : service.name}</p>
+              <Price>{service.price}</Price>
+            </Service>
+          );
+        })}
+      </MenuWrapper>
     </Wrapper>
   );
 };
@@ -41,15 +49,28 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   color: white;
   min-height: 100vh;
   position: relative;
   scroll-snap-align: start;
 `;
-const StyledMenu = styled.img`
-  width: ${(props) => (props.$isMobile ? "90vw" : "40vw")};
-  border-radius: 10px;
+const Service = styled.div`
+  display: grid;
+  grid-template-columns: 80% 20%;
+  gap: 20px;
+  background-color: rgba(3, 94, 63, 0.7);
+  padding: 10px 25px;
+  border-radius: 3px;
+  align-content: center;
+  align-items: center;
+  width: 85vw;
+`;
+const MenuWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  min-height: 50vh;
 `;
 export const Title = styled.p`
   color: white;
@@ -74,20 +95,28 @@ export const TitleWrapper = styled.div`
   height: 13vh;
 `;
 const Appreciate = styled.p`
-  font-size: 1.1rem;
-  margin: 5px 25% 5px 25%;
+  font-size: 1rem;
+  margin: 5px 15% 5px 15%;
   line-height: 1.5;
   font-style: italic;
   letter-spacing: 2px;
   color: #e7e7b0;
   font-family: "Brandon Grotesque Regular", sans-serif;
 `;
+const Price = styled.p`
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: 2px;
+  font-weight: 700;
+  color: #e7e7b0;
+  font-family: "Brandon Grotesque Regular", sans-serif;
+`;
 const ThanksWrapper = styled.div`
   display: flex;
-  width: 96vw;
+  width: 77vw;
   justify-content: center;
   align-items: center;
-  height: 27vh;
+  height: 20vh;
   text-align: center;
 `;
 export default Menu;
