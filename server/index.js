@@ -11,7 +11,7 @@ const {
   getReservationById,
 } = require("./server");
 const PORT = process.env.PORT || 4000;
-
+const cors = require("cors");
 express()
   .use((req, res, next) => {
     res.header(
@@ -24,6 +24,7 @@ express()
     );
     next();
   })
+  .use(cors())
   .use(morgan("tiny"))
   .use(express.json())
   .use(express.static("public"))
