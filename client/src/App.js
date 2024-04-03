@@ -55,10 +55,7 @@ const App = () => {
       <Routes>
         <Route path={"/"} element={<HomePage />} />
         <Route path={"/book"} element={<RSVP />} />
-        <Route path={"/signup"} element={<Signup />} />
-        <Route path={"/login"} element={<Login />} />
-        <Route path={"/profile/:_id"} element={<Profile />} />
-        <Route path={"/yourReservation/:_id"} element={<YourRes />} />1
+        <Route path={"/yourReservation/:_id"} element={<YourRes />} />
       </Routes>
     </Container>
   );
