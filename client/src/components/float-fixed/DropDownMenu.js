@@ -1,6 +1,6 @@
 import { keyframes } from "styled-components";
 import { styled } from "styled-components";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { LanguageContext } from "../contexts/LanguageContext";
 
 const DropDownMenu = ({
