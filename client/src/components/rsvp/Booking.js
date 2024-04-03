@@ -43,7 +43,7 @@ const Booking = () => {
   };
   //get reservations
   useEffect(() => {
-    fetch("/getReservations")
+    fetch("https://hollywoodbarbershop.onrender.com/getReservations")
       .then((res) => res.json())
       .then((data) => {
         setReservations(data.data);
@@ -246,7 +246,7 @@ const Booking = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("/addReservation", {
+    fetch("https://hollywoodbarbershop.onrender.com/addReservation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

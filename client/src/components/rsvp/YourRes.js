@@ -10,7 +10,7 @@ const YourRes = () => {
   const params = useParams();
   const { isMobile } = useContext(IsMobileContext);
   useEffect(() => {
-    fetch(`/getRes/${params._id}`)
+    fetch(`https://hollywoodbarbershop.onrender.com/getRes/${params._id}`)
       .then((res) => res.json())
       .then((data) => {
         setRes(data.data);

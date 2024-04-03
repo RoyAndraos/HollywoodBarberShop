@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@getbrevo/brevo": "^1.0.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mongodb": "^5.4.0",

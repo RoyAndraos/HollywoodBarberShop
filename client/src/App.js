@@ -41,7 +41,7 @@ const App = () => {
     });
   };
   useEffect(() => {
-    fetch("/getWebsiteInfo")
+    fetch("https://hollywoodbarbershop.onrender.com/getWebsiteInfo")
       .then((res) => res.json())
       .then((data) => {
         setBarberInfo(data.barbers);
