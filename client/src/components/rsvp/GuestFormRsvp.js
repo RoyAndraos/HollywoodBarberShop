@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useState, useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
-import { StyledInput, Submit } from "../account/Signup";
 import { FaArrowRight } from "react-icons/fa";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
@@ -152,5 +151,34 @@ export const SmallWrapper = styled.div`
   z-index: 2;
   background-color: ${(props) => (props.$isMobile ? "" : "rgba(0,0,0,0.7)")};
   border-radius: 10px;
+`;
+
+const Submit = styled.button`
+  font-family: sans-serif;
+  background-color: whitesmoke;
+  border-radius: 10px;
+  border: none;
+  font-size: 1.2rem;
+  padding: 7px 30px 7px 30px;
+  transition: all 0.3s ease-in-out;
+  border-bottom: 4px solid #035e3f;
+  z-index: 2;
+  &:active {
+    transform: scale(0.9);
+  }
+  &:disabled {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-bottom: 4px solid #b50000;
+    color: #b50000;
+  }
+`;
+const StyledInput = styled.input`
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  border-radius: 10px;
+  border: none;
+  font-size: 1.2rem;
+  border-bottom: 4px solid #035e3f;
+  outline: none;
+  z-index: 2;
 `;
 export default FormRsvp;

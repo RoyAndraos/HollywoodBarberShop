@@ -4,7 +4,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
 import { ServiceContext } from "../contexts/ServiceContext";
 import { BarberContext } from "../contexts/BarberContext";
-import { Submit } from "../account/Signup";
 import moment from "moment";
 import { filterSlotBeforeFor2Duration } from "../helpers";
 import Loader from "../float-fixed/Loader";
@@ -486,5 +485,24 @@ const SmallWrapper = styled.div`
   z-index: 1;
   background-color: ${(props) => (props.$isMobile ? "" : "rgba(0,0,0,0.7)")};
   border-radius: 10px;
+`;
+const Submit = styled.button`
+  font-family: sans-serif;
+  background-color: whitesmoke;
+  border-radius: 10px;
+  border: none;
+  font-size: 1.2rem;
+  padding: 7px 30px 7px 30px;
+  transition: all 0.3s ease-in-out;
+  border-bottom: 4px solid #035e3f;
+  z-index: 2;
+  &:active {
+    transform: scale(0.9);
+  }
+  &:disabled {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-bottom: 4px solid #b50000;
+    color: #b50000;
+  }
 `;
 export default Booking;

@@ -8,8 +8,6 @@ import { BarberContext } from "./components/contexts/BarberContext";
 import { TextContext } from "./components/contexts/TextContext";
 import { ImageContext } from "./components/contexts/ImageContext";
 import { UserContext } from "./components/contexts/UserContext";
-import Signup from "./components/account/Signup";
-import Login from "./components/account/Login";
 import Loader from "./components/float-fixed/Loader";
 import { ServiceContext } from "./components/contexts/ServiceContext";
 import Profile from "./components/account/Profile";
