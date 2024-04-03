@@ -10,7 +10,6 @@ import { ImageContext } from "./components/contexts/ImageContext";
 import { UserContext } from "./components/contexts/UserContext";
 import Loader from "./components/float-fixed/Loader";
 import { ServiceContext } from "./components/contexts/ServiceContext";
-import Profile from "./components/account/Profile";
 import YourRes from "./components/rsvp/YourRes";
 import { useRef } from "react";
 import Header from "./components/Header";
