@@ -6,15 +6,6 @@ const authToken = process.env.SMS_AUTH_TOKEN;
 const twilioClient = require("twilio")(accountSid, authToken);
 
 // ---------------------------------------------------------------------------------------------
-//brevo stuff, email + TODO:sms
-// ---------------------------------------------------------------------------------------------
-
-const brevo = require("@getbrevo/brevo");
-let defaultClient = brevo.ApiClient.instance;
-let apiKey = defaultClient.authentications["api-key"];
-apiKey.apiKey = process.env.EMAIL_API_KEY;
-
-// ---------------------------------------------------------------------------------------------
 //Mongo stuff
 // ---------------------------------------------------------------------------------------------
 
