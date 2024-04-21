@@ -62,7 +62,7 @@ const Header = ({ isShowing }) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [location, headerHeight, showBackToTop]);
+  }, [location, headerHeight, showBackToTop, isMobile]);
   return (
     <div
       style={{ backgroundColor: "whitesmoke", zIndex: "100" }}
