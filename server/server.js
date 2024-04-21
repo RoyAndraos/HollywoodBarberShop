@@ -10,10 +10,6 @@ const twilioClient = require("twilio")(accountSid, authToken);
 // ---------------------------------------------------------------------------------------------
 
 const MONGO_URI_RALF = process.env.MONGO_URI_RALF;
-const options = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-};
 
 // ---------------------------------------------------------------------------------------------
 //endpoints
@@ -22,7 +18,7 @@ const options = {
 // ---------------------------------------------------------------------------------------------
 
 const getWebsiteInfo = async (req, res) => {
-  const client = new MongoClient(MONGO_URI_RALF, options);
+  const client = new MongoClient(MONGO_URI_RALF);
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
@@ -45,7 +41,7 @@ const getWebsiteInfo = async (req, res) => {
 };
 
 const getBarberInfo = async (req, res) => {
-  const client = new MongoClient(MONGO_URI_RALF, options);
+  const client = new MongoClient(MONGO_URI_RALF);
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
@@ -59,7 +55,7 @@ const getBarberInfo = async (req, res) => {
 };
 
 const getReservationById = async (req, res) => {
-  const client = new MongoClient(MONGO_URI_RALF, options);
+  const client = new MongoClient(MONGO_URI_RALF);
   const _id = req.params._id;
   try {
     await client.connect();
@@ -74,12 +70,21 @@ const getReservationById = async (req, res) => {
 };
 
 const getReservations = async (req, res) => {
-  const client = new MongoClient(MONGO_URI_RALF, options);
+  const client = new MongoClient(MONGO_URI_RALF);
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
     const rsvps = await db.collection("reservations").find().toArray();
-    res.status(200).json({ status: 200, data: rsvps });
+    const rsvpsWithoutPersonalInfo = rsvps.map((rsvp) => {
+      return {
+        date: rsvp.date,
+        barber: rsvp.barber,
+        service: rsvp.service,
+        slot: rsvp.slot,
+      };
+    });
+
+    res.status(200).json({ status: 200, data: rsvpsWithoutPersonalInfo });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   } finally {
@@ -92,21 +97,18 @@ const getReservations = async (req, res) => {
 // ---------------------------------------------------------------------------------------------
 //FOR DATE FORMAT BEFORE SAVING IN DB
 const formatDate = (inputDate) => {
-  const options = {
+  cons = {
     weekday: "short",
     year: "numeric",
     month: "short",
     day: "2-digit",
   };
 
-  const formattedDate = new Date(inputDate).toLocaleDateString(
-    "en-US",
-    options
-  );
+  const formattedDate = new Date(inputDate).toLocaleDateString("en-US");
   return formattedDate;
 };
 const addReservation = async (req, res) => {
-  const client = new MongoClient(MONGO_URI_RALF, options);
+  const client = new MongoClient(MONGO_URI_RALF);
   const formData = req.body.data[0];
   const userInfo = req.body.data[1];
   const _id = uuid();
@@ -168,7 +170,10 @@ const addReservation = async (req, res) => {
         reservation.slot[0].split("-")[1]
       }. You will be getting a ${reservation.service.name} for ${
         reservation.service.price
-      }. ~${reservation.barber}`,
+      }. ~${reservation.barber}
+      
+      ID: ${_id}
+      `,
       messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
       to: userInfo.number,
     });
@@ -190,7 +195,92 @@ const addReservation = async (req, res) => {
     });
   } catch (err) {
     // handle errors
-    console.log(err);
+    res.status(500).json({ status: 500, message: err.message });
+  } finally {
+    client.close();
+  }
+};
+
+// ---------------------------------------------------------------------------------------------
+// DELETE ENDPOINTS
+// ---------------------------------------------------------------------------------------------
+
+const getMonthIndex = (monthName) => {
+  const months = {
+    Jan: 0,
+    Feb: 1,
+    Mar: 2,
+    Apr: 3,
+    May: 4,
+    Jun: 5,
+    Jul: 6,
+    Aug: 7,
+    Sep: 8,
+    Oct: 9,
+    Nov: 10,
+    Dec: 11,
+  };
+  return months[monthName];
+};
+const deleteReservation = async (req, res) => {
+  const client = new MongoClient(MONGO_URI_RALF);
+  const { phone, resId } = req.body;
+  try {
+    await client.connect();
+    const db = client.db("HollywoodBarberShop");
+    const reservation = await db.collection("reservations").findOne({
+      _id: resId,
+      number: phone,
+    });
+    if (reservation === null) {
+      res.status(404).json({ status: 404, message: "Reservation not found" });
+    } else {
+      let message;
+      // check if reservation is in more than 3 hours
+      // get the day
+      const dateParts = reservation.date.split(" "); // Split date string into parts
+      const time = reservation.slot[0].split("-")[1].slice(0, -2); // Extract time, e.g., "12:30"
+      const [hours, minutes] = time.split(":").map(Number); // Split time into hours and minutes
+
+      // Construct the Date object in UTC
+      const dateTime = new Date(
+        Date.UTC(
+          dateParts[3], // Year
+          getMonthIndex(dateParts[1]), // Month (converted to 0-based index)
+          dateParts[2], // Day
+          hours,
+          minutes
+        )
+      );
+
+      const now = new Date();
+      const differenceInMilliseconds = dateTime - now;
+      const differenceInHours = differenceInMilliseconds / (1000 * 60 * 60); // Convert milliseconds to hours
+      if (differenceInHours > 3) {
+        // Reservation is more than 3 hours away from now
+        await db.collection("reservations").deleteOne({
+          _id: resId,
+          number: phone,
+        });
+        //send sms to the user that the reservation is cancelled
+        await twilioClient.messages.create({
+          body: `Bonjour ${reservation.fname} ${reservation.lname}, votre réservation au Hollywood Barbershop est annulée. ~Hollywood Barbershop
+          
+          Hello ${reservation.fname} ${reservation.lname}, your reservation at Hollywood Barbershop is cancelled. ~Hollywood Barbershop`,
+          messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
+          to: phone,
+        });
+      } else if (differenceInHours < 0) {
+        message = "Reservation is in the past.";
+      } else {
+        // Reservation is within 3 hours from now
+        message = "Reservation is in less than 3 hours.";
+      }
+      res
+        .status(200)
+        .json({ status: 200, reservation: reservation, message: message });
+    }
+  } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   } finally {
     client.close();
@@ -203,4 +293,5 @@ module.exports = {
   getReservations,
   addReservation,
   getReservationById,
+  deleteReservation,
 };

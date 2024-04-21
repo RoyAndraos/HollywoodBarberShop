@@ -80,7 +80,6 @@ const Booking = () => {
           formatDate(new Date(reservation.date)) === formatDate(selectedDate);
         return selectedBarber.given_name === reservation.barber && today;
       });
-
       //filter reserved slots for the selected day for the selected barber out
       const filteredSlots = originalAvailableSlots.filter((slot) => {
         return !todayReservations.some((reservation) => {
@@ -91,6 +90,7 @@ const Booking = () => {
           }
         });
       });
+
       //1-filter out the now empty elements
       if (selectedService !== null) {
         if (selectedService.duration === "2") {
@@ -244,13 +244,14 @@ const Booking = () => {
   }
 
   const handleSubmit = (e) => {
+    formData.slot = selectedSlot;
     e.preventDefault();
     fetch("https://hollywoodbarbershop.onrender.com/addReservation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ data: [formData, userInfo, language] }),
+      body: JSON.stringify({ data: [formData, userInfo] }),
     })
       .then((res) => {
         return res.json();
@@ -272,8 +273,6 @@ const Booking = () => {
         }
       });
   };
-
-  console.log("selectedSlot", selectedSlot);
   return (
     <StyledForm
       $isMobile={isMobile}
@@ -367,6 +366,11 @@ const Booking = () => {
             )}
           </SlotWrapper>
         )}
+        {filteredAvailableSlots.length === 0 && selectedBarber !== null && (
+          <NotAvail>
+            {language === "en" ? "No Available Slots" : "Aucune disponibilité"}
+          </NotAvail>
+        )}
         <Submit
           style={{ marginBottom: "50px" }}
           key={"booking"}
@@ -385,6 +389,20 @@ const Booking = () => {
     </StyledForm>
   );
 };
+
+const NotAvail = styled.div`
+  font-family: sans-serif;
+  font-size: 1rem;
+  color: whitesmoke;
+  padding: 0.5rem;
+  background-color: #035e3f;
+  text-align: center;
+  border-radius: 10px;
+  margin: 0 0 1.5rem 0;
+  border-bottom: 4px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+`;
 
 const StyledForm = styled.form`
   display: flex;
@@ -496,6 +514,7 @@ const Submit = styled.button`
   transition: all 0.3s ease-in-out;
   border-bottom: 4px solid #035e3f;
   z-index: 2;
+  cursor: pointer;
   &:active {
     transform: scale(0.9);
   }

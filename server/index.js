@@ -5,7 +5,7 @@ const morgan = require("morgan");
 const {
   getBarberInfo,
   getWebsiteInfo,
-
+  deleteReservation,
   getReservations,
   addReservation,
   getReservationById,
@@ -33,6 +33,7 @@ express()
   .get("/getReservations", getReservations)
   .get("/getRes/:_id", getReservationById)
   .post("/addReservation", addReservation)
+  .delete("/deleteReservation", deleteReservation)
   .listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
   });

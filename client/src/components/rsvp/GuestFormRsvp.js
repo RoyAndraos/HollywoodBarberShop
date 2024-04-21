@@ -1,13 +1,15 @@
 import styled from "styled-components";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { FaArrowRight } from "react-icons/fa";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
 import bg from "../../assets/bgPC.jpg";
+import { NavLink } from "react-router-dom";
 const FormRsvp = () => {
   const { setUserInfo } = useContext(UserContext);
   const { isMobile } = useContext(IsMobileContext);
+  const [isPhoneValid, setIsPhoneValid] = useState(false);
   const [formData, setFormData] = useState({
     fname: "",
     lname: "",
@@ -17,6 +19,15 @@ const FormRsvp = () => {
     note: "",
   });
   const { language } = useContext(LanguageContext);
+  // check if phone number is valid
+  useEffect(() => {
+    if (formData.number.length !== 10 && formData.number.length !== 0) {
+      setIsPhoneValid(false);
+    } else {
+      setIsPhoneValid(true);
+    }
+  }, [formData.number]);
+
   const handleChange = (e) => {
     setFormData((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
@@ -57,12 +68,15 @@ const FormRsvp = () => {
           }}
           required
         ></StyledInput>
+        {!isPhoneValid && (
+          <Error>
+            {language === "en" ? "Invalid phone number" : "Numero invalide"}
+          </Error>
+        )}
         <StyledInput
           name="email"
           placeholder={
-            language === "en"
-              ? "Email (optional)"
-              : "Addresse Courriel (optionnel)"
+            language === "en" ? "Email (optional)" : "Courriel (optionnel)"
           }
           onChange={(e) => {
             handleChange(e);
@@ -98,18 +112,39 @@ const FormRsvp = () => {
             alignItems: "center",
           }}
           disabled={
-            formData.fname && formData.lname && formData.number ? false : true
+            isPhoneValid && formData.fname && formData.lname && formData.number
+              ? false
+              : true
           }
         >
           {language === "en" ? "Next Step" : "Prochaine Etape"}
           <FaArrowRight style={{ marginLeft: "10px", color: "#035e3f" }} />
         </Submit>
+        <CancelWrapper>
+          {language === "en" ? "Or" : "Ou"}{" "}
+          <StyledNavLink to="/cancelReservation">
+            {language === "en" ? "click here" : "cliquez ici"}
+          </StyledNavLink>{" "}
+          {language === "en"
+            ? "to cancel an existing reservation."
+            : "pour annuler une réservation existante."}
+        </CancelWrapper>
       </SmallWrapper>
-      {!isMobile && <StyledBg />}
       {!isMobile && <Filter />}
+      {!isMobile && <StyledBg />}
     </StyledForm>
   );
 };
+const CancelWrapper = styled.div`
+  color: whitesmoke;
+`;
+const StyledNavLink = styled(NavLink)`
+  color: #e7e797;
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    color: #035e3f;
+  }
+`;
 const StyledForm = styled.form`
   background-color: transparent;
   display: flex;
@@ -179,6 +214,12 @@ const StyledInput = styled.input`
   font-size: 1.2rem;
   border-bottom: 4px solid #035e3f;
   outline: none;
+  z-index: 2;
+`;
+
+export const Error = styled.p`
+  color: #b50000;
+  font-size: 1.2rem;
   z-index: 2;
 `;
 export default FormRsvp;

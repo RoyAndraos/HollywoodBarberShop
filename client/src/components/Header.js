@@ -26,15 +26,7 @@ const Header = ({ isShowing }) => {
   let backToTopRef = useRef(null);
   const scrollToRef = (ref) => {
     //if ref is menuRef, then scroll to it, then scroll up a bit
-    if (!isMobile && ref === menuRef) {
-      ref.current.scrollIntoView({ behavior: "smooth" });
-      // Delay the scrollBy operation slightly after scrollIntoView
-      setTimeout(() => {
-        window.scrollBy(0, -200);
-      }, 350);
-    } else {
-      ref.current.scrollIntoView({ behavior: "smooth" });
-    }
+    ref.current.scrollIntoView({ behavior: "smooth" });
   };
   useEffect(() => {
     menuRef.current = document.getElementById("menu-section");
@@ -55,7 +47,9 @@ const Header = ({ isShowing }) => {
       if (scrollHeight > 0) {
         if (headerHeight === "8vh") {
           setHeaderHeight("4vh"); // Change the height when scrolled
-          setShowBackToTop(true);
+          if (!isMobile) {
+            setShowBackToTop(true);
+          }
         }
       } else {
         setHeaderHeight("8vh"); // Default height when at the top

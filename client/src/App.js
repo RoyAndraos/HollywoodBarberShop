@@ -14,6 +14,7 @@ import YourRes from "./components/rsvp/YourRes";
 import { useRef } from "react";
 import Header from "./components/Header";
 import { IsMobileContext } from "./components/contexts/IsMobileContext";
+import CancelReservation from "./components/CancelReservation";
 const App = () => {
   const { setBarberInfo, barberInfo } = useContext(BarberContext);
   const { setText, text } = useContext(TextContext);
@@ -56,6 +57,7 @@ const App = () => {
         <Route path={"/"} element={<HomePage />} />
         <Route path={"/book"} element={<RSVP />} />
         <Route path={"/yourReservation/:_id"} element={<YourRes />} />
+        <Route path={"/cancelReservation"} element={<CancelReservation />} />
       </Routes>
     </Container>
   );

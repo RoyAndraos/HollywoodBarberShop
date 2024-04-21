@@ -53,6 +53,7 @@ const Wrapper = styled.div`
   position: relative;
   margin-bottom: 3vh;
 `;
+
 const StyledBg = styled.div`
   background-image: url(${bg});
   background-size: cover;
