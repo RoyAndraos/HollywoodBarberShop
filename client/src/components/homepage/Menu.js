@@ -20,7 +20,7 @@ const Menu = () => {
       $isMobile={isMobile}
     >
       <TitleWrapper>
-        <Title>{language === "eng" ? "Our Prices" : "Nos Prix"}</Title>
+        <Title>{language === "en" ? "Our Prices" : "Nos Prix"}</Title>
       </TitleWrapper>
       <ThanksWrapper>
         * <br />* <br />* <br />*<br /> * <br />* <br />* <br />* <br />*

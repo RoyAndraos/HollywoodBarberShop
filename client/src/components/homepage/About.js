@@ -61,6 +61,7 @@ const About = () => {
 
 const StoryContainer = styled.div`
   width: 90vw;
+  height: 70vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -72,7 +73,7 @@ const StoryContainer = styled.div`
 `;
 const Story = styled.div`
   width: 90%;
-  font-size: 1.1rem;
+  font-size: 1rem;
   line-height: 1.1;
   letter-spacing: 0.1rem;
   font-family: "Lato", sans-serif;

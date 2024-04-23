@@ -142,7 +142,7 @@ const SocialMediaLinksWrapper = styled.div`
   background-color: transparent;
   transition: all 0.3s ease-in-out;
   position: relative;
-  top: 24.2vh;
+  top: 15vh;
 `;
 
 const SocialMediaLink = styled.div`

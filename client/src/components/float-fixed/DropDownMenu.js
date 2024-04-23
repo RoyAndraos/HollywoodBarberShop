@@ -96,7 +96,7 @@ const slideOut = keyframes`
 const Wrapper = styled.div`
   position: fixed;
   right: ${(props) => (props.isopen === "true" ? "0" : "-100%")};
-  top: 15.2vh;
+  top: 10vh;
   height: 28vh;
   padding: 0 20px 0 20px;
   animation: ${(props) => (props.isopen ? slideIn : slideOut)} 0.5s ease-in-out;

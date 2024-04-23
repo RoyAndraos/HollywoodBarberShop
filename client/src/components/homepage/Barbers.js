@@ -36,7 +36,6 @@ const Barbers = () => {
           </BarberWrapper>
         );
       })}
-      {barberInfo.length === 1 && <BarberWrapper />}
     </Wrapper>
   );
 };
@@ -56,7 +55,7 @@ const BarberWrapper = styled.div`
   }
 `;
 const Avatar = styled.img`
-  width: 200px;
+  width: 150px;
   border-radius: 10%;
 `;
 const Description = styled.p`
