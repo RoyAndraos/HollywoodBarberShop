@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { ServiceContext } from "../contexts/ServiceContext";
 import { BarberContext } from "../contexts/BarberContext";
 import moment from "moment";
-import { filterSlotBeforeFor2Duration } from "../helpers";
+import { removeSlotsForOverLapping } from "../helpers";
 import Loader from "../float-fixed/Loader";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +15,9 @@ import { IsMobileContext } from "../contexts/IsMobileContext";
 
 const Booking = () => {
   const [reservations, setReservations] = useState([]);
-  const [formData, setFormData] = useState({ date: new Date() });
+  const [formData, setFormData] = useState({
+    date: moment(new Date()).format("ddd MMM DD YYYY").toString(),
+  });
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedBarber, setSelectedBarber] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
@@ -23,7 +25,7 @@ const Booking = () => {
   const [selectedSlot, setSelectedSlot] = useState([]);
   const { barberInfo } = useContext(BarberContext);
   const { services } = useContext(ServiceContext);
-  const { userInfo, setUserInfo } = useContext(UserContext);
+  const { userInfo } = useContext(UserContext);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
   const todayDate = new Date();
@@ -60,6 +62,7 @@ const Booking = () => {
         const endDate = moment(selectedBarber.time_off[0].endDate)._i;
         const timeOff = moment(selectedDate).isBetween(startDate, endDate);
         setBarberIsOff(timeOff);
+        return;
       }
       // if barber is not off, filter available slots of the selected day
       const originalAvailableSlots = selectedBarber.availability
@@ -93,51 +96,28 @@ const Booking = () => {
 
       //1-filter out the now empty elements
       if (selectedService !== null) {
-        if (selectedService.duration === "2") {
-          const removedBeforeSlotsFor2Duration = todayReservations.map(
-            (reservation) => {
-              //2-if the services in reservations need 2 slots, remove the slot that comes after the one reserved
-              return filterSlotBeforeFor2Duration(reservation.slot[0]);
-            }
-          );
-          const finalAvailableSlots = filteredSlots
-            .filter((slot) => {
-              return slot !== "";
-            })
-            .filter((item) => !removedBeforeSlotsFor2Duration.includes(item));
-          if (isToday) {
-            const dailyAvailabilityFilteredSlots =
-              selectedBarber.dailyAvailability
-                .filter((slot) => {
-                  return slot.available === false;
-                })
-                .map((slot) => {
-                  return slot.slot;
-                });
-            setFilteredAvailableSlots(
-              finalAvailableSlots
-                .filter((slot) => {
-                  const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
-                  return minutes !== "45" && minutes !== "15";
-                })
-                .filter((item) => {
-                  return !dailyAvailabilityFilteredSlots.some((slot) =>
-                    item.includes(slot)
-                  );
-                })
-            );
-          } else {
-            setFilteredAvailableSlots(
-              finalAvailableSlots.filter((slot) => {
-                const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
-                return minutes !== "45" && minutes !== "15";
-              })
-            );
+        const finalAvailableSlots = filteredSlots.filter((slot) => {
+          return slot !== "";
+        });
+        const todayReservationStartingSlots = todayReservations.map(
+          (reservation) => {
+            return reservation.slot[0].split("-")[1];
           }
-        } else {
-          const finalAvailableSlots = filteredSlots.filter((slot) => {
-            return slot !== "";
-          });
+        );
+        const slotsToRemoveForOverlapping = removeSlotsForOverLapping(
+          selectedService.duration,
+          todayReservationStartingSlots
+        );
+        const filteredForOverlappingSlots = finalAvailableSlots.filter(
+          (slot) => {
+            // Extract the time portion of the slot (e.g., "2:30pm")
+            const time = slot.split("-")[1];
+            // Check if the time is not included in slotsToRemoveForOverlapping
+            return !slotsToRemoveForOverlapping.includes(time);
+          }
+        );
+
+        if (isToday) {
           const dailyAvailabilityFilteredSlots =
             selectedBarber.dailyAvailability
               .filter((slot) => {
@@ -147,7 +127,7 @@ const Booking = () => {
                 return slot.slot;
               });
           setFilteredAvailableSlots(
-            finalAvailableSlots
+            filteredForOverlappingSlots
               .filter((slot) => {
                 const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
                 return minutes !== "45" && minutes !== "15";
@@ -157,6 +137,13 @@ const Booking = () => {
                   item.includes(slot)
                 );
               })
+          );
+        } else {
+          setFilteredAvailableSlots(
+            filteredForOverlappingSlots.filter((slot) => {
+              const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
+              return minutes !== "45" && minutes !== "15";
+            })
           );
         }
       }
@@ -198,7 +185,8 @@ const Booking = () => {
   const handleDateChange = (date) => {
     setSelectedDate(date);
     setSelectedSlot([]);
-    handleChange("date", date);
+    const newDateFormat = moment(date).format("ddd MMM DD YYYY").toString();
+    handleChange("date", newDateFormat);
   };
 
   const handleBarberClick = (barber) => {
@@ -259,10 +247,6 @@ const Booking = () => {
       .then((data) => {
         switch (data.status) {
           case 200:
-            setUserInfo({
-              ...userInfo,
-              reservations: [...userInfo.reservations, data.data],
-            });
             navigate(`/yourReservation/${data.data._id}`);
             break;
           case 500:
@@ -499,10 +483,9 @@ const SmallWrapper = styled.div`
   align-items: center;
   justify-content: space-evenly;
   height: ${(props) => (props.$isMobile ? "100%" : "unset")};
-  width: ${(props) => (props.$isMobile ? "100%" : "30%")};
+  width: ${(props) => (props.$isMobile ? "100%" : "60%")};
   z-index: 1;
   background-color: ${(props) => (props.$isMobile ? "" : "rgba(0,0,0,0.7)")};
-  border-radius: 10px;
 `;
 const Submit = styled.button`
   font-family: sans-serif;

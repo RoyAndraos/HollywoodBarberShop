@@ -14,9 +14,6 @@ const MenuPC = () => {
   return (
     <Wrapper id="menu-section">
       <Title>{language === "en" ? "Our Services" : "Nos Services"}</Title>
-      <Message>
-        {language === "en" ? underMenu[0].content : underMenu[0].french}
-      </Message>
       <MenuWrapper>
         {services.map((service) => {
           return (
@@ -28,6 +25,11 @@ const MenuPC = () => {
             </Service>
           );
         })}
+      </MenuWrapper>
+      <Right>
+        <Message>
+          {language === "en" ? underMenu[0].content : underMenu[0].french}
+        </Message>
         <BookButton
           onClick={() => {
             navigate("/book");
@@ -35,71 +37,103 @@ const MenuPC = () => {
         >
           {language === "en" ? "Book Now" : "Reserver"}
         </BookButton>
-      </MenuWrapper>
+      </Right>
       <StyledBg />
       <Filter />
     </Wrapper>
   );
 };
 
-const Wrapper = styled.div`
+const Right = styled.div`
+  z-index: 3;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
+`;
+const Wrapper = styled.div`
+  display: grid;
+  grid-template-columns: 50% 30%;
+  place-content: center space-evenly;
   background-color: black;
+  scroll-snap-align: start;
   color: white;
   width: 100%;
   min-height: 70vh;
   position: relative;
   margin-bottom: 3vh;
+  top: -8vh;
 `;
 
 const StyledBg = styled.div`
   background-image: url(${bg});
   background-size: cover;
-  clip-path: polygon(46% 0, 59% 19%, 99% 23%, 100% 100%, 0 100%, 0% 60%, 0 0);
+  clip-path: polygon(46% 0, 59% 14%, 99% 17%, 100% 100%, 0 100%, 0% 60%, 0 0);
   width: 100%;
   height: 100%;
   z-index: 1;
   position: absolute;
+  top: 8vh;
 `;
 
 const Title = styled.h1`
-  font-size: clamp(1.8rem, 3rem, 3.4rem);
+  font-size: 35px;
   z-index: 3;
   margin: 1rem;
   position: absolute;
   color: #079061;
   top: 5%;
   right: 15%;
+  top: 8vh;
+
+  @media (max-width: 1000px) {
+    font-size: 25px;
+  }
 `;
 const Service = styled.div`
   background-color: rgba(0, 0, 0, 0.8);
   padding: 1rem;
   display: grid;
+  place-content: start;
   grid-template-columns: 70% 30%;
   gap: 1rem;
-  width: 50%;
   border-radius: 10px;
+  @media (max-width: 1000px) {
+    padding: 0.5rem;
+  }
 `;
 const ServiceName = styled.p`
-  font-size: clamp(1.3rem, 1.5rem, 1.8rem);
+  font-size: 20px;
   color: whitesmoke;
   margin-left: 20%;
+  @media (max-width: 1000px) {
+    font-size: 16px;
+  }
 `;
 const ServicePrice = styled.p`
-  font-size: clamp(1.1rem, 1.3rem, 1.6rem);
+  font-size: 20px;
   margin-left: 20%;
   color: #e7e7b0;
   font-weight: bold;
   z-index: 3;
+  @media (max-width: 1000px) {
+    font-size: 16px;
+  }
 `;
 const Message = styled.p`
-  font-size: clamp(1.1rem, 1.3rem, 1.6rem);
-  margin-left: 13%;
+  font-size: 20px;
   color: #e7e7b0;
   margin-bottom: 1rem;
   z-index: 3;
+  text-align: center;
+  line-height: 1.5;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 5rem 1rem 5rem 1rem;
+  margin-top: 5rem;
+  border-radius: 10px;
+  @media (max-width: 1000px) {
+    font-size: 16px;
+  }
 `;
 const MenuWrapper = styled.div`
   display: flex;
@@ -108,26 +142,27 @@ const MenuWrapper = styled.div`
   z-index: 3;
   gap: 1rem;
   position: relative;
-  left: 15%;
-  width: 85%;
+  top: 8vh;
+
+  @media (max-width: 1000px) {
+    gap: 0.5rem;
+  }
 `;
 const Filter = styled.div`
   position: absolute;
   height: 100%;
   width: 100%;
-  background-color: rgba(47, 36, 23, 0.5);
-  clip-path: polygon(46% 0, 59% 19%, 99% 23%, 100% 100%, 0 100%, 0% 60%, 0 0);
+  background-color: rgba(47, 36, 23, 0.9);
+  clip-path: polygon(46% 0, 59% 14%, 99% 17%, 100% 100%, 0 100%, 0% 60%, 0 0);
   z-index: 2;
+  top: 8vh;
 `;
 const BookButton = styled.button`
-  width: 20%;
   height: auto;
-  z-index: 1000;
   background-color: #035e3f;
   color: whitesmoke;
   font-size: clamp(1rem, 1.5vw, 1.6rem);
-  padding: 20px 0 20px 0;
-  border-radius: 20px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   font-family: "octin-prison", sans-serif;
@@ -135,9 +170,7 @@ const BookButton = styled.button`
   font-style: normal;
   border: none;
   letter-spacing: 2px;
-  position: absolute;
-  bottom: -25%;
-  left: 15%;
+  padding: 15px 30px;
   &:hover {
     transform: scale(1.02);
     background-color: whitesmoke;

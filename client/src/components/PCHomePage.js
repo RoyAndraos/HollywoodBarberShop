@@ -141,14 +141,11 @@ const StyledImage = styled.div.attrs((props) => ({
 `;
 
 const BookButton = styled.button`
-  width: 70%;
   height: auto;
-  z-index: 1000;
   background-color: #035e3f;
   color: whitesmoke;
   font-size: clamp(1rem, 1.5vw, 1.6rem);
-  padding: 20px 0 20px 0;
-  border-radius: 20px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
   font-family: "octin-prison", sans-serif;
@@ -156,6 +153,7 @@ const BookButton = styled.button`
   font-style: normal;
   border: none;
   letter-spacing: 2px;
+  padding: 15px 30px;
   &:hover {
     transform: scale(1.02);
     background-color: whitesmoke;
@@ -173,11 +171,11 @@ const StylishBookWrapper = styled.div`
   align-items: center;
   gap: 20px;
   color: whitesmoke;
-  width: 20%;
+  min-width: 20%;
   height: 55%;
   z-index: 10;
   background-color: rgba(0, 0, 0, 0.7);
-  padding: 20px;
+  padding: 0 50px;
   border-radius: 10px;
   transform: translateY(-50%);
 `;
@@ -186,7 +184,7 @@ const Filter = styled.div`
   position: absolute;
   height: 100%;
   width: 100%;
-  background-color: rgba(47, 36, 23, 0.45);
+  background-color: rgba(47, 36, 23, 0.7);
   z-index: 1;
 `;
 export default PCHomePage;

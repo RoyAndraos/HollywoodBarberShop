@@ -9,6 +9,7 @@ import NavBarPC from "./float-fixed/NavBarPC";
 import SocialsPC from "./float-fixed/SocialsPC";
 import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
+import { MdOutlineKeyboardDoubleArrowUp } from "react-icons/md";
 
 const Header = ({ isShowing }) => {
   const [isOpen, setIsOpen] = useState("false");
@@ -21,13 +22,25 @@ const Header = ({ isShowing }) => {
   let barbersRef = useRef(null);
   let aboutRef = useRef(null);
   let slideshowRef = useRef(null);
-  let logoRef = useRef(null);
   let textRef = useRef(null);
+  let logoRef = useRef(null);
   let backToTopRef = useRef(null);
   const scrollToRef = (ref) => {
     //if ref is menuRef, then scroll to it, then scroll up a bit
     ref.current.scrollIntoView({ behavior: "smooth" });
   };
+
+  useEffect(() => {
+    if (!textRef.current) {
+      return;
+    }
+    gsap.fromTo(
+      textRef.current,
+      { opacity: 0 },
+      { opacity: 1, duration: 0.5, ease: "power2.out", delay: 0.3 }
+    );
+  }, [headerHeight]);
+
   useEffect(() => {
     menuRef.current = document.getElementById("menu-section");
     barbersRef.current = document.getElementById("barbers-section");
@@ -72,7 +85,11 @@ const Header = ({ isShowing }) => {
       {isMobile ? (
         <Wrapper>
           <StyledNavLink to="/">
-            <Logo key={"logoForMobile"} src={"/assets/hello.jpg"} />
+            <Logo
+              key={"logoForMobile"}
+              src={"/assets/hello.jpg"}
+              $isMobile={isMobile}
+            />
           </StyledNavLink>
           {isShowing === true && (
             <BurgerMenu isopen={isOpen} setIsOpen={setIsOpen} />
@@ -92,22 +109,32 @@ const Header = ({ isShowing }) => {
           <div
             style={{
               position: "relative",
-              height: "100%",
+              maxHeight: "100%",
             }}
           >
             {headerHeight === "8vh" ? (
-              <Logo key={"logoForPC"} src={"/assets/hello.jpg"} ref={logoRef} />
-            ) : (
-              <StyledLogoText ref={textRef}>HOLLYWOOD</StyledLogoText>
-            )}
-            {headerHeight === "8vh" && (
-              <LogoFilter
+              <Logo
+                key={"logoForPC"}
+                src={"/assets/hello.jpg"}
+                ref={logoRef}
+                onLoad={() => {
+                  gsap.fromTo(
+                    logoRef.current,
+                    { opacity: 0 },
+                    {
+                      opacity: 1,
+                      duration: 0.5,
+                      ease: "power2.out",
+                      delay: 0.3,
+                    }
+                  );
+                }}
                 onClick={() => {
-                  if (location.pathname !== "/") {
-                    navigate("/");
-                  }
+                  navigate("/");
                 }}
               />
+            ) : (
+              <StyledLogoText ref={textRef}>HOLLYWOOD</StyledLogoText>
             )}
           </div>
           <NavBarPC
@@ -128,7 +155,7 @@ const Header = ({ isShowing }) => {
               scrollToRef(slideshowRef);
             }}
           >
-            ^
+            <MdOutlineKeyboardDoubleArrowUp />
           </StyledButton>
         </BackToTop>
       )}
@@ -145,9 +172,11 @@ const BackToTop = styled.div`
   align-items: center;
   border: 0.5px solid rgba(255, 255, 255, 0.5);
   margin-right: 0.5px;
-  width: 2vw;
-  height: 2vw;
+  width: 55px;
+  height: 45px;
   transition: all 0.3s ease-in-out;
+  padding: 0;
+  margin-right: 1px;
   &:hover {
     opacity: 0.8;
   }
@@ -165,6 +194,7 @@ export const Logo = styled.img`
   transform: translateX(-50%);
   border-radius: 30%;
   width: 55%;
+  max-height: ${(props) => (props.$isMobile ? "unset" : "8vh")};
   max-width: 200px;
   @media (min-width: 768px) {
     position: relative;
@@ -176,23 +206,6 @@ export const Logo = styled.img`
     margin-right: 1vw;
     cursor: pointer;
     z-index: 0;
-  }
-`;
-
-const LogoFilter = styled.div`
-  display: none;
-  @media (min-width: 768px) {
-    display: block;
-    position: absolute;
-    border-radius: 20%;
-    top: 2.5%;
-    width: 55%;
-    max-width: 200px;
-    background-color: rgba(0, 0, 0, 0.2);
-    height: 95%;
-    width: 100vw;
-    z-index: 1;
-    cursor: pointer;
   }
 `;
 
@@ -215,9 +228,9 @@ const WrapperPC = styled.div`
   position: fixed;
   transition: all 0.3s ease-in-out;
 `;
-const StyledLogoText = styled.h1`
+const StyledLogoText = styled.p`
   color: whitesmoke;
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 1vh, 2rem);
   z-index: 2;
   font-family: "nexa-rust-slab-black-2", sans-serif;
   font-style: normal;

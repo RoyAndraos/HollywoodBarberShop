@@ -26,20 +26,24 @@ const Barbers = () => {
             {barber.picture !== "" && (
               <Avatar src={barber.picture} alt="barber"></Avatar>
             )}
-            <BarberTitle>
-              {barber.given_name + " " + barber.family_name}
-            </BarberTitle>
+            <NameWrapper>
+              <BarberTitle>
+                {barber.given_name + " " + barber.family_name}
+              </BarberTitle>
+            </NameWrapper>
             <Description> {barber.description}</Description>
-            <Book key={barber._id} onClick={() => navigate("/book")}>
-              {language === "en" ? "Book" : "Reserver"}
-            </Book>
           </BarberWrapper>
         );
       })}
+      <Book onClick={() => navigate("/book")}>
+        {language === "en" ? "Book" : "Reserver"}
+      </Book>
     </Wrapper>
   );
 };
-
+const NameWrapper = styled.div`
+  width: 70vw;
+`;
 const BarberWrapper = styled.div`
   display: flex;
   height: 45vh;
@@ -49,13 +53,15 @@ const BarberWrapper = styled.div`
   align-items: center;
   justify-content: space-evenly;
   color: #035e3f;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 20px;
+  border-bottom: 1px solid #035e3f;
   &:last-of-type {
     border-bottom: none;
+    padding-bottom: 0;
   }
 `;
 const Avatar = styled.img`
-  width: 150px;
+  width: 120px;
   border-radius: 10%;
 `;
 const Description = styled.p`
@@ -86,7 +92,7 @@ const BarberTitle = styled.p`
   background-color: transparent;
   color: #e7e7b0;
   font-size: 1.5rem;
-  padding: 7px 12px 7px 12px;
+  padding: 7px 0;
   margin-top: 20px;
   font-family: "Brandon Grotesque Regular";
 `;

@@ -22,8 +22,8 @@ const AboutPC = () => {
   }, []);
   return (
     <Wrapper id="about-section">
+      <Title>Hollywood Barber Shop</Title>
       <Left>
-        <Title>Hollywood Barber Shop</Title>
         <StoryWrapper>
           <Story>
             {language === "en"
@@ -38,10 +38,8 @@ const AboutPC = () => {
             .
           </Story>
         </StoryWrapper>
-      </Left>
-      <Right>
         <StyledImg $src={aboutImage.src} alt="shop image"></StyledImg>
-      </Right>
+      </Left>
       {imageLoaded && <Filter />}
       {!imageLoaded && (
         <Blurhash
@@ -66,9 +64,9 @@ const Wrapper = styled.div`
   border-left: ${(props) => (props.$isMobile ? "5px solid #011c13" : "none")};
   border-right: ${(props) => (props.$isMobile ? "5px solid #011c13" : "none")};
   background-color: ${(props) => (props.$isMobile ? "#011c13" : "transparent")};
-  display: grid;
-  justify-content: space-around;
-  grid-template-columns: 30% 30%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
   gap: 5%;
   color: white;
   height: 70vh;
@@ -81,34 +79,46 @@ const Wrapper = styled.div`
 `;
 const Story = styled.p`
   text-align: left;
-  font-size: clamp(1.3rem, 1.5rem, 1.8rem);
+  font-size: 20px;
   line-height: 1.5;
   color: whitesmoke;
   padding: 0 20px 0 20px;
+  @media (max-width: 1000px) {
+    font-size: 16px;
+  }
 `;
 const Title = styled.h1`
   color: #079061;
-  display: flex;
-  margin: 0 2vw 5vh 2vw;
-  font-size: clamp(1.8rem, 2.5rem, 3.2rem);
+  position: absolute;
+  top: 15%;
+  left: 5%;
+  z-index: 3;
+  font-size: 35px;
+  @media (max-width: 1000px) {
+    font-size: 25px;
+  }
 `;
 const Left = styled.div`
   position: relative;
-  top: 20%;
+  width: 80vw;
+  height: 50vh;
+  top: 6vh;
   z-index: 3;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.8);
 `;
-const Right = styled.div`
-  z-index: 3;
-`;
+
 const StyledImg = styled.div`
-  position: relative;
   background-image: ${(props) => `url(${props.$src})`};
   background-size: cover;
   background-position: right 35% bottom 65%;
-  top: 30%;
-  border-radius: 20px;
+  border-radius: 5px;
   width: 25vw;
-  height: 50vh;
+  height: 45vh;
   box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.5);
 `;
 const StyledBG = styled.div`
@@ -127,7 +137,7 @@ const Filter = styled.div`
   position: absolute;
   height: 100%;
   width: 100%;
-  background-color: rgba(47, 36, 23, 0.5);
+  background-color: rgba(47, 36, 23, 0.9);
   z-index: 2;
   clip-path: polygon(38% 16%, 48% 0, 100% 0, 100% 100%, 0 100%, 0% 60%, 0 20%);
   transition: all 0.1s ease-in-out smooth;
@@ -138,12 +148,9 @@ const StoryWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
-  align-items: center;
   gap: 20px;
-  left: 50%;
-  top: 20%;
-  background-color: rgba(0, 0, 0, 0.8);
   padding: 50px 30px;
   border-radius: 10px;
+  max-width: 50%;
 `;
 export default AboutPC;

@@ -167,7 +167,7 @@ const FooterPc = () => {
   );
 };
 const Wrapper = styled.div`
-  height: 19vh;
+  height: 25vh;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -177,10 +177,10 @@ const Wrapper = styled.div`
 const TopPart = styled.div`
   display: grid;
   grid-template-columns: 33% 33% 33%;
-  align-items: flex-start;
+  place-content: top space-evenly;
   width: 100%;
   justify-content: center;
-  height: 10vh;
+  height: 20vh;
 `;
 const BottomPart = styled.div`
   width: 100%;
@@ -188,7 +188,6 @@ const BottomPart = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
   color: whitesmoke;
 `;
 const BusinesssHours = styled.div`
@@ -218,9 +217,7 @@ const Location = styled.div`
   width: 100%;
 `;
 const StyledLogo = styled.img`
-  max-height: 8vh;
-  position: relative;
-  top: 1vh;
+  max-height: 13vh;
   border-radius: 30%;
 `;
 const StyledButton = styled.button`

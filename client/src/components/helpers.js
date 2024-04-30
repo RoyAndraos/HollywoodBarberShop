@@ -28,3 +28,47 @@ export const filterSlotBeforeFor2Duration = (slot) => {
     }
   }
 };
+
+export const removeSlotsForOverLapping = (
+  serviceDuration,
+  todayReservationStartingSlots
+) => {
+  let slotsToRemove = [];
+  switch (serviceDuration) {
+    case "1":
+      break;
+    case "2":
+      todayReservationStartingSlots.forEach((slot) => {
+        const slotToEdit = filterSlotBeforeFor2Duration(slot);
+        slotsToRemove.push(slotToEdit);
+      });
+      break;
+    case "3":
+      todayReservationStartingSlots.forEach((slot) => {
+        const slotToEdit = filterSlotBeforeFor2Duration(slot);
+        slotsToRemove.push(slotToEdit);
+        const slotToEdit2 = filterSlotBeforeFor2Duration(slotToEdit);
+        slotsToRemove.push(slotToEdit2);
+      });
+      break;
+    case "4":
+      todayReservationStartingSlots.forEach((slot) => {
+        const slotToEdit = filterSlotBeforeFor2Duration(slot);
+        slotsToRemove.push(slotToEdit);
+        const slotToEdit2 = filterSlotBeforeFor2Duration(slotToEdit);
+        slotsToRemove.push(slotToEdit2);
+        const slotToEdit3 = filterSlotBeforeFor2Duration(slotToEdit2);
+        slotsToRemove.push(slotToEdit3);
+      });
+      break;
+    default:
+      break;
+  }
+
+  return slotsToRemove.map((slot) => {
+    if (slot[0] === "0") {
+      return slot.slice(1);
+    }
+    return slot;
+  });
+};

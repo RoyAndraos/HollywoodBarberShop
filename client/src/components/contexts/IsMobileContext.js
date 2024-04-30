@@ -6,7 +6,7 @@ export const IsMobileProvider = ({ children }) => {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const handleResize = () => {
-      const newIsMobile = window.innerWidth <= 1000;
+      const newIsMobile = window.innerWidth <= 760;
       setIsMobile(newIsMobile);
     };
     handleResize();
