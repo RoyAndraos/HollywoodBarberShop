@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import { Title, Wrapper, TitleWrapper } from "./Menu";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,20 @@ const Barbers = () => {
   const navigate = useNavigate();
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
+  const [currentBarberIndex, setCurrentBarberIndex] = useState(0);
+
+  const nextBarber = () => {
+    setCurrentBarberIndex((prevIndex) =>
+      prevIndex === barberInfo.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const prevBarber = () => {
+    setCurrentBarberIndex((prevIndex) =>
+      prevIndex === 0 ? barberInfo.length - 1 : prevIndex - 1
+    );
+  };
+  console.log(currentBarberIndex);
   return (
     <Wrapper
       id="barbers-section"
@@ -20,9 +34,13 @@ const Barbers = () => {
       <TitleWrapper>
         <Title>{language === "en" ? "Our Team" : "Notre Equipe"}</Title>
       </TitleWrapper>
-      {barberInfo.map((barber) => {
+      {barberInfo.map((barber, index) => {
         return (
-          <BarberWrapper key={barber._id}>
+          <BarberWrapper
+            key={barber._id}
+            $selected={currentBarberIndex === index}
+            $prev={currentBarberIndex === index - 1}
+          >
             {barber.picture !== "" && (
               <Avatar src={barber.picture} alt="barber"></Avatar>
             )}
@@ -35,14 +53,49 @@ const Barbers = () => {
           </BarberWrapper>
         );
       })}
-      <Book onClick={() => navigate("/book")}>
-        {language === "en" ? "Book" : "Reserver"}
-      </Book>
+      <ButtonWrapper>
+        <SelectWrap>
+          <StyledSelectButton
+            onClick={prevBarber}
+            $selected={currentBarberIndex === 0}
+          ></StyledSelectButton>
+          <StyledSelectButton
+            onClick={nextBarber}
+            $selected={currentBarberIndex === 1}
+          ></StyledSelectButton>
+        </SelectWrap>
+        <Book onClick={() => navigate("/book")}>
+          {language === "en" ? "Book" : "Reserver"}
+        </Book>
+      </ButtonWrapper>
     </Wrapper>
   );
 };
 const NameWrapper = styled.div`
   width: 70vw;
+`;
+const ButtonWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 70vw;
+  position: absolute;
+  align-items: center;
+  bottom: 20%;
+`;
+const SelectWrap = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 20vw;
+  justify-content: space-between;
+`;
+const StyledSelectButton = styled.button`
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: ${(props) => (props.$selected ? "#035e3f" : "#02412b")};
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
 `;
 const BarberWrapper = styled.div`
   display: flex;
@@ -55,6 +108,13 @@ const BarberWrapper = styled.div`
   color: #035e3f;
   padding-bottom: 20px;
   border-bottom: 1px solid #035e3f;
+  border-top: 1px solid #035e3f;
+  top: 40%;
+  left: 50%;
+  position: absolute;
+  transition: all 0.3s ease-in-out;
+  transform: ${({ $selected }) =>
+    $selected ? "translate(-50%, -50%)" : "translate(-200%, -50%)"};
   &:last-of-type {
     border-bottom: none;
     padding-bottom: 0;
