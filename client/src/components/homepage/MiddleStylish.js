@@ -67,19 +67,19 @@ const MiddleStylish = () => {
 const Wrapper = styled.div`
   position: absolute;
   z-index: 9;
-  top: 35%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -40%);
   font-size: 1.3rem;
   color: white;
-  height: 70vh;
+  height: 65vh;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   width: 85vw;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.5);
 `;
 
 export const SecondWrap = styled.div`
@@ -102,7 +102,6 @@ export const FirstContainer = styled.div`
   justify-content: center;
   align-items: center;
   height: 30%;
-  text-shadow: 0 0 15px black;
   width: 100%;
 `;
 export const SecondContainer = styled.div`
@@ -115,7 +114,6 @@ export const SecondContainer = styled.div`
   height: 30%;
   align-items: center;
   justify-content: center;
-  text-shadow: 0 0 15px black;
   width: 100%;
 `;
 export const ThirdContainer = styled.div`
@@ -127,7 +125,6 @@ export const ThirdContainer = styled.div`
   height: 30%;
   align-items: center;
   justify-content: center;
-  text-shadow: 0 0 15px black;
   flex-direction: column;
   width: 100%;
 `;
@@ -137,7 +134,6 @@ export const Modern = styled.p`
   width: 100%;
   padding: 0 20px;
   font-size: clamp(1rem, 1.5vw, 1.6rem);
-  text-shadow: 7px 7px 3px black;
 `;
 
 export const WordContainer = styled.div`
