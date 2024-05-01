@@ -151,7 +151,9 @@ const StyledForm = styled.form`
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  height: 80vh;
+  position: relative;
+  top: 3vh;
+  height: 70vh;
   @media (min-width: 768px) {
     height: 100vh;
     justify-content: center;

@@ -69,7 +69,7 @@ const MiddleStylish = () => {
 const Wrapper = styled.div`
   position: absolute;
   z-index: 9;
-  top: 40%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -40%);
   font-size: 1.3rem;

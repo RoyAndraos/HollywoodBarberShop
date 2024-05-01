@@ -482,7 +482,7 @@ const SmallWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  height: ${(props) => (props.$isMobile ? "100%" : "unset")};
+  height: ${(props) => (props.$isMobile ? "unset" : "unset")};
   width: ${(props) => (props.$isMobile ? "100%" : "60%")};
   z-index: 1;
   background-color: ${(props) => (props.$isMobile ? "" : "rgba(0,0,0,0.7)")};

@@ -98,14 +98,14 @@ const getReservations = async (req, res) => {
 
 const addReservation = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
-  const formData = req.body.data[0];
-  const userInfo = req.body.data[1];
+  const formData = req.body[0];
+  const userInfo = req.body[1];
   const _id = uuid();
   const client_id = uuid();
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
-    const reservation = {
+    let reservation = {
       _id: _id,
       date: formData.date,
       barber: formData.barber,
@@ -117,14 +117,11 @@ const addReservation = async (req, res) => {
       number: userInfo.number,
       client_id: client_id,
     };
-    // add the reservation to the database
-    await db.collection("reservations").insertOne(reservation);
 
     // check if client exists
     const isClient = await db
       .collection("Clients")
       .findOne({ number: reservation.number });
-
     // if client does not exist, create client
     if (isClient === null) {
       await db.collection("Clients").insertOne({
@@ -136,10 +133,16 @@ const addReservation = async (req, res) => {
         note: "",
         reservations: [_id],
       });
+      // add the reservation to the database
+      await db.collection("reservations").insertOne(reservation);
     } else {
+      //update the client's reservations array
       await db
         .collection("Clients")
         .updateOne({ _id: isClient._id }, { $push: { reservations: _id } });
+      // add the reservation to the database
+      reservation.client_id = isClient._id;
+      await db.collection("reservations").insertOne(reservation);
     }
 
     // send SMS to the user
@@ -148,17 +151,17 @@ const addReservation = async (req, res) => {
         reservation.lname !== "" && reservation.lname
       }, votre réservation au Hollywood Barbershop est confirmée pour ${
         reservation.date
-      } à ${reservation.slot[0].split("-")[1]}. Vous recevrez un ${
+      } à ${reservation.slot[0].split("-")[1]}. Vous recevrez une ${
         reservation.service.name
       } pour ${reservation.service.price} CAD. ~${reservation.barber}
       
       Hello ${reservation.fname} ${
         reservation.lname !== "" && reservation.lname
-      }, your reservation at Hollywood Barbershop is confirmed for ${formattedDate} at ${
-        reservation.slot[0].split("-")[1]
-      }. You will be getting a ${reservation.service.name} for ${
-        reservation.service.price
-      }. ~${reservation.barber}
+      }, your reservation at Hollywood Barbershop is confirmed for ${
+        reservation.date
+      } at ${reservation.slot[0].split("-")[1]}. You will be getting a ${
+        reservation.service.english
+      } for ${reservation.service.price}. ~${reservation.barber}
       
       ID: ${_id}
       `,

@@ -113,7 +113,7 @@ const StyledImage = styled.img`
 
 const BookButton = styled.button`
   position: absolute;
-  top: 80%;
+  top: 75%;
   left: 50%;
   width: 76vw;
   transform: translate(-50%, -50%);
