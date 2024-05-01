@@ -95,31 +95,19 @@ const getReservations = async (req, res) => {
 // ---------------------------------------------------------------------------------------------
 // POST ENDPOINTS
 // ---------------------------------------------------------------------------------------------
-//FOR DATE FORMAT BEFORE SAVING IN DB
-const formatDate = (inputDate) => {
-  cons = {
-    weekday: "short",
-    year: "numeric",
-    month: "short",
-    day: "2-digit",
-  };
 
-  const formattedDate = new Date(inputDate).toLocaleDateString("en-US");
-  return formattedDate;
-};
 const addReservation = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
   const formData = req.body.data[0];
   const userInfo = req.body.data[1];
   const _id = uuid();
-  const formattedDate = formatDate(formData.date).replace(/,/g, "");
   const client_id = uuid();
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
     const reservation = {
       _id: _id,
-      date: formattedDate,
+      date: formData.date,
       barber: formData.barber,
       service: formData.service,
       slot: formData.slot,
