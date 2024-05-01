@@ -17,7 +17,6 @@ const MiddleStylish = () => {
     return (
       <Wrapper>
         <WordContainer>
-          * * *
           <FirstContainer>
             <Modern key={StylishText[0]}>
               {language === "en"
@@ -59,7 +58,6 @@ const MiddleStylish = () => {
                 : frenchStylishText[2].split(" ")[1]}
             </Modern>
           </ThirdContainer>
-          * * *
         </WordContainer>
       </Wrapper>
     );
@@ -69,19 +67,19 @@ const MiddleStylish = () => {
 const Wrapper = styled.div`
   position: absolute;
   z-index: 9;
-  top: 30%;
+  top: 35%;
   left: 50%;
   transform: translate(-50%, -40%);
   font-size: 1.3rem;
   color: white;
-  height: 76vh;
-  padding: 20px;
+  height: 70vh;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-items: center;
   width: 85vw;
+  background-color: rgba(0, 0, 0, 0.8);
 `;
 
 export const SecondWrap = styled.div`
@@ -143,7 +141,7 @@ export const Modern = styled.p`
 `;
 
 export const WordContainer = styled.div`
-  height: 70%;
+  height: 90%;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;

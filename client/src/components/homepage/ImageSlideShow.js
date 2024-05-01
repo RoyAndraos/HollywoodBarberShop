@@ -115,13 +115,13 @@ const BookButton = styled.button`
   position: absolute;
   top: 75%;
   left: 50%;
-  width: 76vw;
+  width: 50vw;
   transform: translate(-50%, -50%);
   z-index: 1000;
   background-color: #035e3f;
   color: whitesmoke;
   font-size: 1.4rem;
-  padding: 20px 0 20px 0;
+  padding: 10px 0;
   border-radius: 20px;
   border: 3px solid #002b1c;
   font-family: sans-serif;
@@ -129,7 +129,7 @@ const BookButton = styled.button`
 const StyledLeftButton = styled.button`
   position: absolute;
   top: 50%;
-  left: 30px;
+  left: 0;
   transform: translateY(-50%) scaleY(1.7) scaleX(1.1);
   z-index: 100;
   font-size: 3rem;
@@ -141,7 +141,7 @@ const StyledLeftButton = styled.button`
 const StyledRightButton = styled.button`
   position: absolute;
   top: 50%;
-  right: 30px;
+  right: 0;
   transform: translateY(-50%) scaleY(1.7) scaleX(1.1);
   z-index: 1000;
   font-size: 3rem;
