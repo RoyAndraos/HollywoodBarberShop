@@ -239,7 +239,7 @@ const Booking = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ data: [formData, userInfo] }),
+      body: JSON.stringify([formData, userInfo]),
     })
       .then((res) => {
         return res.json();
@@ -250,6 +250,7 @@ const Booking = () => {
             navigate(`/yourReservation/${data.data._id}`);
             break;
           case 500:
+            console.log(data.message);
             break;
           default:
             alert("Something went wrong please try again later");

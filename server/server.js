@@ -172,17 +172,7 @@ const addReservation = async (req, res) => {
     // send response to the client
     res.status(200).json({
       status: 200,
-      data: {
-        date: formData.date,
-        barber: formData.barber,
-        service: formData.service,
-        slot: formData.slot,
-        fname: userInfo.fname,
-        lname: userInfo.lname,
-        email: userInfo.email,
-        number: userInfo.number,
-        _id: _id,
-      },
+      data: reservation,
     });
   } catch (err) {
     // handle errors
@@ -245,7 +235,7 @@ const deleteReservation = async (req, res) => {
       );
 
       const now = new Date();
-      const differenceInMilliseconds = dateTime - now;
+      const differenceInMilliseconds = now - dateTime;
       const differenceInHours = differenceInMilliseconds / (1000 * 60 * 60); // Convert milliseconds to hours
       if (differenceInHours > 3) {
         // Reservation is more than 3 hours away from now
@@ -261,15 +251,23 @@ const deleteReservation = async (req, res) => {
           messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
           to: phone,
         });
+        res
+          .status(200)
+          .json({ status: 200, reservation: reservation, message: message });
       } else if (differenceInHours < 0) {
-        message = "Reservation is in the past.";
+        res.status(404).json({
+          status: 404,
+          reservation: reservation,
+          message: "Reservation is in the past.",
+        });
       } else {
         // Reservation is within 3 hours from now
-        message = "Reservation is in less than 3 hours.";
+        res.status(404).json({
+          status: 404,
+          reservation: reservation,
+          message: "Reservation is in less than 3 hours.",
+        });
       }
-      res
-        .status(200)
-        .json({ status: 200, reservation: reservation, message: message });
     }
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
