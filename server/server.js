@@ -220,7 +220,12 @@ const deleteReservation = async (req, res) => {
       // check if reservation is in more than 3 hours
       // get the day
       const dateParts = reservation.date.split(" "); // Split date string into parts
-      const time = reservation.slot[0].split("-")[1].slice(0, -2); // Extract time, e.g., "12:30"
+
+      const suffix = reservation.slot[0].split("-")[1].slice(-2); // Extract AM/PM
+      let time = reservation.slot[0].split("-")[1].slice(0, -2); // Extract time, e.g., "12:30"
+      if (suffix === "pm" && time.split(":")[0] !== "12") {
+        time = parseInt(time.split(":")[0]) + 12 + ":" + time.split(":")[1]; // Convert 12-hour time to 24-hour time
+      }
       const [hours, minutes] = time.split(":").map(Number); // Split time into hours and minutes
 
       // Construct the Date object in UTC
@@ -234,9 +239,18 @@ const deleteReservation = async (req, res) => {
         )
       );
 
-      const now = new Date();
-      const differenceInMilliseconds = now - dateTime;
-      const differenceInHours = differenceInMilliseconds / (1000 * 60 * 60); // Convert milliseconds to hours
+      const now = new Date(
+        Date.UTC(
+          new Date().getFullYear(),
+          new Date().getMonth(),
+          new Date().getDate(),
+          new Date().getHours(),
+          new Date().getMinutes()
+        )
+      );
+
+      const differenceInMilliseconds = dateTime.getTime() - now.getTime();
+      const differenceInHours = differenceInMilliseconds / (1000 * 60 * 60); //Convert milliseconds to hours
       if (differenceInHours > 3) {
         // Reservation is more than 3 hours away from now
         await db.collection("reservations").deleteOne({

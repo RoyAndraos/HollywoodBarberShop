@@ -2,13 +2,17 @@ import { useContext } from "react";
 import styled from "styled-components";
 import { LanguageContext } from "./contexts/LanguageContext";
 import { ServiceContext } from "./contexts/ServiceContext";
-import bg from "../assets/MenuPC.jpg";
 import { useNavigate } from "react-router-dom";
 import { TextContext } from "./contexts/TextContext";
+import { ImageContext } from "./contexts/ImageContext";
 const MenuPC = () => {
   const { services } = useContext(ServiceContext);
   const { language } = useContext(LanguageContext);
   const { text } = useContext(TextContext);
+  const { images } = useContext(ImageContext);
+  const menuBackground = images.filter(
+    (image) => image.filename === "menuBackground"
+  )[0].src;
   const underMenu = text.filter((item) => item._id === "underMenu");
   const navigate = useNavigate();
   return (
@@ -38,8 +42,7 @@ const MenuPC = () => {
           {language === "en" ? "Book Now" : "Reserver"}
         </BookButton>
       </Right>
-      <StyledBg />
-      <Filter />
+      <StyledBg src={menuBackground} />
     </Wrapper>
   );
 };
@@ -55,7 +58,7 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 50% 30%;
   place-content: center space-evenly;
-  background-color: black;
+  background-color: #011c13;
   scroll-snap-align: start;
   color: white;
   width: 100%;
@@ -65,9 +68,8 @@ const Wrapper = styled.div`
   top: -8vh;
 `;
 
-const StyledBg = styled.div`
-  background-image: url(${bg});
-  background-size: cover;
+const StyledBg = styled.img`
+  object-fit: cover;
   clip-path: polygon(46% 0, 59% 14%, 99% 17%, 100% 100%, 0 100%, 0% 60%, 0 0);
   width: 100%;
   height: 100%;
@@ -81,7 +83,7 @@ const Title = styled.h1`
   z-index: 3;
   margin: 1rem;
   position: absolute;
-  color: #079061;
+  color: rgba(243, 238, 211, 0.9);
   top: 5%;
   right: 15%;
   top: 8vh;
@@ -148,15 +150,7 @@ const MenuWrapper = styled.div`
     gap: 0.5rem;
   }
 `;
-const Filter = styled.div`
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(47, 36, 23, 0.9);
-  clip-path: polygon(46% 0, 59% 14%, 99% 17%, 100% 100%, 0 100%, 0% 60%, 0 0);
-  z-index: 2;
-  top: 8vh;
-`;
+
 const BookButton = styled.button`
   height: auto;
   background-color: #035e3f;

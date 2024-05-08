@@ -221,7 +221,7 @@ const WrapperPC = styled.div`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: black;
+  background-color: #035e3f;
   height: ${(props) => props.$headerHeight};
   gap: 1vw;
   width: 100vw;
@@ -234,7 +234,7 @@ const StyledLogoText = styled.p`
   z-index: 2;
   font-family: "nexa-rust-slab-black-2", sans-serif;
   font-style: normal;
-  color: #079061;
+  color: whitesmoke;
   border-right: 1px solid rgba(255, 255, 255, 0.5);
   padding-right: 1vw;
 `;

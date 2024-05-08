@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
-import { Filter, StyledBg } from "./rsvp/GuestFormRsvp";
 import { IsMobileContext } from "./contexts/IsMobileContext";
 import { useNavigate } from "react-router-dom";
 import { Error } from "./rsvp/GuestFormRsvp";
 import { LanguageContext } from "./contexts/LanguageContext";
 import Header from "./Header";
+import { ImageContext } from "./contexts/ImageContext";
+
 const CancelReservation = () => {
   const { isMobile } = useContext(IsMobileContext);
   const [phone, setPhone] = useState("");
@@ -14,6 +15,10 @@ const CancelReservation = () => {
   const [resIdError, setResIdError] = useState("");
   const [cancelError, setCancelError] = useState("");
   const { language } = useContext(LanguageContext);
+  const { images } = useContext(ImageContext);
+  const homepageBackground = images.filter(
+    (image) => image.filename === "homepageBackground"
+  )[0].src;
   //make a validation function to check if the phone number is valid and if the reservation id is valid
   useEffect(() => {
     if (phone.length !== 10 && phone.length !== 0) {
@@ -39,7 +44,6 @@ const CancelReservation = () => {
   }, [resId]);
   const navigate = useNavigate();
   const handleDeleteReservation = () => {
-    console.log({ phone: phone, resId: resId });
     fetch("https://hollywoodbarbershop.onrender.com/deleteReservation", {
       method: "DELETE",
       headers: {
@@ -49,6 +53,7 @@ const CancelReservation = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        console.log(data);
         if (data.status === 200) {
           if (data.message === "Reservation is in the past.") {
             if (language === "en") {
@@ -127,8 +132,7 @@ const CancelReservation = () => {
           {language === "en" ? "Cancel Reservation" : "Annuler la réservation"}
         </CancelButton>
       </SmallWrapper>
-      {!isMobile && <StyledBg key={"cancel"} />}
-      {!isMobile && <Filter key={"filterCancel"} />}
+      {!isMobile && <StyledBg key={"cancel"} src={homepageBackground} />}
     </Wrapper>
   );
 };
@@ -231,5 +235,12 @@ const HeaderWrapper = styled.div`
   top: 0;
   z-index: 10;
   background-color: black;
+`;
+const StyledBg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  z-index: 0;
 `;
 export default CancelReservation;

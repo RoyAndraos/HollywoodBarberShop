@@ -3,12 +3,17 @@ import { useParams } from "react-router-dom";
 import Loader from "../float-fixed/Loader";
 import styled from "styled-components";
 import Header from "../Header";
-import { StyledBg, Filter } from "./GuestFormRsvp";
 import { IsMobileContext } from "../contexts/IsMobileContext";
+import { ImageContext } from "../contexts/ImageContext";
 const YourRes = () => {
   const [res, setRes] = useState({});
   const params = useParams();
   const { isMobile } = useContext(IsMobileContext);
+  const { images } = useContext(ImageContext);
+  const homepageBackground = images.filter(
+    (image) => image.filename === "homepageBackground"
+  )[0].src;
+
   useEffect(() => {
     fetch(`https://hollywoodbarbershop.onrender.com/getRes/${params._id}`)
       .then((res) => res.json())
@@ -54,8 +59,7 @@ const YourRes = () => {
         </StyledDiv>
         <Message>Thank you for booking with hollywood barbers!</Message>
       </SmallWrapper>
-      <StyledBg />
-      <Filter />
+      <StyledBg src={homepageBackground} />
     </Wrapper>
   );
 };
@@ -102,5 +106,12 @@ const Message = styled.p`
   width: 70%;
   text-align: center;
   line-height: 1.5;
+`;
+const StyledBg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  z-index: 0;
 `;
 export default YourRes;

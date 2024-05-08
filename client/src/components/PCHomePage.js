@@ -1,6 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import bg from "../assets/bgPC.jpg";
 import { useNavigate } from "react-router-dom";
 import { LanguageContext } from "./contexts/LanguageContext";
 import {
@@ -13,21 +12,25 @@ import {
 } from "./homepage/MiddleStylish";
 import { TextContext } from "./contexts/TextContext";
 import Loader from "./float-fixed/Loader";
-import { Blurhash } from "react-blurhash";
+import { ImageContext } from "./contexts/ImageContext";
 const PCHomePage = () => {
   const navigate = useNavigate();
   const { text } = useContext(TextContext);
   const { language } = useContext(LanguageContext);
   const imgRef = useRef(null);
   const [imageLoaded, setImageLoaded] = useState(false);
+  const { images } = useContext(ImageContext);
   const [offsetY, setOffsetY] = useState(0);
+  const homepageImageSrc = images.filter(
+    (image) => image.filename === "homepageBackground"
+  )[0].src;
   useEffect(() => {
     const img = new Image();
     img.onload = () => {
       setImageLoaded(true);
     };
-    img.src = bg;
-  }, [imageLoaded]);
+    img.src = homepageImageSrc;
+  }, [homepageImageSrc]);
   const handleScroll = () => {
     requestAnimationFrame(() => {
       setOffsetY(window.pageYOffset);
@@ -49,19 +52,9 @@ const PCHomePage = () => {
       .french;
     return (
       <Wrapper ref={main}>
-        {imageLoaded && <Filter />}
-
-        {!imageLoaded && (
-          <Blurhash
-            hash="L6BM*z00W002~p4n%MM}M}xtt3WW"
-            width="100%"
-            height="85vh"
-            resolutionX={32}
-            resolutionY={32}
-            punch={1}
-          />
+        {imageLoaded && (
+          <StyledImage ref={imgRef} $offsetY={offsetY} src={homepageImageSrc} />
         )}
-        {imageLoaded && <StyledImage ref={imgRef} $offsetY={offsetY} />}
 
         <StylishBookWrapper>
           <WordContainer>
@@ -127,15 +120,7 @@ const Wrapper = styled.div`
   background-color: black;
 `;
 
-const StyledImage = styled.div.attrs((props) => ({
-  style: {
-    backgroundImage: `url(${bg})`,
-    backgroundSize: "cover",
-    behavior: "smooth",
-    backgroundPosition: `center ${props.$offsetY * -0.13}px`,
-  },
-}))`
-  background-repeat: no-repeat;
+const StyledImage = styled.img`
   height: 100%;
   width: 100%;
 `;
@@ -172,19 +157,12 @@ const StylishBookWrapper = styled.div`
   gap: 20px;
   color: whitesmoke;
   min-width: 20%;
-  height: 55%;
+  height: 60%;
   z-index: 10;
   background-color: rgba(0, 0, 0, 0.7);
-  padding: 0 50px;
+  padding: 50px 50px;
   border-radius: 10px;
   transform: translateY(-50%);
 `;
 
-const Filter = styled.div`
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(47, 36, 23, 0.7);
-  z-index: 1;
-`;
 export default PCHomePage;

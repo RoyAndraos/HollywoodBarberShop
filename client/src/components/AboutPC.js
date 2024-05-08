@@ -3,8 +3,6 @@ import { TextContext } from "./contexts/TextContext";
 import { ImageContext } from "./contexts/ImageContext";
 import { LanguageContext } from "./contexts/LanguageContext";
 import styled from "styled-components";
-import bg from "../assets/AboutBG.jpg";
-import { Blurhash } from "react-blurhash";
 const AboutPC = () => {
   const { text } = useContext(TextContext);
   const { images } = useContext(ImageContext);
@@ -12,14 +10,17 @@ const AboutPC = () => {
   const aboutText = text.filter((text) => text._id === "about")[0].content;
   const frenchAboutText = text.filter((text) => text._id === "about")[0].french;
   const aboutImage = images.filter((image) => image.filename === "about")[0];
+  const aboutBackground = images.filter((image) => {
+    return image.filename === "aboutBackground";
+  })[0].src;
   const [imageLoaded, setImageLoaded] = useState(false);
   useEffect(() => {
     const img = new Image();
     img.onload = () => {
       setImageLoaded(true);
     };
-    img.src = bg;
-  }, []);
+    img.src = aboutBackground;
+  }, [aboutBackground]);
   return (
     <Wrapper id="about-section">
       <Title>Hollywood Barber Shop</Title>
@@ -40,30 +41,14 @@ const AboutPC = () => {
         </StoryWrapper>
         <StyledImg $src={aboutImage.src} alt="shop image"></StyledImg>
       </Left>
-      {imageLoaded && <Filter />}
-      {!imageLoaded && (
-        <Blurhash
-          hash="LBCF|y~q?a?a-;a*.8%M?Gxu.8i|"
-          width="99.4vw"
-          height="70vh"
-          resolutionX={32}
-          resolutionY={32}
-          punch={1}
-          style={{
-            clipPath:
-              "polygon(38% 16%, 48% 0, 100% 0, 100% 100%, 0 100%, 0% 60%, 0 20%)",
-            transform: "translateX(-8.8vw) translateY(-44vh)",
-          }}
-        />
-      )}
-      {imageLoaded && <StyledBG />}
+      {imageLoaded && <StyledBG src={aboutBackground} />}
     </Wrapper>
   );
 };
 const Wrapper = styled.div`
   border-left: ${(props) => (props.$isMobile ? "5px solid #011c13" : "none")};
   border-right: ${(props) => (props.$isMobile ? "5px solid #011c13" : "none")};
-  background-color: ${(props) => (props.$isMobile ? "#011c13" : "transparent")};
+  background-color: #011c13;
   display: flex;
   justify-content: center;
   align-items: flex-end;
@@ -74,7 +59,6 @@ const Wrapper = styled.div`
   scroll-snap-align: start;
   top: -8vh;
   width: 100%;
-  background-color: black;
   margin-bottom: 4vh;
 `;
 const Story = styled.p`
@@ -88,7 +72,7 @@ const Story = styled.p`
   }
 `;
 const Title = styled.h1`
-  color: #079061;
+  color: rgba(243, 238, 211, 0.9);
   position: absolute;
   top: 15%;
   left: 5%;
@@ -109,7 +93,7 @@ const Left = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 10px;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(1, 28, 19, 0.5);
 `;
 
 const StyledImg = styled.div`
@@ -121,28 +105,17 @@ const StyledImg = styled.div`
   height: 45vh;
   box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.5);
 `;
-const StyledBG = styled.div`
+const StyledBG = styled.img`
   width: 100%;
   height: 100%;
-  background-image: url(${bg});
-  background-size: cover;
-  background-position: right 35% bottom 45%;
   z-index: 1;
   position: absolute;
+  object-fit: cover;
   top: 10vh;
   clip-path: polygon(38% 16%, 48% 0, 100% 0, 100% 100%, 0 100%, 0% 60%, 0 20%);
   z-index: 1;
 `;
-const Filter = styled.div`
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(47, 36, 23, 0.9);
-  z-index: 2;
-  clip-path: polygon(38% 16%, 48% 0, 100% 0, 100% 100%, 0 100%, 0% 60%, 0 20%);
-  transition: all 0.1s ease-in-out smooth;
-  top: 10vh;
-`;
+
 const StoryWrapper = styled.div`
   position: relative;
   display: flex;

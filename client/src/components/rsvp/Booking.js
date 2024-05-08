@@ -10,8 +10,8 @@ import Loader from "../float-fixed/Loader";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { LanguageContext } from "../contexts/LanguageContext";
-import { Filter, StyledBg } from "./GuestFormRsvp";
 import { IsMobileContext } from "../contexts/IsMobileContext";
+import { ImageContext } from "../contexts/ImageContext";
 
 const Booking = () => {
   const [reservations, setReservations] = useState([]);
@@ -28,6 +28,11 @@ const Booking = () => {
   const { userInfo } = useContext(UserContext);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
+  const { images } = useContext(ImageContext);
+  const homepageBackground = images.filter(
+    (image) => image.filename === "homepageBackground"
+  )[0].src;
+
   const todayDate = new Date();
   // format date for Wed Mar 27 2024
   const formattedDate = moment(todayDate).format("ddd MMM DD YYYY").toString();
@@ -88,8 +93,21 @@ const Booking = () => {
         return !todayReservations.some((reservation) => {
           if (reservation.slot.length === 1) {
             return reservation.slot[0] === slot;
-          } else {
+          } else if (reservation.slot.length === 2) {
             return reservation.slot[0] === slot || reservation.slot[1] === slot;
+          } else if (reservation.slot.length === 3) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot
+            );
+          } else {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot
+            );
           }
         });
       });
@@ -369,8 +387,7 @@ const Booking = () => {
           {language === "en" ? "Submit" : "Valider"}
         </Submit>
       </SmallWrapper>
-      {!isMobile && <StyledBg />}
-      {!isMobile && <Filter />}
+      {!isMobile && <StyledBg src={homepageBackground} />}
     </StyledForm>
   );
 };
@@ -503,9 +520,15 @@ const Submit = styled.button`
     transform: scale(0.9);
   }
   &:disabled {
-    background-color: rgba(255, 255, 255, 0.2);
     border-bottom: 4px solid #b50000;
     color: #b50000;
   }
+`;
+const StyledBg = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  z-index: 0;
 `;
 export default Booking;

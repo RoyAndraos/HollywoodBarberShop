@@ -1,23 +1,25 @@
 import { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
-import bg from "../assets/barbersPC.jpg";
 import { LanguageContext } from "./contexts/LanguageContext";
 import { BarberContext } from "./contexts/BarberContext";
-import { Blurhash } from "react-blurhash";
+import { ImageContext } from "./contexts/ImageContext";
 
 const BarbersPc = () => {
   const { language } = useContext(LanguageContext);
   const { barberInfo } = useContext(BarberContext);
   const [currentBarberIndex, setCurrentBarberIndex] = useState(0);
   const [imageLoaded, setImageLoaded] = useState(false);
-
+  const { images } = useContext(ImageContext);
+  const barberBackground = images.filter(
+    (image) => image.filename === "barbersBackground"
+  )[0].src;
   useEffect(() => {
     const img = new Image();
     img.onload = () => {
       setImageLoaded(true);
     };
-    img.src = bg;
-  }, []);
+    img.src = barberBackground;
+  }, [barberBackground]);
 
   // Function to handle next barber
   const nextBarber = () => {
@@ -42,24 +44,7 @@ const BarbersPc = () => {
           </Barber>
         ))}
       </BarberWrapper>
-      {imageLoaded && <StyledBg />}
-      {imageLoaded && <Filter />}
-      {!imageLoaded && (
-        <div style={{ width: "100%", position: "absolute" }}>
-          <Blurhash
-            hash="LCEB,0Mc5S%f_NIAj]x]kqNFs:xu"
-            width="99vw"
-            height="70vh"
-            resolutionX={32}
-            resolutionY={32}
-            punch={1}
-            style={{
-              clipPath:
-                "polygon(38% 16%, 48% 0, 100% 0, 100% 100%, 0 100%, 0% 60%, 0 20%)",
-            }}
-          />
-        </div>
-      )}
+      {imageLoaded && <StyledBg src={barberBackground} />}
       {barberInfo.length > 1 && (
         <ButtonWrap>
           <Button
@@ -111,14 +96,14 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: black;
+  background-color: #011c13;
   width: 100%;
   height: 70vh;
   position: relative;
   top: -8vh;
 `;
 const Title = styled.h1`
-  color: #079061;
+  color: rgba(243, 238, 211, 0.9);
   position: absolute;
   top: calc(5% + 8vh);
   left: 13%;
@@ -131,26 +116,15 @@ const Title = styled.h1`
   }
 `;
 
-const StyledBg = styled.div`
+const StyledBg = styled.img`
   width: 100%;
   height: 100%;
-  background-image: url(${bg});
-  background-size: cover;
-  background-position: right 35% bottom 45%;
+  object-fit: cover;
   z-index: 1;
   position: absolute;
   clip-path: polygon(38% 16%, 48% 0, 100% 0, 100% 100%, 0 100%, 0% 60%, 0 20%);
   z-index: 1;
   top: 8vh;
-`;
-const Filter = styled.div`
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background-color: rgba(47, 36, 23, 0.9);
-  clip-path: polygon(38% 16%, 48% 0, 100% 0, 100% 100%, 0 100%, 0% 60%, 0 20%);
-  top: 8vh;
-  z-index: 2;
 `;
 
 const BarberWrapper = styled.div`

@@ -173,6 +173,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 2vh 0 2vh 0;
+  background-color: #011c13;
 `;
 const TopPart = styled.div`
   display: grid;
