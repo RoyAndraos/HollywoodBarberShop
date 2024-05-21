@@ -1,17 +1,14 @@
 import { styled } from "styled-components";
-import ImageSlideShow from "./homepage/ImageSlideShow";
-import Menu from "./homepage/Menu";
 import { useContext } from "react";
 import { IsMobileContext } from "./contexts/IsMobileContext";
-import PCHomePage from "./PCHomePage";
-import MenuPC from "./MenuPC";
 import FooterPc from "./FooterPc";
+import PCHomePage from "./PCHomePage";
+import ImageSlideShow from "./homepage/ImageSlideShow";
 const HomePage = () => {
   const { isMobile } = useContext(IsMobileContext);
   return (
     <Container>
       {isMobile ? <ImageSlideShow /> : <PCHomePage />}
-      {isMobile ? <Menu /> : <MenuPC />}
       {!isMobile && <FooterPc />}
     </Container>
   );

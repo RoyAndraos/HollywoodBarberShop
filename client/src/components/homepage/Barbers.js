@@ -4,6 +4,7 @@ import { Title, Wrapper, TitleWrapper } from "./Menu";
 import { useNavigate } from "react-router-dom";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
+import Loader from "../float-fixed/Loader";
 const Barbers = () => {
   const navigate = useNavigate();
   const { language } = useContext(LanguageContext);
@@ -11,10 +12,10 @@ const Barbers = () => {
   const [currentBarberIndex, setCurrentBarberIndex] = useState(0);
   const [barbers, setBarbers] = useState(null);
   useEffect(() => {
-    fetch("https://hollywoodbarbershop.onrender.com/getAbout")
+    fetch("https://hollywoodbarbershop.onrender.com/getBarbers")
       .then((res) => res.json())
       .then((data) => {
-        setBarbers(data.barbers[0]);
+        setBarbers(data.barbers);
       });
   }, []);
   const nextBarber = () => {
@@ -28,7 +29,9 @@ const Barbers = () => {
       prevIndex === 0 ? barbers.length - 1 : prevIndex - 1
     );
   };
-
+  if (!barbers) {
+    return <Loader />;
+  }
   return (
     <Wrapper
       id="barbers-section"

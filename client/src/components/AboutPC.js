@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { LanguageContext } from "./contexts/LanguageContext";
 import styled from "styled-components";
+import Loader from "./float-fixed/Loader";
 const AboutPC = () => {
   const { language } = useContext(LanguageContext);
   const [textState, setText] = useState(null);
@@ -15,13 +16,9 @@ const AboutPC = () => {
         setAboutBackground(data.aboutBackground[0]);
       });
   }, []);
-  // const aboutText = text.filter((text) => text._id === "about")[0].content;
-  // const frenchAboutText = text.filter((text) => text._id === "about")[0].french;
-  // const aboutImage = images.filter((image) => image.filename === "about")[0];
-  // const aboutBackground = images.filter((image) => {
-  //   return image.filename === "aboutBackground";
-  // })[0].src;
-
+  if (!textState || !aboutImage || !aboutBackground) {
+    return <Loader />;
+  }
   return (
     <Wrapper id="about-section">
       <Title>Hollywood Barber Shop</Title>

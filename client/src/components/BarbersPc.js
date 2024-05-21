@@ -1,17 +1,17 @@
 import { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { LanguageContext } from "./contexts/LanguageContext";
-
+import Loader from "./float-fixed/Loader";
 const BarbersPc = () => {
   const { language } = useContext(LanguageContext);
   const [currentBarberIndex, setCurrentBarberIndex] = useState(0);
   const [barbers, setBarbers] = useState(null);
   const [barberBackground, setBarberBackground] = useState(null);
   useEffect(() => {
-    fetch("https://hollywoodbarbershop.onrender.com/getAbout")
+    fetch("https://hollywoodbarbershop.onrender.com/getBarbers")
       .then((res) => res.json())
       .then((data) => {
-        setBarbers(data.barbers[0]);
+        setBarbers(data.barbers);
         setBarberBackground(data.barbersBackgroundImage[0]);
       });
   }, []);
@@ -25,6 +25,9 @@ const BarbersPc = () => {
   const prevBarber = () => {
     setCurrentBarberIndex(0);
   };
+  if (!barbers || !barberBackground) {
+    return <Loader />;
+  }
   return (
     <Wrapper id="barbers-section">
       <Title>{language === "en" ? "Our Team" : "Notre Equipe"}</Title>

@@ -3,6 +3,7 @@ import { Title, Wrapper, TitleWrapper } from "./Menu";
 import { styled } from "styled-components";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
+import Loader from "../float-fixed/Loader";
 const About = () => {
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
@@ -16,9 +17,9 @@ const About = () => {
         setAboutImage(data.aboutImage[0]);
       });
   }, []);
-  // const aboutText = text.filter((text) => text._id === "about")[0].content;
-  // const frenchAboutText = text.filter((text) => text._id === "about")[0].french;
-  // const aboutImage = images.filter((image) => image.filename === "about")[0];
+  if (!textState || !aboutImage) {
+    return <Loader />;
+  }
   return (
     <Wrapper
       key={"about-section"}

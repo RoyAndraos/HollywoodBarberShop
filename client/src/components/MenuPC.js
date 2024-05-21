@@ -2,21 +2,26 @@ import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { LanguageContext } from "./contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
+import Loader from "./float-fixed/Loader";
 const MenuPC = () => {
   const { language } = useContext(LanguageContext);
   const [services, setServices] = useState(null);
   const [menuBackground, setMenuBackground] = useState(null);
   const [underMenu, setUnderMenu] = useState(null);
   useEffect(() => {
-    fetch("https://hollywoodbarbershop.onrender.com/getServices")
+    fetch("https://hollywoodbarbershop.onrender.com/getMenu")
       .then((res) => res.json())
       .then((data) => {
-        setServices(data.services[0]);
-        setMenuBackground(data.menuBackground[0].src);
-        setUnderMenu(data.underMenu[0]);
+        setServices(data.services);
+        setMenuBackground(data.menuBackgroundImage[0]);
+        setUnderMenu(data.menuText[0]);
       });
   }, []);
+  console.log(services, menuBackground, underMenu);
   const navigate = useNavigate();
+  if (!services || !menuBackground || !underMenu) {
+    return <Loader />;
+  }
   return (
     <Wrapper id="menu-section">
       <Title>{language === "en" ? "Our Services" : "Nos Services"}</Title>

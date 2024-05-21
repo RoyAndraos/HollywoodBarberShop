@@ -74,7 +74,7 @@ const getMenuData = async (req, res) => {
     );
     res.status(200).json({
       status: 200,
-      services: services[0],
+      services: services,
       menuBackgroundImage: menuBackgroundImage,
       menuText: menuText,
     });

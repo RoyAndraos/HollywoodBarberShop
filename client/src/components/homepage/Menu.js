@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
+import Loader from "../float-fixed/Loader";
 const Menu = () => {
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
@@ -15,6 +16,9 @@ const Menu = () => {
         setServices(data.services[0]);
       });
   }, []);
+  if (!textState || !servicesState) {
+    return <Loader />;
+  }
   return (
     <Wrapper
       id="menu-section"
