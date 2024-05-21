@@ -2,19 +2,10 @@ import { keyframes } from "styled-components";
 import { styled } from "styled-components";
 import { useContext } from "react";
 import { LanguageContext } from "../contexts/LanguageContext";
+import { useNavigate } from "react-router-dom";
 
-const DropDownMenu = ({
-  menuRef,
-  barbersRef,
-  aboutRef,
-  setIsOpen,
-  isopen,
-  slideshowRef,
-}) => {
-  const scrollToRef = (ref) => {
-    ref.current.scrollIntoView({ behavior: "smooth" });
-    setIsOpen("false"); // Close the menu
-  };
+const DropDownMenu = ({ setIsOpen, isopen }) => {
+  const navigate = useNavigate();
   const { language, setLanguage } = useContext(LanguageContext);
 
   return (
@@ -23,7 +14,8 @@ const DropDownMenu = ({
         <Li>
           <StyledButton
             onClick={() => {
-              scrollToRef(menuRef);
+              setIsOpen("false");
+              navigate("/ourServices");
             }}
           >
             Menu
@@ -32,7 +24,8 @@ const DropDownMenu = ({
         <Li>
           <StyledButton
             onClick={() => {
-              scrollToRef(barbersRef);
+              setIsOpen("false");
+              navigate("/ourTeam");
             }}
           >
             {language === "en" ? "Barbers" : "Coiffeurs"}
@@ -41,7 +34,8 @@ const DropDownMenu = ({
         <Li>
           <StyledButton
             onClick={() => {
-              scrollToRef(aboutRef);
+              setIsOpen("false");
+              navigate("/about");
             }}
           >
             {language === "en" ? "About" : "A propos"}
@@ -52,21 +46,14 @@ const DropDownMenu = ({
             onClick={() => {
               if (language === "en") {
                 setLanguage("fr");
+                setIsOpen("false");
               } else {
                 setLanguage("en");
+                setIsOpen("false");
               }
             }}
           >
             Fr | En
-          </StyledButton>
-        </Li>
-        <Li>
-          <StyledButton
-            onClick={() => {
-              scrollToRef(slideshowRef);
-            }}
-          >
-            {language === "en" ? "Back to Top" : "Retour en haut"}
           </StyledButton>
         </Li>
       </Ul>

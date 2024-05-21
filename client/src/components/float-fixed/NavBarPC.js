@@ -1,61 +1,18 @@
 import styled from "styled-components";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { LanguageContext } from "../contexts/LanguageContext";
-const NavBarPC = ({
-  menuRef,
-  barbersRef,
-  aboutRef,
-  slideshowRef,
-  scrollToRef,
-  headerHeight,
-}) => {
+import { useNavigate } from "react-router-dom";
+const NavBarPC = ({ headerHeight }) => {
+  const navigate = useNavigate();
   const [isSelected, setIsSelected] = useState("");
   const { language, setLanguage } = useContext(LanguageContext);
-  const handleSelect = (name) => {
-    setIsSelected(name);
-  };
-  useEffect(() => {
-    if (
-      !menuRef.current ||
-      !barbersRef.current ||
-      !aboutRef.current ||
-      !slideshowRef.current
-    )
-      return;
-    const observerOptions = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.5, // Trigger when 50% of the target is visible
-    };
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const targetRef = entry.target;
-          const targetId = targetRef.id;
-
-          setIsSelected(targetId.split("-")[0]);
-        }
-      });
-    }, observerOptions);
-
-    // Observe the target elements
-    observer.observe(menuRef.current);
-    observer.observe(barbersRef.current);
-    observer.observe(aboutRef.current);
-    observer.observe(slideshowRef.current);
-
-    // Cleanup function to disconnect the observer
-    return () => {
-      observer.disconnect();
-    };
-  }, [menuRef, barbersRef, aboutRef, slideshowRef]);
   return (
     <Wrapper>
       <NavButton
         onClick={() => {
-          scrollToRef(menuRef);
-          handleSelect("menu");
+          setIsSelected("menu");
+          navigate("/ourServices");
         }}
         $headerHeight={headerHeight}
         $isselected={isSelected === "menu" ? true : false}
@@ -64,8 +21,8 @@ const NavBarPC = ({
       </NavButton>
       <NavButton
         onClick={() => {
-          scrollToRef(barbersRef);
-          handleSelect("barbers");
+          setIsSelected("barbers");
+          navigate("/ourTeam");
         }}
         $headerHeight={headerHeight}
         $isselected={isSelected === "barbers" ? true : false}
@@ -74,8 +31,8 @@ const NavBarPC = ({
       </NavButton>
       <NavButton
         onClick={() => {
-          scrollToRef(aboutRef);
-          handleSelect("about");
+          setIsSelected("about");
+          navigate("/about");
         }}
         $headerHeight={headerHeight}
         $isselected={isSelected === "about" ? true : false}

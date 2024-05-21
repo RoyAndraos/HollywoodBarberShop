@@ -1,19 +1,21 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { LanguageContext } from "./contexts/LanguageContext";
-import { ServiceContext } from "./contexts/ServiceContext";
 import { useNavigate } from "react-router-dom";
-import { TextContext } from "./contexts/TextContext";
-import { ImageContext } from "./contexts/ImageContext";
 const MenuPC = () => {
-  const { services } = useContext(ServiceContext);
   const { language } = useContext(LanguageContext);
-  const { text } = useContext(TextContext);
-  const { images } = useContext(ImageContext);
-  const menuBackground = images.filter(
-    (image) => image.filename === "menuBackground"
-  )[0].src;
-  const underMenu = text.filter((item) => item._id === "underMenu");
+  const [services, setServices] = useState(null);
+  const [menuBackground, setMenuBackground] = useState(null);
+  const [underMenu, setUnderMenu] = useState(null);
+  useEffect(() => {
+    fetch("https://hollywoodbarbershop.onrender.com/getServices")
+      .then((res) => res.json())
+      .then((data) => {
+        setServices(data.services[0]);
+        setMenuBackground(data.menuBackground[0].src);
+        setUnderMenu(data.underMenu[0]);
+      });
+  }, []);
   const navigate = useNavigate();
   return (
     <Wrapper id="menu-section">
@@ -32,7 +34,7 @@ const MenuPC = () => {
       </MenuWrapper>
       <Right>
         <Message>
-          {language === "en" ? underMenu[0].content : underMenu[0].french}
+          {language === "en" ? underMenu.content : underMenu.french}
         </Message>
         <BookButton
           onClick={() => {
@@ -42,7 +44,7 @@ const MenuPC = () => {
           {language === "en" ? "Book Now" : "Reserver"}
         </BookButton>
       </Right>
-      <StyledBg src={menuBackground} />
+      <StyledBg src={menuBackground} alt="barber tools" />
     </Wrapper>
   );
 };

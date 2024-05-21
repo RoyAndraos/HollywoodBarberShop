@@ -1,25 +1,20 @@
 import { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { LanguageContext } from "./contexts/LanguageContext";
-import { BarberContext } from "./contexts/BarberContext";
-import { ImageContext } from "./contexts/ImageContext";
 
 const BarbersPc = () => {
   const { language } = useContext(LanguageContext);
-  const { barberInfo } = useContext(BarberContext);
   const [currentBarberIndex, setCurrentBarberIndex] = useState(0);
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const { images } = useContext(ImageContext);
-  const barberBackground = images.filter(
-    (image) => image.filename === "barbersBackground"
-  )[0].src;
+  const [barbers, setBarbers] = useState(null);
+  const [barberBackground, setBarberBackground] = useState(null);
   useEffect(() => {
-    const img = new Image();
-    img.onload = () => {
-      setImageLoaded(true);
-    };
-    img.src = barberBackground;
-  }, [barberBackground]);
+    fetch("https://hollywoodbarbershop.onrender.com/getAbout")
+      .then((res) => res.json())
+      .then((data) => {
+        setBarbers(data.barbers[0]);
+        setBarberBackground(data.barbersBackgroundImage[0]);
+      });
+  }, []);
 
   // Function to handle next barber
   const nextBarber = () => {
@@ -34,7 +29,7 @@ const BarbersPc = () => {
     <Wrapper id="barbers-section">
       <Title>{language === "en" ? "Our Team" : "Notre Equipe"}</Title>
       <BarberWrapper>
-        {barberInfo.map((barber, index) => (
+        {barbers.map((barber, index) => (
           <Barber key={barber._id} $selected={currentBarberIndex === index}>
             <Name>{barber.given_name + " " + barber.family_name}</Name>
             {barber.picture !== "" && (
@@ -44,8 +39,8 @@ const BarbersPc = () => {
           </Barber>
         ))}
       </BarberWrapper>
-      {imageLoaded && <StyledBg src={barberBackground} />}
-      {barberInfo.length > 1 && (
+      <StyledBg src={barberBackground.src} alt="barber tools" />
+      {barbers.length > 1 && (
         <ButtonWrap>
           <Button
             onClick={prevBarber}

@@ -1,29 +1,34 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { Title, Wrapper, TitleWrapper } from "./Menu";
 import { useNavigate } from "react-router-dom";
-import { BarberContext } from "../contexts/BarberContext";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
 const Barbers = () => {
-  const { barberInfo } = useContext(BarberContext);
   const navigate = useNavigate();
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
   const [currentBarberIndex, setCurrentBarberIndex] = useState(0);
-
+  const [barbers, setBarbers] = useState(null);
+  useEffect(() => {
+    fetch("https://hollywoodbarbershop.onrender.com/getAbout")
+      .then((res) => res.json())
+      .then((data) => {
+        setBarbers(data.barbers[0]);
+      });
+  }, []);
   const nextBarber = () => {
     setCurrentBarberIndex((prevIndex) =>
-      prevIndex === barberInfo.length - 1 ? 0 : prevIndex + 1
+      prevIndex === barbers.length - 1 ? 0 : prevIndex + 1
     );
   };
 
   const prevBarber = () => {
     setCurrentBarberIndex((prevIndex) =>
-      prevIndex === 0 ? barberInfo.length - 1 : prevIndex - 1
+      prevIndex === 0 ? barbers.length - 1 : prevIndex - 1
     );
   };
-  console.log(currentBarberIndex);
+
   return (
     <Wrapper
       id="barbers-section"
@@ -34,7 +39,7 @@ const Barbers = () => {
       <TitleWrapper>
         <Title>{language === "en" ? "Our Team" : "Notre Equipe"}</Title>
       </TitleWrapper>
-      {barberInfo.map((barber, index) => {
+      {barbers.map((barber, index) => {
         return (
           <BarberWrapper
             key={barber._id}

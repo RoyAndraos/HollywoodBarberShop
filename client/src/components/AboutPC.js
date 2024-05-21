@@ -1,26 +1,27 @@
 import { useContext, useEffect, useState } from "react";
-import { TextContext } from "./contexts/TextContext";
-import { ImageContext } from "./contexts/ImageContext";
 import { LanguageContext } from "./contexts/LanguageContext";
 import styled from "styled-components";
 const AboutPC = () => {
-  const { text } = useContext(TextContext);
-  const { images } = useContext(ImageContext);
   const { language } = useContext(LanguageContext);
-  const aboutText = text.filter((text) => text._id === "about")[0].content;
-  const frenchAboutText = text.filter((text) => text._id === "about")[0].french;
-  const aboutImage = images.filter((image) => image.filename === "about")[0];
-  const aboutBackground = images.filter((image) => {
-    return image.filename === "aboutBackground";
-  })[0].src;
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [textState, setText] = useState(null);
+  const [aboutImage, setAboutImage] = useState(null);
+  const [aboutBackground, setAboutBackground] = useState(null);
   useEffect(() => {
-    const img = new Image();
-    img.onload = () => {
-      setImageLoaded(true);
-    };
-    img.src = aboutBackground;
-  }, [aboutBackground]);
+    fetch("https://hollywoodbarbershop.onrender.com/getAbout")
+      .then((res) => res.json())
+      .then((data) => {
+        setText(data.aboutText[0]);
+        setAboutImage(data.aboutImage[0]);
+        setAboutBackground(data.aboutBackground[0]);
+      });
+  }, []);
+  // const aboutText = text.filter((text) => text._id === "about")[0].content;
+  // const frenchAboutText = text.filter((text) => text._id === "about")[0].french;
+  // const aboutImage = images.filter((image) => image.filename === "about")[0];
+  // const aboutBackground = images.filter((image) => {
+  //   return image.filename === "aboutBackground";
+  // })[0].src;
+
   return (
     <Wrapper id="about-section">
       <Title>Hollywood Barber Shop</Title>
@@ -28,20 +29,20 @@ const AboutPC = () => {
         <StoryWrapper>
           <Story>
             {language === "en"
-              ? aboutText.split(".")[0]
-              : frenchAboutText.split(".")[0]}
+              ? textState.content.split(".")[0]
+              : textState.french.split(".")[0]}
             .
           </Story>
           <Story>
             {language === "en"
-              ? aboutText.split(".")[1]
-              : frenchAboutText.split(".")[1]}
+              ? textState.content.split(".")[1]
+              : textState.french.split(".")[1]}
             .
           </Story>
         </StoryWrapper>
         <StyledImg $src={aboutImage.src} alt="shop image"></StyledImg>
       </Left>
-      {imageLoaded && <StyledBG src={aboutBackground} />}
+      <StyledBG src={aboutBackground.src} alt="barber shop" />
     </Wrapper>
   );
 };

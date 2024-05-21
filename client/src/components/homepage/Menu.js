@@ -1,17 +1,20 @@
 import styled from "styled-components";
-import { useContext } from "react";
-import { TextContext } from "../contexts/TextContext";
+import { useContext, useEffect, useState } from "react";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
-import { ServiceContext } from "../contexts/ServiceContext";
 const Menu = () => {
-  const { text } = useContext(TextContext);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
-  const menuText = text.filter((text) => text._id === "underMenu")[0].content;
-  const frenchMenuText = text.filter((text) => text._id === "underMenu")[0]
-    .french;
-  const { services } = useContext(ServiceContext);
+  const [textState, setText] = useState(null);
+  const [servicesState, setServices] = useState(null);
+  useEffect(() => {
+    fetch("https://hollywoodbarbershop.onrender.com/getMenu")
+      .then((res) => res.json())
+      .then((data) => {
+        setText(data.menuText[0]);
+        setServices(data.services[0]);
+      });
+  }, []);
   return (
     <Wrapper
       id="menu-section"
@@ -24,11 +27,13 @@ const Menu = () => {
       </TitleWrapper>
       <ThanksWrapper>
         * <br />* <br />* <br />*<br /> * <br />* <br />* <br />* <br />*
-        <Appreciate>{language === "en" ? menuText : frenchMenuText}</Appreciate>
+        <Appreciate>
+          {language === "en" ? textState.content : textState.french}
+        </Appreciate>
         * <br />* <br />* <br />*<br /> * <br />* <br />* <br />* <br />*
       </ThanksWrapper>
       <MenuWrapper>
-        {services.map((service) => {
+        {servicesState.map((service) => {
           return (
             <Service key={service._id}>
               <p>{language === "en" ? service.english : service.name}</p>

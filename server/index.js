@@ -9,6 +9,9 @@ const {
   getReservations,
   addReservation,
   getReservationById,
+  getBarbersData,
+  getAboutInfo,
+  getMenuData,
 } = require("./server");
 const PORT = process.env.PORT || 4000;
 const cors = require("cors");
@@ -28,6 +31,9 @@ express()
   .use(morgan("tiny"))
   .use(express.json())
   .use(express.static("public"))
+  .get("/getMenu", getMenuData)
+  .get("/getBarbers", getBarbersData)
+  .get("/getAbout", getAboutInfo)
   .get("/getBarberInfo", getBarberInfo)
   .get("/getWebsiteInfo", getWebsiteInfo)
   .get("/getReservations", getReservations)

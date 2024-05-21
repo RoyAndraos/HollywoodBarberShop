@@ -15,6 +15,12 @@ import { useRef } from "react";
 import Header from "./components/Header";
 import { IsMobileContext } from "./components/contexts/IsMobileContext";
 import CancelReservation from "./components/CancelReservation";
+import AboutPC from "./components/AboutPC";
+import About from "./components/homepage/About";
+import Menu from "./components/homepage/Menu";
+import MenuPC from "./components/MenuPC";
+import Barbers from "./components/homepage/Barbers";
+import BarbersPc from "./components/BarbersPc";
 const App = () => {
   const { setBarberInfo, barberInfo } = useContext(BarberContext);
   const { setText, text } = useContext(TextContext);
@@ -55,6 +61,19 @@ const App = () => {
       {!isMobile && <Header />}
       <Routes>
         <Route path={"/"} element={<HomePage />} />
+        {isMobile ? (
+          <>
+            <Route path={"/about"} element={<About />} />
+            <Route path={"/ourServices"} element={<Menu />} />
+            <Route path={"/ourTeam"} element={<Barbers />} />
+          </>
+        ) : (
+          <>
+            <Route path={"/about"} element={<AboutPC />} />
+            <Route path={"/ourServices"} element={<MenuPC />} />
+            <Route path={"/ourTeam"} element={<BarbersPc />} />
+          </>
+        )}
         <Route path={"/book"} element={<RSVP />} />
         <Route path={"/yourReservation/:_id"} element={<YourRes />} />
         <Route path={"/cancelReservation"} element={<CancelReservation />} />

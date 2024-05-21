@@ -39,6 +39,51 @@ const getWebsiteInfo = async (req, res) => {
     client.close();
   }
 };
+const getBarbersData = async (req, res) => {
+  const client = new MongoClient(MONGO_URI_RALF);
+  try {
+    await client.connect();
+    const db = client.db("HollywoodBarberShop");
+    const barbers = await db.collection("admin").find().toArray();
+    const images = await db.collection("Images").find().toArray();
+    const barbersBackgroundImage = images.filter(
+      (image) => image.filename === "barbersBackground"
+    );
+    res.status(200).json({
+      status: 200,
+      barbers: barbers,
+      barbersBackgroundImage: barbersBackgroundImage,
+    });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  } finally {
+    client.close();
+  }
+};
+const getMenuData = async (req, res) => {
+  const client = new MongoClient(MONGO_URI_RALF);
+  try {
+    await client.connect();
+    const db = client.db("HollywoodBarberShop");
+    const services = await db.collection("services").find().toArray();
+    const images = await db.collection("Images").find().toArray();
+    const text = await db.collection("web_text").find().toArray();
+    const menuText = text.filter((text) => text._id === "underMenu");
+    const menuBackgroundImage = images.filter(
+      (image) => image.filename === "menuBackground"
+    );
+    res.status(200).json({
+      status: 200,
+      services: services[0],
+      menuBackgroundImage: menuBackgroundImage,
+      menuText: menuText,
+    });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  } finally {
+    client.close();
+  }
+};
 
 const getBarberInfo = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
@@ -47,6 +92,32 @@ const getBarberInfo = async (req, res) => {
     const db = client.db("HollywoodBarberShop");
     const data = await db.collection("admin").find().toArray();
     res.status(200).json({ status: 200, data: data });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  } finally {
+    client.close();
+  }
+};
+
+const getAboutInfo = async (req, res) => {
+  const client = new MongoClient(MONGO_URI_RALF);
+  try {
+    await client.connect();
+    const db = client.db("HollywoodBarberShop");
+    const text = await db.collection("web_text").find().toArray();
+    const aboutText = text.filter((text) => text._id === "about");
+    const images = await db.collection("Images").find().toArray();
+    const aboutImage = images.filter((image) => image.filename === "about");
+    const aboutBackground = images.filter(
+      (image) => image.filename === "aboutBackground"
+    );
+
+    res.status(200).json({
+      status: 200,
+      aboutText: aboutText,
+      aboutImage: aboutImage,
+      aboutBackground: aboutBackground,
+    });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
   } finally {
@@ -297,4 +368,7 @@ module.exports = {
   addReservation,
   getReservationById,
   deleteReservation,
+  getBarbersData,
+  getAboutInfo,
+  getMenuData,
 };

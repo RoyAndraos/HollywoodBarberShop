@@ -1,18 +1,24 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Title, Wrapper, TitleWrapper } from "./Menu";
 import { styled } from "styled-components";
-import { TextContext } from "../contexts/TextContext";
-import { ImageContext } from "../contexts/ImageContext";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
 const About = () => {
-  const { text } = useContext(TextContext);
-  const { images } = useContext(ImageContext);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
-  const aboutText = text.filter((text) => text._id === "about")[0].content;
-  const frenchAboutText = text.filter((text) => text._id === "about")[0].french;
-  const aboutImage = images.filter((image) => image.filename === "about")[0];
+  const [textState, setText] = useState(null);
+  const [aboutImage, setAboutImage] = useState(null);
+  useEffect(() => {
+    fetch("https://hollywoodbarbershop.onrender.com/getAbout")
+      .then((res) => res.json())
+      .then((data) => {
+        setText(data.aboutText[0]);
+        setAboutImage(data.aboutImage[0]);
+      });
+  }, []);
+  // const aboutText = text.filter((text) => text._id === "about")[0].content;
+  // const frenchAboutText = text.filter((text) => text._id === "about")[0].french;
+  // const aboutImage = images.filter((image) => image.filename === "about")[0];
   return (
     <Wrapper
       key={"about-section"}
@@ -33,14 +39,14 @@ const About = () => {
         >
           <Story>
             {language === "en"
-              ? aboutText.split(".")[0]
-              : frenchAboutText.split(".")[0]}
+              ? textState.content.split(".")[0]
+              : textState.french.split(".")[0]}
             .
           </Story>
           <Story>
             {language === "en"
-              ? aboutText.split(".")[1]
-              : frenchAboutText.split(".")[1]}
+              ? textState.content.split(".")[1]
+              : textState.french.split(".")[1]}
             .
           </Story>
         </div>
