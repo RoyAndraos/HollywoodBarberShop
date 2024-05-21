@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 const NavBarPC = ({ headerHeight, isSelected, setIsSelected }) => {
