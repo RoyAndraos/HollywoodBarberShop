@@ -23,10 +23,9 @@ const PCHomePage = () => {
       .then((res) => res.json())
       .then((data) => {
         setText(data.homeText);
-        setHomepageImage(data.homeImage[0]);
+        setHomepageImage(data.homeBackground);
       });
   }, []);
-
   const handleScroll = () => {
     requestAnimationFrame(() => {
       setOffsetY(window.pageYOffset);

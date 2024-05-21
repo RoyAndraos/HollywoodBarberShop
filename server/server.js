@@ -66,16 +66,12 @@ const getMenuData = async (req, res) => {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
     const services = await db.collection("services").find().toArray();
-    const images = await db.collection("Images").find().toArray();
     const text = await db.collection("web_text").find().toArray();
     const menuText = text.filter((text) => text._id === "underMenu");
-    const menuBackgroundImage = images.filter(
-      (image) => image.filename === "menuBackground"
-    );
+
     res.status(200).json({
       status: 200,
       services: services,
-      menuBackgroundImage: menuBackgroundImage,
       menuText: menuText,
     });
   } catch (err) {

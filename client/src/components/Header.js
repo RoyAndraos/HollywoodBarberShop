@@ -9,7 +9,7 @@ import NavBarPC from "./float-fixed/NavBarPC";
 import SocialsPC from "./float-fixed/SocialsPC";
 import { gsap } from "gsap";
 import { useNavigate } from "react-router-dom";
-import { MdOutlineKeyboardDoubleArrowUp } from "react-icons/md";
+// import { MdOutlineKeyboardDoubleArrowUp } from "react-icons/md";
 
 const Header = ({ isShowing }) => {
   const [isOpen, setIsOpen] = useState("false");
@@ -24,7 +24,7 @@ const Header = ({ isShowing }) => {
   let slideshowRef = useRef(null);
   let textRef = useRef(null);
   let logoRef = useRef(null);
-  let backToTopRef = useRef(null);
+  // let backToTopRef = useRef(null);
   const scrollToRef = (ref) => {
     //if ref is menuRef, then scroll to it, then scroll up a bit
     ref.current.scrollIntoView({ behavior: "smooth" });
@@ -48,13 +48,13 @@ const Header = ({ isShowing }) => {
     slideshowRef.current = document.getElementById("slideshow-section");
 
     //animate the logo on load
-    if (showBackToTop) {
-      gsap.fromTo(
-        backToTopRef.current,
-        { x: "100%" }, // Start from the right side of the screen
-        { x: 0, duration: 0.5, ease: "power2.out" } // Move to the left (show)
-      );
-    }
+    // if (showBackToTop) {
+    //   gsap.fromTo(
+    //     backToTopRef.current,
+    //     { x: "100%" }, // Start from the right side of the screen
+    //     { x: 0, duration: 0.5, ease: "power2.out" } // Move to the left (show)
+    //   );
+    // }
     const handleScroll = () => {
       const scrollHeight = window.scrollY;
       if (scrollHeight > 0) {
@@ -148,7 +148,7 @@ const Header = ({ isShowing }) => {
           <SocialsPC headerHeight={headerHeight} />
         </WrapperPC>
       )}
-      {showBackToTop && (
+      {/* {showBackToTop && (
         <BackToTop ref={backToTopRef}>
           <StyledButton
             onClick={() => {
@@ -158,29 +158,29 @@ const Header = ({ isShowing }) => {
             <MdOutlineKeyboardDoubleArrowUp />
           </StyledButton>
         </BackToTop>
-      )}
+      )} */}
     </div>
   );
 };
-const BackToTop = styled.div`
-  position: fixed;
-  bottom: 30vh;
-  right: 0;
-  background-color: #353333;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 0.5px solid rgba(255, 255, 255, 0.5);
-  margin-right: 0.5px;
-  width: 55px;
-  height: 45px;
-  transition: all 0.3s ease-in-out;
-  padding: 0;
-  margin-right: 1px;
-  &:hover {
-    opacity: 0.8;
-  }
-`;
+// const BackToTop = styled.div`
+//   position: fixed;
+//   bottom: 30vh;
+//   right: 0;
+//   background-color: #353333;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   border: 0.5px solid rgba(255, 255, 255, 0.5);
+//   margin-right: 0.5px;
+//   width: 55px;
+//   height: 45px;
+//   transition: all 0.3s ease-in-out;
+//   padding: 0;
+//   margin-right: 1px;
+//   &:hover {
+//     opacity: 0.8;
+//   }
+// `;
 const Wrapper = styled.div`
   width: 100vw;
   height: 10vh;
@@ -238,14 +238,14 @@ const StyledLogoText = styled.p`
   border-right: 1px solid rgba(255, 255, 255, 0.5);
   padding-right: 1vw;
 `;
-const StyledButton = styled.button`
-  color: whitesmoke;
-  background-color: #353333;
-  border: none;
-  cursor: pointer;
-  font-size: 1.5rem;
-  transition: all 0.3s ease-in-out;
-  width: 100%;
-  height: 100%;
-`;
+// const StyledButton = styled.button`
+//   color: whitesmoke;
+//   background-color: #353333;
+//   border: none;
+//   cursor: pointer;
+//   font-size: 1.5rem;
+//   transition: all 0.3s ease-in-out;
+//   width: 100%;
+//   height: 100%;
+// `;
 export default Header;

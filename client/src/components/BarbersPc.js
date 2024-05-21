@@ -96,9 +96,8 @@ const Wrapper = styled.div`
   align-items: center;
   background-color: #011c13;
   width: 100%;
-  height: 70vh;
+  height: 90vh;
   position: relative;
-  top: -8vh;
 `;
 const Title = styled.h1`
   color: rgba(243, 238, 211, 0.9);

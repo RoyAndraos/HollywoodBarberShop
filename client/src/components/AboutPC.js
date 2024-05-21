@@ -52,10 +52,9 @@ const Wrapper = styled.div`
   align-items: flex-end;
   gap: 5%;
   color: white;
-  height: 70vh;
+  height: 90vh;
   position: relative;
   scroll-snap-align: start;
-  top: -8vh;
   width: 100%;
   margin-bottom: 4vh;
 `;
@@ -108,7 +107,7 @@ const StyledBG = styled.img`
   height: 100%;
   z-index: 1;
   position: absolute;
-  object-fit: cover;
+  object-fit: contain;
   top: 10vh;
   clip-path: polygon(38% 16%, 48% 0, 100% 0, 100% 100%, 0 100%, 0% 60%, 0 20%);
   z-index: 1;

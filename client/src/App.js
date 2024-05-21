@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import GlobalStyles from "./GlobalStyles";
-import HomePage from "./components/HomePage";
+import ImageSlideShow from "./components/homepage/ImageSlideShow";
 import { Routes, Route } from "react-router-dom";
 import RSVP from "./components/rsvp/RSVP";
 import { useContext } from "react";
@@ -16,6 +16,8 @@ import MenuPC from "./components/MenuPC";
 import Barbers from "./components/homepage/Barbers";
 import BarbersPc from "./components/BarbersPc";
 import TransitionComponent from "./components/TransitionComponent";
+import PCHomePage from "./components/PCHomePage";
+import FooterPc from "./components/FooterPc";
 const App = () => {
   const { isMobile } = useContext(IsMobileContext);
   const containerRef = useRef(null);
@@ -40,9 +42,16 @@ const App = () => {
       <GlobalStyles />
       {!isMobile && <Header />}
       <Routes>
-        <Route path={"/"} element={<HomePage />} />
         {isMobile ? (
           <>
+            <Route
+              path={"/"}
+              element={
+                <TransitionComponent>
+                  <ImageSlideShow />
+                </TransitionComponent>
+              }
+            />
             <Route
               path={"/about"}
               element={
@@ -70,6 +79,17 @@ const App = () => {
           </>
         ) : (
           <>
+            <Route
+              path={"/"}
+              element={
+                <TransitionComponent>
+                  <>
+                    <PCHomePage />
+                    <FooterPc />
+                  </>
+                </TransitionComponent>
+              }
+            />
             <Route
               path={"/about"}
               element={
