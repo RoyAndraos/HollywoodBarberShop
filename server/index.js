@@ -12,6 +12,7 @@ const {
   getBarbersData,
   getAboutInfo,
   getMenuData,
+  getHomePageInfo,
 } = require("./server");
 const PORT = process.env.PORT || 4000;
 const cors = require("cors");
@@ -31,6 +32,7 @@ express()
   .use(morgan("tiny"))
   .use(express.json())
   .use(express.static("public"))
+  .get("/getHomePage", getHomePageInfo)
   .get("/getMenu", getMenuData)
   .get("/getBarbers", getBarbersData)
   .get("/getAbout", getAboutInfo)

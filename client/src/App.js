@@ -3,13 +3,7 @@ import GlobalStyles from "./GlobalStyles";
 import HomePage from "./components/HomePage";
 import { Routes, Route } from "react-router-dom";
 import RSVP from "./components/rsvp/RSVP";
-import { useEffect, useContext } from "react";
-import { BarberContext } from "./components/contexts/BarberContext";
-import { TextContext } from "./components/contexts/TextContext";
-import { ImageContext } from "./components/contexts/ImageContext";
-import { UserContext } from "./components/contexts/UserContext";
-import Loader from "./components/float-fixed/Loader";
-import { ServiceContext } from "./components/contexts/ServiceContext";
+import { useContext } from "react";
 import YourRes from "./components/rsvp/YourRes";
 import { useRef } from "react";
 import Header from "./components/Header";
@@ -21,12 +15,8 @@ import Menu from "./components/homepage/Menu";
 import MenuPC from "./components/MenuPC";
 import Barbers from "./components/homepage/Barbers";
 import BarbersPc from "./components/BarbersPc";
+import TransitionComponent from "./components/TransitionComponent";
 const App = () => {
-  const { setBarberInfo, barberInfo } = useContext(BarberContext);
-  const { setText, text } = useContext(TextContext);
-  const { setImages, images } = useContext(ImageContext);
-  const { setUserInfo } = useContext(UserContext);
-  const { setServices, services } = useContext(ServiceContext);
   const { isMobile } = useContext(IsMobileContext);
   const containerRef = useRef(null);
   const handleScroll = (e) => {
@@ -44,17 +34,7 @@ const App = () => {
       }
     });
   };
-  useEffect(() => {
-    fetch("https://hollywoodbarbershop.onrender.com/getWebsiteInfo")
-      .then((res) => res.json())
-      .then((data) => {
-        setBarberInfo(data.barbers);
-        setText(data.text);
-        setImages(data.images);
-        setServices(data.services);
-      });
-  }, [setBarberInfo, setText, setImages, setUserInfo, setServices]);
-  if (!barberInfo || !text || !images || !services) return <Loader />;
+
   return (
     <Container ref={containerRef} onScroll={handleScroll}>
       <GlobalStyles />
@@ -63,20 +43,83 @@ const App = () => {
         <Route path={"/"} element={<HomePage />} />
         {isMobile ? (
           <>
-            <Route path={"/about"} element={<About />} />
-            <Route path={"/ourServices"} element={<Menu />} />
-            <Route path={"/ourTeam"} element={<Barbers />} />
+            <Route
+              path={"/about"}
+              element={
+                <TransitionComponent>
+                  <About />
+                </TransitionComponent>
+              }
+            />
+            <Route
+              path={"/ourServices"}
+              element={
+                <TransitionComponent>
+                  <Menu />
+                </TransitionComponent>
+              }
+            />
+            <Route
+              path={"/ourTeam"}
+              element={
+                <TransitionComponent>
+                  <Barbers />
+                </TransitionComponent>
+              }
+            />
           </>
         ) : (
           <>
-            <Route path={"/about"} element={<AboutPC />} />
-            <Route path={"/ourServices"} element={<MenuPC />} />
-            <Route path={"/ourTeam"} element={<BarbersPc />} />
+            <Route
+              path={"/about"}
+              element={
+                <TransitionComponent>
+                  <AboutPC />
+                </TransitionComponent>
+              }
+            />
+            <Route
+              path={"/ourServices"}
+              element={
+                <TransitionComponent>
+                  <MenuPC />
+                </TransitionComponent>
+              }
+            />
+            <Route
+              path={"/ourTeam"}
+              element={
+                <TransitionComponent>
+                  <BarbersPc />
+                </TransitionComponent>
+              }
+            />
           </>
         )}
-        <Route path={"/book"} element={<RSVP />} />
-        <Route path={"/yourReservation/:_id"} element={<YourRes />} />
-        <Route path={"/cancelReservation"} element={<CancelReservation />} />
+        <Route
+          path={"/book"}
+          element={
+            <TransitionComponent>
+              <RSVP />
+            </TransitionComponent>
+          }
+        />
+        <Route
+          path={"/yourReservation/:_id"}
+          element={
+            <TransitionComponent>
+              <YourRes />
+            </TransitionComponent>
+          }
+        />
+        <Route
+          path={"/cancelReservation"}
+          element={
+            <TransitionComponent>
+              <CancelReservation />
+            </TransitionComponent>
+          }
+        />
       </Routes>
     </Container>
   );

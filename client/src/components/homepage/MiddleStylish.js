@@ -1,19 +1,19 @@
 import React, { useContext } from "react";
 import { styled } from "styled-components";
-import { TextContext } from "../contexts/TextContext";
 import Loader from "../float-fixed/Loader";
 import { LanguageContext } from "../contexts/LanguageContext";
 
-const MiddleStylish = () => {
-  const { text } = useContext(TextContext);
+const MiddleStylish = ({ homepageText }) => {
   const { language } = useContext(LanguageContext);
-  if (!text) {
+  if (!homepageText) {
     return <Loader />;
   } else {
-    const StylishText = text.filter((text) => text._id === "slideshow")[0]
-      .content;
-    const frenchStylishText = text.filter((text) => text._id === "slideshow")[0]
-      .french;
+    const StylishText = homepageText.filter(
+      (text) => text._id === "slideshow"
+    )[0].content;
+    const frenchStylishText = homepageText.filter(
+      (text) => text._id === "slideshow"
+    )[0].french;
     return (
       <Wrapper>
         <WordContainer>

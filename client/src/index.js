@@ -10,26 +10,29 @@ import { UserProvider } from "./components/contexts/UserContext";
 import { ServiceProvider } from "./components/contexts/ServiceContext";
 import { LanguageProvider } from "./components/contexts/LanguageContext";
 import { IsMobileProvider } from "./components/contexts/IsMobileContext";
+import { TransitionProvider } from "./components/contexts/TransitionContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <UserProvider>
-        <BarberProvider>
-          <ImageProvider>
-            <TextProvider>
-              <ServiceProvider>
-                <LanguageProvider>
-                  <IsMobileProvider>
-                    <App>{Children}</App>
-                  </IsMobileProvider>
-                </LanguageProvider>
-              </ServiceProvider>
-            </TextProvider>
-          </ImageProvider>
-        </BarberProvider>
-      </UserProvider>
+      <TransitionProvider>
+        <UserProvider>
+          <BarberProvider>
+            <ImageProvider>
+              <TextProvider>
+                <ServiceProvider>
+                  <LanguageProvider>
+                    <IsMobileProvider>
+                      <App>{Children}</App>
+                    </IsMobileProvider>
+                  </LanguageProvider>
+                </ServiceProvider>
+              </TextProvider>
+            </ImageProvider>
+          </BarberProvider>
+        </UserProvider>
+      </TransitionProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

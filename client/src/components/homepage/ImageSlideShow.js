@@ -3,7 +3,6 @@ import { styled } from "styled-components";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
 import MiddleStylish from "./MiddleStylish";
 import { useNavigate } from "react-router-dom";
-import { ImageContext } from "../contexts/ImageContext";
 import Loader from "../float-fixed/Loader";
 import Header from "../Header";
 import { LanguageContext } from "../contexts/LanguageContext";
@@ -11,26 +10,35 @@ import { IsMobileContext } from "../contexts/IsMobileContext";
 const ImageSlideShow = () => {
   const [imagePos, setImagePos] = useState(0);
   const navigate = useNavigate();
-  const { images } = useContext(ImageContext);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
-  const slideImages = images.filter((image) => image.filename === "slideShow");
+  const [slideShowImages, setSlideShowImages] = useState(null);
+  const [homepageText, setHomepageText] = useState(null);
+  useEffect(() => {
+    fetch("https://hollywoodbarbershop.onrender.com/getHomePage")
+      .then((res) => res.json())
+      .then((data) => {
+        setSlideShowImages(data.homeSlideshow);
+        setHomepageText(data.homeText);
+      });
+  }, []);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setImagePos((prev) =>
-        prev === -((slideImages.length - 1) * 100) ? 0 : prev - 100
+        prev === -((slideShowImages.length - 1) * 100) ? 0 : prev - 100
       );
     }, 5000);
 
     return () => {
       clearInterval(interval);
     };
-  }, [slideImages.length]);
+  }, [slideShowImages.length]);
   const handleSlideRight = () => {
-    if (imagePos !== -((slideImages.length - 1) * 100)) {
+    if (imagePos !== -((slideShowImages.length - 1) * 100)) {
       setImagePos((prev) => prev - 100);
     } else {
-      setImagePos((prev) => prev + (slideImages.length - 1) * 100);
+      setImagePos((prev) => prev + (slideShowImages.length - 1) * 100);
     }
   };
 
@@ -38,16 +46,18 @@ const ImageSlideShow = () => {
     if (imagePos !== 0) {
       setImagePos((prev) => prev + 100);
     } else {
-      setImagePos((prev) => prev - (slideImages.length - 1) * 100);
+      setImagePos((prev) => prev - (slideShowImages.length - 1) * 100);
     }
   };
-  if (!images) return <Loader />;
+  if (!slideShowImages || !homepageText) {
+    return <Loader />;
+  }
   return (
     <Wrapper className="snap-element" $isMobile={isMobile}>
       {isMobile && <Header isShowing={true} />}
       <BackgroundFilter $isMobile={isMobile} />
       <OtherWrapper>
-        <MiddleStylish />
+        <MiddleStylish homepageText={homepageText} />
         <BookButton onClick={() => navigate("/book")}>
           {language === "en" ? "Book Now!" : "Reserver Ici!"}
         </BookButton>
@@ -58,7 +68,7 @@ const ImageSlideShow = () => {
           <AiOutlineRight />
         </StyledRightButton>
         <ImageContainer imagepos={imagePos} $isMobile={isMobile}>
-          {slideImages.map((image) => {
+          {slideShowImages.map((image) => {
             return (
               <StyledImage
                 key={image._id}

@@ -125,6 +125,35 @@ const getAboutInfo = async (req, res) => {
   }
 };
 
+const getHomePageInfo = async (req, res) => {
+  const client = new MongoClient(MONGO_URI_RALF);
+  try {
+    await client.connect();
+    const db = client.db("HollywoodBarberShop");
+    const text = await db.collection("web_text").find().toArray();
+    const homeText = text.filter((text) => text._id === "slideshow");
+    const images = await db.collection("Images").find().toArray();
+    const homeSlideshow = images.filter((image) => {
+      return image.filename === "slideShow";
+    });
+
+    const homeBackground = images.filter(
+      (image) => image.filename === "homepageBackground"
+    );
+
+    res.status(200).json({
+      status: 200,
+      homeText: homeText[0],
+      homeBackground: homeBackground[0],
+      homeSlideshow: homeSlideshow,
+    });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  } finally {
+    client.close();
+  }
+};
+
 const getReservationById = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
   const _id = req.params._id;
@@ -274,6 +303,7 @@ const getMonthIndex = (monthName) => {
   };
   return months[monthName];
 };
+
 const deleteReservation = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
   const { phone, resId } = req.body;
@@ -370,5 +400,6 @@ module.exports = {
   deleteReservation,
   getBarbersData,
   getAboutInfo,
+  getHomePageInfo,
   getMenuData,
 };

@@ -10,27 +10,23 @@ import {
   ThirdContainer,
   SecondWrap,
 } from "./homepage/MiddleStylish";
-import { TextContext } from "./contexts/TextContext";
 import Loader from "./float-fixed/Loader";
-import { ImageContext } from "./contexts/ImageContext";
 const PCHomePage = () => {
   const navigate = useNavigate();
-  const { text } = useContext(TextContext);
   const { language } = useContext(LanguageContext);
   const imgRef = useRef(null);
-  const [imageLoaded, setImageLoaded] = useState(false);
-  const { images } = useContext(ImageContext);
   const [offsetY, setOffsetY] = useState(0);
-  const homepageImageSrc = images.filter(
-    (image) => image.filename === "homepageBackground"
-  )[0].src;
+  const [text, setText] = useState(null);
+  const [homepageImage, setHomepageImage] = useState(null);
   useEffect(() => {
-    const img = new Image();
-    img.onload = () => {
-      setImageLoaded(true);
-    };
-    img.src = homepageImageSrc;
-  }, [homepageImageSrc]);
+    fetch("https://hollywoodbarbershop.onrender.com/getHomePage")
+      .then((res) => res.json())
+      .then((data) => {
+        setText(data.homeText);
+        setHomepageImage(data.homeImage[0]);
+      });
+  }, []);
+
   const handleScroll = () => {
     requestAnimationFrame(() => {
       setOffsetY(window.pageYOffset);
@@ -43,61 +39,54 @@ const PCHomePage = () => {
 
   const main = useRef(null);
 
-  if (!text) {
+  if (!text || !homepageImage) {
     return <Loader />;
   } else {
-    const StylishText = text.filter((text) => text._id === "slideshow")[0]
-      .content;
-    const frenchStylishText = text.filter((text) => text._id === "slideshow")[0]
-      .french;
     return (
       <Wrapper ref={main}>
-        {imageLoaded && (
-          <StyledImage ref={imgRef} $offsetY={offsetY} src={homepageImageSrc} />
-        )}
-
+        <StyledImage ref={imgRef} $offsetY={offsetY} src={homepageImage.src} />
         <StylishBookWrapper>
           <WordContainer>
             * * *
             <FirstContainer>
-              <Modern key={StylishText[0]}>
+              <Modern key={text.content[0]}>
                 {language === "en"
-                  ? StylishText[0].split(" ")[0]
-                  : frenchStylishText[0].split(" ")[0]}
+                  ? text.content[0].split(" ")[0]
+                  : text.french[0].split(" ")[0]}
               </Modern>
               <Modern>
                 {language === "en"
-                  ? StylishText[0].split(" ")[1]
-                  : frenchStylishText[0].split(" ")[1]}
+                  ? text.content[0].split(" ")[1]
+                  : text.french[0].split(" ")[1]}
               </Modern>
             </FirstContainer>
             <SecondContainer>
               *
               <SecondWrap>
-                <Modern key={StylishText[1]}>
+                <Modern key={text.content[1]}>
                   {language === "en"
-                    ? StylishText[1].split(" ")[0]
-                    : frenchStylishText[1].split(" ")[0]}
+                    ? text.content[1].split(" ")[0]
+                    : text.french[1].split(" ")[0]}
                 </Modern>
-                <Modern key={StylishText[1] + ".1"}>
+                <Modern key={text.content[1] + ".1"}>
                   {language === "en"
-                    ? StylishText[1].split(" ")[1]
-                    : frenchStylishText[1].split(" ")[1]}
+                    ? text.content[1].split(" ")[1]
+                    : text.french[1].split(" ")[1]}
                 </Modern>
               </SecondWrap>
               *
             </SecondContainer>
             <ThirdContainer>
-              <Modern key={StylishText[2]}>
+              <Modern key={text.content[2]}>
                 {language === "en"
-                  ? StylishText[2].split(" ")[0]
-                  : frenchStylishText[2].split(" ")[0]}
+                  ? text.content[2].split(" ")[0]
+                  : text.french[2].split(" ")[0]}
               </Modern>
-              <Modern key={StylishText[2] + ".1"}>
+              <Modern key={text.content[2] + ".1"}>
                 {" "}
                 {language === "en"
-                  ? StylishText[2].split(" ")[1]
-                  : frenchStylishText[2].split(" ")[1]}
+                  ? text.content[2].split(" ")[1]
+                  : text.french[2].split(" ")[1]}
               </Modern>
             </ThirdContainer>
             * * *
