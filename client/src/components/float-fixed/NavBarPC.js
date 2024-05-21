@@ -2,9 +2,8 @@ import styled from "styled-components";
 import { useContext, useState } from "react";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
-const NavBarPC = ({ headerHeight }) => {
+const NavBarPC = ({ headerHeight, isSelected, setIsSelected }) => {
   const navigate = useNavigate();
-  const [isSelected, setIsSelected] = useState("");
   const { language, setLanguage } = useContext(LanguageContext);
 
   return (

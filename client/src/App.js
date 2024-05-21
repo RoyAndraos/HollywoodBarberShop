@@ -148,7 +148,7 @@ const App = () => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: whitesmoke;
+  background-color: #011c13;
   height: 100vh;
   position: relative;
   z-index: 0;

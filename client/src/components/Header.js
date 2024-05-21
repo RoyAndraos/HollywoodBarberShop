@@ -15,7 +15,7 @@ const Header = ({ isShowing }) => {
   const [isOpen, setIsOpen] = useState("false");
   const { isMobile } = useContext(IsMobileContext);
   const [headerHeight, setHeaderHeight] = useState("8vh");
-  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [isSelected, setIsSelected] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
   let menuRef = useRef(null);
@@ -60,13 +60,9 @@ const Header = ({ isShowing }) => {
       if (scrollHeight > 0) {
         if (headerHeight === "8vh") {
           setHeaderHeight("4vh"); // Change the height when scrolled
-          if (!isMobile) {
-            setShowBackToTop(true);
-          }
         }
       } else {
         setHeaderHeight("8vh"); // Default height when at the top
-        setShowBackToTop(false);
       }
     };
 
@@ -75,7 +71,7 @@ const Header = ({ isShowing }) => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [location, headerHeight, showBackToTop, isMobile]);
+  }, [location, headerHeight, isMobile]);
   return (
     <div
       style={{ backgroundColor: "whitesmoke", zIndex: "100" }}
@@ -84,7 +80,12 @@ const Header = ({ isShowing }) => {
     >
       {isMobile ? (
         <Wrapper>
-          <StyledNavLink to="/">
+          <StyledNavLink
+            to="/"
+            onClick={() => {
+              setIsSelected("");
+            }}
+          >
             <Logo
               key={"logoForMobile"}
               src={"/assets/hello.jpg"}
@@ -130,6 +131,7 @@ const Header = ({ isShowing }) => {
                   );
                 }}
                 onClick={() => {
+                  setIsSelected("");
                   navigate("/");
                 }}
               />
@@ -144,6 +146,8 @@ const Header = ({ isShowing }) => {
             slideshowRef={slideshowRef}
             scrollToRef={scrollToRef}
             headerHeight={headerHeight}
+            isSelected={isSelected}
+            setIsSelected={setIsSelected}
           />
           <SocialsPC headerHeight={headerHeight} />
         </WrapperPC>

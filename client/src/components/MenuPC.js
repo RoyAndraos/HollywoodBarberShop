@@ -6,7 +6,7 @@ import Loader from "./float-fixed/Loader";
 const MenuPC = () => {
   const { language } = useContext(LanguageContext);
   const [services, setServices] = useState(null);
-  const [menuBackground, setMenuBackground] = useState(null);
+  // const [menuBackground, setMenuBackground] = useState(null);
   const [underMenu, setUnderMenu] = useState(null);
 
   useEffect(() => {
@@ -14,15 +14,19 @@ const MenuPC = () => {
       .then((res) => res.json())
       .then((data) => {
         setServices(data.services);
-        setMenuBackground(data.menuBackgroundImage[0]);
+        // setMenuBackground(data.menuBackgroundImage[0]);
         setUnderMenu(data.menuText[0]);
       });
   }, []);
 
   const navigate = useNavigate();
 
-  if (!services || !menuBackground || !underMenu) {
-    return <Loader />;
+  if (!services || !underMenu) {
+    return (
+      <Wrapper>
+        <Loader />
+      </Wrapper>
+    );
   }
 
   return (

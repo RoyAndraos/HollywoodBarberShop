@@ -17,10 +17,10 @@ const spin = keyframes`
     }
 `;
 const Wrapper = styled.div`
-  position: fixed;
-  height: 100vh;
-  width: 100vw;
-  background-color: rgba(255, 255, 255, 0.5);
+  position: relative;
+  height: 100%;
+  width: 100%;
+  background-color: #011c13;
 `;
 const StyledRazor = styled(GiRazor)`
   font-size: 5rem;
