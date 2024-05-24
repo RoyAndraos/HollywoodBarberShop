@@ -11,7 +11,6 @@ import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
-import { ImageContext } from "../contexts/ImageContext";
 
 const Booking = () => {
   const [reservations, setReservations] = useState([]);
@@ -28,10 +27,6 @@ const Booking = () => {
   const { userInfo } = useContext(UserContext);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
-  const { images } = useContext(ImageContext);
-  const homepageBackground = images.filter(
-    (image) => image.filename === "homepageBackground"
-  )[0].src;
 
   const todayDate = new Date();
   // format date for Wed Mar 27 2024
@@ -277,11 +272,7 @@ const Booking = () => {
       });
   };
   return (
-    <StyledForm
-      $isMobile={isMobile}
-      onSubmit={(e) => handleSubmit(e)}
-      style={{ backgroundColor: "#011c13" }}
-    >
+    <StyledForm $isMobile={isMobile} onSubmit={(e) => handleSubmit(e)}>
       <SmallWrapper $isMobile={isMobile}>
         <LabelInputWrapper key={"date"}>
           <StyledLabel>Date</StyledLabel>
@@ -345,7 +336,7 @@ const Booking = () => {
           )}
         </LabelInputWrapper>
         <StyledLabel>Time slot</StyledLabel>
-        {filteredAvailableSlots.length && selectedBarber !== null && (
+        {filteredAvailableSlots.length && selectedBarber !== null ? (
           <SlotWrapper key={"slots"} $isMobile={isMobile}>
             {selectedSlot.length === 0 ? (
               filteredAvailableSlots.map((slot) => {
@@ -356,18 +347,22 @@ const Booking = () => {
                 );
               })
             ) : (
-              <BarberBox
-                className="isSelected"
-                style={{ position: "relative", left: "47%" }}
-                key={"selectedslotman"}
-                onClick={() => {
-                  setSelectedSlot([]);
-                }}
-              >
-                {selectedSlot[0].split("-")[1]}
-              </BarberBox>
+              <SingleSlotWrapper>
+                <BarberBox
+                  className="isSelected"
+                  key={"selectedslotman"}
+                  onClick={() => {
+                    setSelectedSlot([]);
+                  }}
+                  style={{ width: "30vw" }}
+                >
+                  {selectedSlot[0].split("-")[1]}
+                </BarberBox>
+              </SingleSlotWrapper>
             )}
           </SlotWrapper>
+        ) : (
+          <NotAvail>Select Service And Barber First.</NotAvail>
         )}
         {filteredAvailableSlots.length === 0 && selectedBarber !== null && (
           <NotAvail>
@@ -387,44 +382,38 @@ const Booking = () => {
           {language === "en" ? "Submit" : "Valider"}
         </Submit>
       </SmallWrapper>
-      {!isMobile && <StyledBg src={homepageBackground} />}
     </StyledForm>
   );
 };
 
 const NotAvail = styled.div`
-  font-family: sans-serif;
   font-size: 1rem;
-  color: whitesmoke;
+  color: #b50000;
   padding: 0.5rem;
-  background-color: #035e3f;
+  background-color: whitesmoke;
   text-align: center;
   border-radius: 10px;
+  width: 30vw;
   margin: 0 0 1.5rem 0;
-  border-bottom: 4px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 4px solid #001c00;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
 `;
 
 const StyledForm = styled.form`
   display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
-  font-family: sans-serif;
+  font-family: "Helvetica Neue", sans-serif;
   position: ${(props) => (props.$isMobile ? "" : "relative")};
-  height: ${(props) => (props.$isMobile ? "unset" : "100%")};
-  margin-top: ${(props) => (props.$isMobile ? "0" : "8vh")};
 `;
 const StyledDatePicker = styled(DatePicker)`
-  font-family: sans-serif;
+  font-family: "Helvetica Neue", sans-serif;
   font-size: 1rem;
-  background-color: #035e3f;
-  color: whitesmoke;
+  background-color: whitesmoke;
   padding: 0.5rem;
   border: none;
   text-align: center;
-  border-bottom: 4px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 4px solid #001c00;
   border-radius: 10px;
   width: 92%;
   outline: none;
@@ -433,7 +422,7 @@ const StyledDatePicker = styled(DatePicker)`
   cursor: pointer;
 `;
 const BarberBox = styled.div`
-  font-family: sans-serif;
+  font-family: "Helvetica Neue", sans-serif;
   font-size: 1rem;
   padding: 0.5rem 1rem 0.5rem 1rem;
   background-color: whitesmoke;
@@ -441,17 +430,17 @@ const BarberBox = styled.div`
   text-align: center;
   border-radius: 10px;
   margin: 0.5rem;
-  border-bottom: 4px solid #035e3f;
+  border-bottom: 4px solid #001c00;
   transition: all 0.3s ease-in-out;
   cursor: pointer;
   &.isSelected {
-    background-color: #035e3f;
-    color: whitesmoke;
-    border-bottom: 4px solid rgba(255, 255, 255, 0.5);
+    background-color: whitesmoke;
+    color: #006044;
+    border-bottom: 4px solid #001c00;
   }
 `;
 const StyledLabel = styled.label`
-  font-family: sans-serif;
+  font-family: "Helvetica Neue", sans-serif;
   font-size: 1rem;
   color: whitesmoke;
   margin: 1rem;
@@ -468,7 +457,7 @@ const LabelInputWrapper = styled.div`
 `;
 
 const Slot = styled.div`
-  font-family: sans-serif;
+  font-family: "Helvetica Neue", sans-serif;
   font-size: 1rem;
   padding: 0.5rem;
   background-color: whitesmoke;
@@ -486,13 +475,22 @@ const Slot = styled.div`
 const SlotWrapper = styled.div`
   display: grid;
   grid-template-columns: ${(props) =>
-    props.$isMobile ? "45% 45%" : "25% 25% 25% 25%"};
-  align-items: flex-end;
-  justify-content: flex-end;
+    props.$isMobile ? "45% 45%" : "24% 24% 24% 24%"};
+  gap: 1%;
+  place-content: center;
   width: 70%;
   padding-bottom: 3%;
   margin-bottom: 3%;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+`;
+const SingleSlotWrapper = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
 `;
 
 const SmallWrapper = styled.div`
@@ -500,13 +498,14 @@ const SmallWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
-  height: ${(props) => (props.$isMobile ? "unset" : "unset")};
-  width: ${(props) => (props.$isMobile ? "100%" : "60%")};
+  width: ${(props) => (props.$isMobile ? "100%" : "30%")};
+  max-height: 60vh;
+  overflow-y: scroll;
   z-index: 1;
-  background-color: ${(props) => (props.$isMobile ? "" : "rgba(0,0,0,0.7)")};
+  background-color: ${(props) => (props.$isMobile ? "" : "#006044")};
 `;
 const Submit = styled.button`
-  font-family: sans-serif;
+  font-family: "Helvetica Neue", sans-serif;
   background-color: whitesmoke;
   border-radius: 10px;
   border: none;
@@ -524,11 +523,5 @@ const Submit = styled.button`
     color: #b50000;
   }
 `;
-const StyledBg = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  z-index: 0;
-`;
+
 export default Booking;

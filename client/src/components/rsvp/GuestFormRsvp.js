@@ -5,7 +5,6 @@ import { FaArrowRight } from "react-icons/fa";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
 import { NavLink } from "react-router-dom";
-import { ImageContext } from "../contexts/ImageContext";
 const FormRsvp = () => {
   const { setUserInfo } = useContext(UserContext);
   const { isMobile } = useContext(IsMobileContext);
@@ -18,11 +17,8 @@ const FormRsvp = () => {
     reservations: [],
     note: "",
   });
-  const { images } = useContext(ImageContext);
   const { language } = useContext(LanguageContext);
-  const homepageBackground = images.filter(
-    (image) => image.filename === "homepageBackground"
-  )[0].src;
+
   // check if phone number is valid
   useEffect(() => {
     if (formData.number.length !== 10 && formData.number.length !== 0) {
@@ -134,7 +130,6 @@ const FormRsvp = () => {
             : "pour annuler une réservation existante."}
         </CancelWrapper>
       </SmallWrapper>
-      {!isMobile && <StyledBg src={homepageBackground} />}
     </StyledForm>
   );
 };
@@ -165,23 +160,15 @@ const StyledForm = styled.form`
   }
 `;
 
-const StyledBg = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  z-index: 0;
-`;
-
 export const SmallWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-evenly;
+  background-color: #006044;
   height: ${(props) => (props.$isMobile ? "100%" : "50%")};
   width: ${(props) => (props.$isMobile ? "100%" : "30%")};
   z-index: 2;
-  background-color: ${(props) => (props.$isMobile ? "" : "rgba(0,0,0,0.7)")};
   border-radius: 10px;
 `;
 
@@ -193,7 +180,7 @@ const Submit = styled.button`
   font-size: 1.2rem;
   padding: 7px 30px 7px 30px;
   transition: all 0.3s ease-in-out;
-  border-bottom: 4px solid #035e3f;
+  border-bottom: 4px solid #001c00;
   z-index: 2;
   &:active {
     transform: scale(0.9);
@@ -209,7 +196,7 @@ const StyledInput = styled.input`
   border-radius: 10px;
   border: none;
   font-size: 1.2rem;
-  border-bottom: 4px solid #035e3f;
+  border-bottom: 4px solid #001c00;
   outline: none;
   z-index: 2;
 `;

@@ -4,20 +4,25 @@ import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 import Booking from "./Booking";
 import Header from "../Header";
+import { IsMobileContext } from "../contexts/IsMobileContext";
 const RSVP = () => {
   const { userInfo } = useContext(UserContext);
+  const { isMobile } = useContext(IsMobileContext);
   return (
     <Wrapper>
-      <Header isShowing={false} />
+      {isMobile && <Header isShowing={false} />}
       {!userInfo ? <GuestFormRsvp /> : <Booking />}
     </Wrapper>
   );
 };
 const Wrapper = styled.div`
-  background-color: #011c13;
+  background-color: #eeebde;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  justify-content: center;
+  top: 8vh;
+  height: 92vh;
+  position: relative;
 `;
 
 export default RSVP;

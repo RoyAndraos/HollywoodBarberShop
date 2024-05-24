@@ -1,41 +1,60 @@
-import { ImLocation2 } from "react-icons/im";
 import { SiInstagram } from "react-icons/si";
-import { BsFacebook } from "react-icons/bs";
-import { FaMobileAlt } from "react-icons/fa";
+import { ImFacebook2 } from "react-icons/im";
 import styled from "styled-components";
-const SocialsPC = ({ headerHeight }) => {
-  const address =
-    "Hollywood fairmount salon de barbier, 18 Av. Fairmount O, Montreal, Quebec H2T 2M1";
-  const shopLocationURL = `https://www.google.com/maps?q=${encodeURIComponent(
-    address
-  )}`;
+import { useLocation } from "react-router-dom";
+import { TimelineLite } from "gsap";
+import { useEffect, useRef } from "react";
+const SocialsPC = () => {
+  const location = useLocation();
+  let fbRef = useRef(null);
+  let instaRef = useRef(null);
+  useEffect(() => {
+    const tl = new TimelineLite();
+    tl.fromTo(
+      fbRef,
+      {
+        opacity: 0,
+        y: -50,
+      },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        delay: 1.2,
+      }
+    ).fromTo(
+      instaRef,
+      {
+        opacity: 0,
+        y: -50,
+      },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.4,
+        delay: -0.2,
+      }
+    );
+  }, []);
   return (
     <Wrapper>
-      <SocialMediaLink $headerHeight={headerHeight}>
+      <SocialMediaLink $location={location.pathname} ref={(el) => (fbRef = el)}>
         <a
           href="https://www.facebook.com/profile.php?id=100095015610230"
           style={{ all: "unset" }}
         >
-          <BsFacebook />
+          <ImFacebook2 />
         </a>
       </SocialMediaLink>
-      <SocialMediaLink $headerHeight={headerHeight}>
-        <a href={shopLocationURL} style={{ all: "unset" }}>
-          <ImLocation2 />
-        </a>
-      </SocialMediaLink>
-      <SocialMediaLink $headerHeight={headerHeight}>
+      <SocialMediaLink
+        $location={location.pathname}
+        ref={(el) => (instaRef = el)}
+      >
         <a
           href="https://instagram.com/hollywood.barbers?igshid=MjEwN2IyYWYwYw=="
           style={{ all: "unset" }}
         >
           <SiInstagram />
-        </a>
-      </SocialMediaLink>
-
-      <SocialMediaLink $headerHeight={headerHeight}>
-        <a href="tel:+14389237297" style={{ all: "unset" }}>
-          <FaMobileAlt />
         </a>
       </SocialMediaLink>
     </Wrapper>
@@ -45,27 +64,21 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center;
+  align-items: baseline;
   z-index: 100;
-  border-left: 1px solid rgba(255, 255, 255, 0.5);
-  padding-left: 1vw;
   height: 50%;
   gap: 0.5vw;
 `;
 const SocialMediaLink = styled.div`
-  font-size: ${(props) => (props.$headerHeight === "4vh" ? "1.5rem" : "2rem")};
-  color: whitesmoke;
+  font-size: 1.3rem;
+  color: ${(props) => (props.$location === "/" ? "whitesmoke" : "#006044")};
   margin: 0 0.5rem;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.15s ease-in-out;
   cursor: pointer;
-  opacity: 0.7;
   &:hover {
-    transform: scale(1.05);
-    opacity: 1;
-    color: #035e3f;
-  }
-  &:first-of-type {
-    margin-left: 0;
+    scale: 1.1;
+    border-bottom: ${(props) =>
+      props.$location === "/" ? "2px solid whitesmoke" : "2px solid #006044"};
   }
 `;
 export default SocialsPC;

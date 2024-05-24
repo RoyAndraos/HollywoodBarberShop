@@ -1,8 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import { TimelineLite } from "gsap";
 const FooterPc = () => {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
+  let rigthRef = useRef(null);
+  let leftRef = useRef(null);
+  let wrapperRef = useRef(null);
+  useEffect(() => {
+    const tl = new TimelineLite();
+    tl.to(wrapperRef, 0, { css: { visibility: "visible" } })
+      .fromTo(
+        rigthRef,
+        {
+          opacity: 0,
+          x: -100,
+        },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 1,
+        }
+      )
+      .fromTo(
+        leftRef,
+        {
+          opacity: 0,
+          x: 100,
+        },
+        {
+          opacity: 1,
+          x: 0,
+          duration: 1,
+          delay: -1,
+        }
+      );
+  }, []);
+
   const handlePrivacy = () => {
     if (isTermsOpen) {
       setIsTermsOpen(false);
@@ -18,32 +52,31 @@ const FooterPc = () => {
 
   return (
     <Wrapper>
-      <TopPart>
-        <BusinesssHours>
+      <TopPart ref={(el) => (wrapperRef = el)}>
+        <BusinesssHours ref={(el) => (rigthRef = el)}>
           <Title>Business Hours</Title>
-          <Day>Monday: closed</Day>
+          <Day>Sunday - Monday: closed</Day>
           <Day>Tuesday - Friday: 9am-7pm</Day>
           <Day>Saturday: 9am-6pm</Day>
-          <Day>Sunday: closed</Day>
         </BusinesssHours>
-        <LogoWrap>
-          <StyledLogo src={"/assets/hello.jpg"} alt="shop logo"></StyledLogo>
-        </LogoWrap>
-        <Location>
+        <Location ref={(el) => (leftRef = el)}>
           <Title>Address</Title>
           <Day>18 Av. Fairmount O, Montréal, QC H2T 2M1</Day>
+          <Title style={{ marginTop: "10px" }}>Number</Title>
+          <Day>+1(514) 271-4247</Day>
         </Location>
       </TopPart>
       <BottomPart>
+        <span></span>
         <StyledButton
           onClick={() => {
             handlePrivacy();
           }}
           key={"Privacy"}
         >
-          Privacy Policy{" "}
+          Privacy Policy
         </StyledButton>
-        |{" "}
+        <span>|</span>
         <StyledButton
           onClick={() => {
             handleTerms();
@@ -51,8 +84,11 @@ const FooterPc = () => {
           key={"Terms"}
         >
           Terms of Service
-        </StyledButton>{" "}
-        | Copyright Hollywood Fairmount Barbershop © {new Date().getFullYear()}
+        </StyledButton>
+        <span>|</span>
+        <StyledButton>
+          Copyright Hollywood Fairmount Barbershop © {new Date().getFullYear()}
+        </StyledButton>
       </BottomPart>
       {isPrivacyOpen && (
         <PrivacyWrapper>
@@ -167,29 +203,36 @@ const FooterPc = () => {
   );
 };
 const Wrapper = styled.div`
-  height: 25vh;
+  cursor: default;
+  height: 22vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2vh 0 2vh 0;
-  background-color: #011c13;
+  background-color: #eeebde;
+  position: relative;
+  font-weight: 600;
+  font-family: "Noto Sans KR", sans-serif;
 `;
 const TopPart = styled.div`
-  display: grid;
-  grid-template-columns: 33% 33% 33%;
-  place-content: top space-evenly;
+  visibility: hidden;
+  display: flex;
+  overflow: hidden;
+  flex-direction: row;
+  align-items: center;
   width: 100%;
-  justify-content: center;
-  height: 20vh;
+  justify-content: space-between;
+  height: 16vh;
 `;
-const BottomPart = styled.div`
+export const BottomPart = styled.div`
   width: 100%;
-  height: 5vh;
+  height: 6vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: whitesmoke;
+  gap: 1rem;
+  background-color: whitesmoke;
+  color: #006044;
 `;
 const BusinesssHours = styled.div`
   display: flex;
@@ -197,17 +240,21 @@ const BusinesssHours = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
-  width: 100%;
+  width: 27%;
 `;
 const Day = styled.p`
   margin: 0.1rem 0;
   font-size: 1rem;
-  color: whitesmoke;
+  color: #006044;
 `;
 
-const Title = styled.h1`
-  font-size: 1.2rem;
-  color: #079061;
+const Title = styled.h3`
+  font-size: 1rem;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #006044;
 `;
 const Location = styled.div`
   display: flex;
@@ -215,24 +262,20 @@ const Location = styled.div`
   align-items: center;
   justify-content: center;
   height: 100%;
-  width: 100%;
+  width: 27%;
 `;
-const StyledLogo = styled.img`
-  max-height: 13vh;
-  border-radius: 30%;
-`;
-const StyledButton = styled.button`
-  color: whitesmoke;
+export const StyledButton = styled.button`
+  color: #006044;
   background-color: transparent;
   border: none;
   cursor: pointer;
   font-size: 1rem;
   transition: all 0.3s ease-in-out;
   &:hover {
-    color: #079061;
+    color: #006044;
   }
 `;
-const PrivacyWrapper = styled.div`
+export const PrivacyWrapper = styled.div`
   position: fixed;
   width: 100vw;
   height: 100vh;
@@ -241,26 +284,27 @@ const PrivacyWrapper = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  top: 0;
+  top: -8vh;
   left: 0;
 `;
-const SmallTitle = styled.h2`
-  font-size: 1.2rem;
-  color: #079061;
+export const SmallTitle = styled.h2`
+  font-size: 1rem;
+  color: #006044;
   text-decoration: underline;
   font-style: italic;
   margin: 2rem 0 1rem 0;
 `;
-const Text = styled.div`
-  font-size: 1rem;
+export const Text = styled.div`
+  font-size: 0.8rem;
   color: black;
   background-color: whitesmoke;
   padding: 2%;
   border-radius: 10px;
   width: 80%;
+  height: 80%;
   position: relative;
 `;
-const BackButton = styled.button`
+export const BackButton = styled.button`
   position: absolute;
   top: 2%;
   right: 2%;
@@ -272,14 +316,7 @@ const BackButton = styled.button`
   transition: all 0.3s ease-in-out;
   font-family: sans-serif;
   &:hover {
-    color: #079061;
+    color: #006044;
   }
-`;
-const LogoWrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  width: 100%;
 `;
 export default FooterPc;

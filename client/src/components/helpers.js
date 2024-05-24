@@ -72,3 +72,25 @@ export const removeSlotsForOverLapping = (
     return slot;
   });
 };
+
+export const reviews = [
+  {
+    name: "Steve St. Pierre",
+    stars: 5,
+    review: `A shop that retained the classic barber experience from the old
+    owner and created a new, inviting atmosphere for a great cut.
+    <br />
+    The best haircut I've had since moving to this city.
+    <br />`,
+  },
+  {
+    name: "Julien Kamar",
+    stars: 5,
+    review: `A combination of a great haircut, impeccable service and a lovely atmosphere.<br/> Highly recommend.`,
+  },
+  {
+    name: "Jesse Polowin",
+    stars: 5,
+    review: `Impeccable customer service experience, and the haircut was exactly as requested. <br/> Will most definitely be coming back.`,
+  },
+];

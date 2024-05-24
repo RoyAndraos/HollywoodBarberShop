@@ -1,156 +1,94 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { LanguageContext } from "./contexts/LanguageContext";
-import {
-  Modern,
-  FirstContainer,
-  WordContainer,
-  SecondContainer,
-  ThirdContainer,
-  SecondWrap,
-} from "./homepage/MiddleStylish";
-import Loader from "./float-fixed/Loader";
+import Reviews from "./Reviews";
+import bgSrc from ".././assets/homepagebg.webp";
+import FooterPc from "./FooterPc";
+import logoHomeCenter from "../assets/logoHomeCenter.svg";
+import { TimelineLite } from "gsap";
 const PCHomePage = () => {
-  const navigate = useNavigate();
-  const { language } = useContext(LanguageContext);
-  const imgRef = useRef(null);
-  const [offsetY, setOffsetY] = useState(0);
-  const [text, setText] = useState(null);
-  const [homepageImage, setHomepageImage] = useState(null);
-  useEffect(() => {
-    fetch("https://hollywoodbarbershop.onrender.com/getHomePage")
-      .then((res) => res.json())
-      .then((data) => {
-        setText(data.homeText);
-        setHomepageImage(data.homeBackground);
-      });
-  }, []);
-  const handleScroll = () => {
-    requestAnimationFrame(() => {
-      setOffsetY(window.pageYOffset);
-    });
-  };
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  let coverRef = useRef(null);
+  let midLogoRef = useRef(null);
 
-  const main = useRef(null);
+  useEffect(() => {
+    const tl = new TimelineLite();
+    if (imageLoaded) {
+      tl.to(coverRef, { height: 0, duration: 0.8, delay: 1 });
+      tl.fromTo(
+        midLogoRef,
+        {
+          opacity: 0,
+          y: -10,
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          delay: 0.2,
+        }
+      );
+    }
+  }, [imageLoaded]);
 
-  if (!text || !homepageImage) {
-    return <Loader />;
-  } else {
-    return (
-      <Wrapper ref={main}>
-        <StyledImage ref={imgRef} $offsetY={offsetY} src={homepageImage.src} />
-        <StylishBookWrapper>
-          <WordContainer>
-            * * *
-            <FirstContainer>
-              <Modern key={text.content[0]}>
-                {language === "en"
-                  ? text.content[0].split(" ")[0]
-                  : text.french[0].split(" ")[0]}
-              </Modern>
-              <Modern>
-                {language === "en"
-                  ? text.content[0].split(" ")[1]
-                  : text.french[0].split(" ")[1]}
-              </Modern>
-            </FirstContainer>
-            <SecondContainer>
-              *
-              <SecondWrap>
-                <Modern key={text.content[1]}>
-                  {language === "en"
-                    ? text.content[1].split(" ")[0]
-                    : text.french[1].split(" ")[0]}
-                </Modern>
-                <Modern key={text.content[1] + ".1"}>
-                  {language === "en"
-                    ? text.content[1].split(" ")[1]
-                    : text.french[1].split(" ")[1]}
-                </Modern>
-              </SecondWrap>
-              *
-            </SecondContainer>
-            <ThirdContainer>
-              <Modern key={text.content[2]}>
-                {language === "en"
-                  ? text.content[2].split(" ")[0]
-                  : text.french[2].split(" ")[0]}
-              </Modern>
-              <Modern key={text.content[2] + ".1"}>
-                {" "}
-                {language === "en"
-                  ? text.content[2].split(" ")[1]
-                  : text.french[2].split(" ")[1]}
-              </Modern>
-            </ThirdContainer>
-            * * *
-          </WordContainer>
-          <BookButton onClick={() => navigate("/book")}>
-            {language === "en" ? "Book Now" : "Reserver"}
-          </BookButton>
-        </StylishBookWrapper>
-      </Wrapper>
-    );
-  }
+  return (
+    <Wrapper>
+      <StyledImage
+        src={bgSrc}
+        onLoad={() => setImageLoaded(true)}
+        alt="counter with plants and a business card"
+      />
+      <StyledLogo
+        src={logoHomeCenter}
+        alt="logo"
+        ref={(el) => (midLogoRef = el)}
+      />
+      <Filter />
+      <Cover ref={(el) => (coverRef = el)} />
+      <Reviews />
+      <FooterPc />
+    </Wrapper>
+  );
 };
-const Wrapper = styled.div`
-  height: 85vh;
+
+const Filter = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+`;
+const StyledLogo = styled.img`
+  position: absolute;
+  top: 10vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 20%;
+  z-index: 1;
+`;
+const Wrapper = styled.div`
   position: relative;
-  top: 4vh;
-  margin-bottom: 4vh;
-  z-index: 10;
-  background-color: black;
+  top: 8vh;
+  height: 92vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 `;
 
 const StyledImage = styled.img`
-  height: 100%;
+  height: 70vh;
+  object-fit: cover;
   width: 100%;
 `;
 
-const BookButton = styled.button`
-  height: auto;
-  background-color: #035e3f;
-  color: whitesmoke;
-  font-size: clamp(1rem, 1.5vw, 1.6rem);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  font-family: "octin-prison", sans-serif;
-  font-weight: 900;
-  font-style: normal;
-  border: none;
-  letter-spacing: 2px;
-  padding: 15px 30px;
-  &:hover {
-    transform: scale(1.02);
-    background-color: whitesmoke;
-    color: #035e3f;
-  }
-`;
-
-const StylishBookWrapper = styled.div`
+const Cover = styled.div`
   position: absolute;
-  right: 15%;
-  top: 50%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  color: whitesmoke;
-  min-width: 20%;
-  height: 60%;
-  z-index: 10;
-  background-color: rgba(0, 0, 0, 0.7);
-  padding: 50px 50px;
-  border-radius: 10px;
-  transform: translateY(-50%);
+  bottom: 22vh;
+  left: 0;
+  width: 100%;
+  height: 70vh;
+  background-color: #eeebde;
+  z-index: 2;
 `;
 
 export default PCHomePage;

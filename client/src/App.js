@@ -3,7 +3,7 @@ import GlobalStyles from "./GlobalStyles";
 import ImageSlideShow from "./components/homepage/ImageSlideShow";
 import { Routes, Route } from "react-router-dom";
 import RSVP from "./components/rsvp/RSVP";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import YourRes from "./components/rsvp/YourRes";
 import { useRef } from "react";
 import Header from "./components/Header";
@@ -17,28 +17,29 @@ import Barbers from "./components/homepage/Barbers";
 import BarbersPc from "./components/BarbersPc";
 import TransitionComponent from "./components/TransitionComponent";
 import PCHomePage from "./components/PCHomePage";
-import FooterPc from "./components/FooterPc";
+import { BarberContext } from "./components/contexts/BarberContext";
+import { ServiceContext } from "./components/contexts/ServiceContext";
+import { TextContext } from "./components/contexts/TextContext";
+import Loader from "./components/float-fixed/Loader";
+
 const App = () => {
   const { isMobile } = useContext(IsMobileContext);
   const containerRef = useRef(null);
-  const handleScroll = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    const container = containerRef.current;
-    const snapElements = container.querySelectorAll(".snap-element");
-    snapElements.forEach((element) => {
-      const rect = element.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
-      // Check if the element is close enough to snap
-      if (rect.top >= containerRect.top && rect.top <= containerRect.bottom) {
-        // Scroll to the element
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    });
-  };
-
+  const { setBarberInfo, barberInfo } = useContext(BarberContext);
+  const { setServices, services } = useContext(ServiceContext);
+  const { setText, text } = useContext(TextContext);
+  useEffect(() => {
+    fetch("https://hollywoodbarbershop.onrender.com/getWebsiteInfo")
+      .then((res) => res.json())
+      .then((data) => {
+        setBarberInfo(data.barbers);
+        setServices(data.services);
+        setText(data.text);
+      });
+  }, [setBarberInfo, setServices, setText]);
+  if (!text || !barberInfo || !services) return <Loader />;
   return (
-    <Container ref={containerRef} onScroll={handleScroll}>
+    <Container ref={containerRef}>
       <GlobalStyles />
       {!isMobile && <Header />}
       <Routes>
@@ -83,10 +84,7 @@ const App = () => {
               path={"/"}
               element={
                 <TransitionComponent>
-                  <>
-                    <PCHomePage />
-                    <FooterPc />
-                  </>
+                  <PCHomePage />
                 </TransitionComponent>
               }
             />
@@ -148,10 +146,10 @@ const App = () => {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: #011c13;
-  height: 100vh;
+  max-height: 100vh;
   position: relative;
   z-index: 0;
+  background-color: #eeebde;
 `;
 
 export default App;

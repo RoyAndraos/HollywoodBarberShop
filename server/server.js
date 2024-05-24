@@ -22,126 +22,14 @@ const getWebsiteInfo = async (req, res) => {
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
-    const images = await db.collection("Images").find().toArray();
     const barbers = await db.collection("admin").find().toArray();
     const text = await db.collection("web_text").find().toArray();
     const services = await db.collection("services").find().toArray();
     res.status(200).json({
       status: 200,
-      images: images,
       barbers: barbers,
       text: text,
       services: services,
-    });
-  } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
-  } finally {
-    client.close();
-  }
-};
-const getBarbersData = async (req, res) => {
-  const client = new MongoClient(MONGO_URI_RALF);
-  try {
-    await client.connect();
-    const db = client.db("HollywoodBarberShop");
-    const barbers = await db.collection("admin").find().toArray();
-    const images = await db.collection("Images").find().toArray();
-    const barbersBackgroundImage = images.filter(
-      (image) => image.filename === "barbersBackground"
-    );
-    res.status(200).json({
-      status: 200,
-      barbers: barbers,
-      barbersBackgroundImage: barbersBackgroundImage,
-    });
-  } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
-  } finally {
-    client.close();
-  }
-};
-const getMenuData = async (req, res) => {
-  const client = new MongoClient(MONGO_URI_RALF);
-  try {
-    await client.connect();
-    const db = client.db("HollywoodBarberShop");
-    const services = await db.collection("services").find().toArray();
-    const text = await db.collection("web_text").find().toArray();
-    const menuText = text.filter((text) => text._id === "underMenu");
-
-    res.status(200).json({
-      status: 200,
-      services: services,
-      menuText: menuText,
-    });
-  } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
-  } finally {
-    client.close();
-  }
-};
-
-const getBarberInfo = async (req, res) => {
-  const client = new MongoClient(MONGO_URI_RALF);
-  try {
-    await client.connect();
-    const db = client.db("HollywoodBarberShop");
-    const data = await db.collection("admin").find().toArray();
-    res.status(200).json({ status: 200, data: data });
-  } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
-  } finally {
-    client.close();
-  }
-};
-
-const getAboutInfo = async (req, res) => {
-  const client = new MongoClient(MONGO_URI_RALF);
-  try {
-    await client.connect();
-    const db = client.db("HollywoodBarberShop");
-    const text = await db.collection("web_text").find().toArray();
-    const aboutText = text.filter((text) => text._id === "about");
-    const images = await db.collection("Images").find().toArray();
-    const aboutImage = images.filter((image) => image.filename === "about");
-    const aboutBackground = images.filter(
-      (image) => image.filename === "aboutBackground"
-    );
-
-    res.status(200).json({
-      status: 200,
-      aboutText: aboutText,
-      aboutImage: aboutImage,
-      aboutBackground: aboutBackground,
-    });
-  } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
-  } finally {
-    client.close();
-  }
-};
-
-const getHomePageInfo = async (req, res) => {
-  const client = new MongoClient(MONGO_URI_RALF);
-  try {
-    await client.connect();
-    const db = client.db("HollywoodBarberShop");
-    const text = await db.collection("web_text").find().toArray();
-    const homeText = text.filter((text) => text._id === "slideshow");
-    const images = await db.collection("Images").find().toArray();
-    const homeSlideshow = images.filter((image) => {
-      return image.filename === "slideShow";
-    });
-
-    const homeBackground = images.filter(
-      (image) => image.filename === "homepageBackground"
-    );
-
-    res.status(200).json({
-      status: 200,
-      homeText: homeText[0],
-      homeBackground: homeBackground[0],
-      homeSlideshow: homeSlideshow,
     });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });
@@ -388,14 +276,9 @@ const deleteReservation = async (req, res) => {
 };
 
 module.exports = {
-  getBarberInfo,
   getWebsiteInfo,
   getReservations,
   addReservation,
   getReservationById,
   deleteReservation,
-  getBarbersData,
-  getAboutInfo,
-  getHomePageInfo,
-  getMenuData,
 };
