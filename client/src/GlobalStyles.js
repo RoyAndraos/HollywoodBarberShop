@@ -31,7 +31,6 @@ export default createGlobalStyle`
       line-height: 1;
       font-family: 'Brandon Grotesque Black', sans-serif;
       background-color: #eeebde;
-      overflow: hidden; /* Hide scroll bar */
   }
   ol, ul {
       list-style: none;

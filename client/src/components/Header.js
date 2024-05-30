@@ -11,6 +11,7 @@ import { TimelineLite } from "gsap";
 import { useNavigate } from "react-router-dom";
 import logoSrc from "../assets/headerLogo.svg";
 import onlyNameLogo from "../assets/onlyNameLogo.svg";
+import logoHomeCenter from "../assets/logoHomeCenter.svg";
 
 const Header = ({ isShowing }) => {
   const [isOpen, setIsOpen] = useState("false");
@@ -57,6 +58,7 @@ const Header = ({ isShowing }) => {
   useEffect(() => {
     if (location.pathname === "/") return;
     const tl = new TimelineLite();
+    if (!logoNotHomeRef) return;
     tl.fromTo(
       logoNotHomeRef,
       {
@@ -107,6 +109,17 @@ const Header = ({ isShowing }) => {
                 key={"logoForPC"}
                 src={logoSrc}
                 ref={(el) => (logoRef = el)}
+                onClick={() => {
+                  setIsSelected("");
+                  navigate("/");
+                }}
+              />
+            ) : location.pathname === "/about" ? (
+              <Logo
+                key={"logoForPC"}
+                src={logoHomeCenter}
+                ref={(el) => (logoRef = el)}
+                style={{ maxHeight: "15vh", zIndex: "900", top: "3vh" }}
                 onClick={() => {
                   setIsSelected("");
                   navigate("/");
@@ -192,8 +205,11 @@ const WrapperPC = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: ${(props) =>
-    props.$location !== "/" ? "#eeebde" : "#035e3f"};
+  background-color: ${(props) => {
+    if (props.$location === "/") return "#006044";
+    if (props.$location === "/about") return "transparent";
+    else return "#eeebde";
+  }};
   height: 8vh;
   gap: 1vw;
   width: 100vw;

@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { LanguageContext } from "./contexts/LanguageContext";
 import { useNavigate } from "react-router-dom";
 import { BookButton } from "./Reviews";
-import imgSrc from "../assets/servicesImage.webp";
 import {
   SmallTitle,
   Text,
@@ -15,6 +14,12 @@ import {
 import { TextContext } from "./contexts/TextContext";
 import { ServiceContext } from "./contexts/ServiceContext";
 import { TimelineLite } from "gsap";
+import oneServiceImage from "../assets/hollywoodWebDesign.jpg";
+import twoServiceImage from "../assets/hollywoodWebDesign2.jpg";
+import threeServiceImage from "../assets/hollywoodWebDesign3.jpg";
+import fourServiceImage from "../assets/hollywoodWebDesign4.jpg";
+import fiveServiceImage from "../assets/hollywoodWebDesign1.jpg";
+
 const MenuPC = () => {
   const { language } = useContext(LanguageContext);
   const { text } = useContext(TextContext);
@@ -25,6 +30,24 @@ const MenuPC = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   let coverRef = useRef(null);
   let coverRef2 = useRef(null);
+
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const slideShow = [
+    oneServiceImage,
+    twoServiceImage,
+    threeServiceImage,
+    fourServiceImage,
+    fiveServiceImage,
+  ];
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prevSlide) =>
+        prevSlide === slideShow.length - 1 ? 0 : prevSlide + 1
+      );
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [slideShow.length]);
   useEffect(() => {
     const tl = new TimelineLite();
     if (imageLoaded) {
@@ -35,18 +58,21 @@ const MenuPC = () => {
       });
     }
   }, [imageLoaded]);
+
   const handlePrivacy = () => {
     if (isTermsOpen) {
       setIsTermsOpen(false);
     }
     setIsPrivacyOpen(!isPrivacyOpen);
   };
+
   const handleTerms = () => {
     if (isPrivacyOpen) {
       setIsPrivacyOpen(false);
     }
     setIsTermsOpen(!isTermsOpen);
   };
+
   const navigate = useNavigate();
 
   return (
@@ -79,11 +105,18 @@ const MenuPC = () => {
         <CoverText ref={(el) => (coverRef2 = el)} key={"textSide"} />
       </LeftWrap>
       <Right>
-        <StyledImg
-          src={imgSrc}
-          alt="barber shop image"
-          onLoad={() => setImageLoaded(true)}
-        />
+        <SlideShow>
+          <SlideContainer $currentSlide={currentSlide}>
+            {slideShow.map((src, index) => (
+              <StyledImg
+                onLoad={() => setImageLoaded(true)}
+                src={src}
+                alt="barber shop image"
+                key={index}
+              />
+            ))}
+          </SlideContainer>
+        </SlideShow>
         <Cover ref={(el) => (coverRef = el)} />
       </Right>
       <Footer>
@@ -203,15 +236,15 @@ const MenuPC = () => {
               appointment. We accept cash, credit/debit cards .<br />
               <SmallTitle>Use of Services:</SmallTitle>
               <br /> You agree to use our services only for lawful purposes and
-              in compliance with these Terms. You may not use our services to
-              harass, abuse, or harm others or to engage in any illegal
-              activities.
+              in compliance with these Terms. You may not use our services for
+              any illegal or unauthorized purpose.
               <br />
               <SmallTitle>Intellectual Property:</SmallTitle> <br />
-              All content on our website, including text, images, logos, and
-              graphics, is the property of Hollywood Fairmount Barbershop and is
-              protected by copyright laws. You may not reproduce, distribute, or
-              transmit any content without our prior written consent.
+              All content and materials on our website, including text, images,
+              logos, and graphics, is the property of Hollywood Fairmount
+              Barbershop and is protected by copyright laws. You may not
+              reproduce, distribute, or transmit any content without our prior
+              written consent.
               <br />
               <SmallTitle>Limitation of Liability:</SmallTitle> <br />
               In no event shall Hollywood Fairmount Barbershop be liable for any
@@ -229,6 +262,18 @@ const MenuPC = () => {
   );
 };
 
+const SlideShow = styled.div`
+  display: flex;
+  width: 85%;
+  overflow: hidden;
+`;
+
+const SlideContainer = styled.div`
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  transform: ${({ $currentSlide }) => `translateX(-${$currentSlide * 100}%)`};
+`;
+
 const Footer = styled.div`
   position: fixed;
   bottom: 0;
@@ -237,9 +282,13 @@ const Footer = styled.div`
   font-family: "Helvetica Neue", sans-serif;
   z-index: 1000;
 `;
+
 const StyledImg = styled.img`
-  width: 75%;
+  width: 100%;
+  flex-shrink: 0;
+  flex-grow: 1;
 `;
+
 const ButtonMessageWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -247,6 +296,7 @@ const ButtonMessageWrap = styled.div`
   align-items: center;
   gap: 1rem;
 `;
+
 const LeftWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -257,10 +307,12 @@ const LeftWrap = styled.div`
   height: 80vh;
   position: relative;
 `;
+
 const Right = styled.div`
   width: 100%;
   position: relative;
 `;
+
 const Cover = styled.div`
   position: absolute;
   left: -1%;
@@ -270,6 +322,7 @@ const Cover = styled.div`
   background-color: #eeebde;
   z-index: 10;
 `;
+
 const CoverText = styled.div`
   position: absolute;
   bottom: 0;
@@ -279,6 +332,7 @@ const CoverText = styled.div`
   background-color: #eeebde;
   z-index: 10;
 `;
+
 const Wrapper = styled.div`
   display: grid;
   gap: 10%;

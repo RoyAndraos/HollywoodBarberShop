@@ -11,23 +11,32 @@ import {
 } from "./FooterPc";
 import { TimelineLite } from "gsap";
 const BarbersPc = () => {
-  const [currentBarberIndex, setCurrentBarberIndex] = useState(0);
   const { barberInfo } = useContext(BarberContext);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   let coverRef = useRef(null);
+  let otherCoverRef = useRef(null);
   let coverRef2 = useRef(null);
+  let otherCoverRef2 = useRef(null);
   useEffect(() => {
     const tl = new TimelineLite();
-    if (imageLoaded) {
-      tl.to(coverRef, { height: 0, duration: 0.8, delay: 1 }).to(coverRef2, {
-        height: 0,
-        duration: 0.8,
-        delay: -0.8,
-      });
+    if (imageLoaded && coverRef && coverRef2) {
+      tl.to(coverRef, { height: 0, duration: 0.8, delay: 1 })
+        .to(coverRef2, {
+          height: 0,
+          duration: 0.8,
+          delay: -0.8,
+        })
+        .to(otherCoverRef, { height: 0, duration: 0.8, delay: 1 })
+        .to(otherCoverRef2, {
+          height: 0,
+          duration: 0.8,
+          delay: -0.8,
+        });
     }
   }, [imageLoaded]);
+
   const handlePrivacy = () => {
     if (isTermsOpen) {
       setIsTermsOpen(false);
@@ -40,52 +49,37 @@ const BarbersPc = () => {
     }
     setIsTermsOpen(!isTermsOpen);
   };
-  // Function to handle next barber
-  const nextBarber = () => {
-    setCurrentBarberIndex(1);
-  };
 
-  // Function to handle previous barber
-  const prevBarber = () => {
-    setCurrentBarberIndex(0);
-  };
   return (
     <Wrapper id="barbers-section">
       <BarberWrapper>
         {barberInfo.map((barber, index) => (
-          <Barber key={barber._id} $selected={currentBarberIndex === index}>
+          <Barber key={barber._id} id="barber-wrapper">
             {barber.picture !== "" && (
               <div
                 style={{ position: "relative", height: "100%", width: "100%" }}
+                id="barber-wrapper"
               >
                 <ProfilePic
                   src={barber.picture}
                   alt={barber.name}
                   onLoad={() => setImageLoaded(true)}
                 />
-                <Cover ref={(el) => (coverRef = el)} />
+                {index === 0 && <Cover ref={(el) => (coverRef = el)} />}
+                {index === 1 && <Cover ref={(el) => (otherCoverRef = el)} />}
               </div>
             )}
             <NameDescriptionWrap>
               <Name>{barber.given_name + " " + barber.family_name}</Name>
-              <Description>{barber.description}</Description>
-              <CoverText ref={(el) => (coverRef2 = el)} key={"textSide"} />
+              <Description>"{barber.description}"</Description>
+              {index === 0 && (
+                <CoverText ref={(el) => (coverRef2 = el)} key={"textSide"} />
+              )}
+              {index === 1 && <Cover ref={(el) => (otherCoverRef2 = el)} />}
             </NameDescriptionWrap>
           </Barber>
         ))}
       </BarberWrapper>
-      {barberInfo.length > 1 && (
-        <ButtonWrap>
-          <Button
-            onClick={prevBarber}
-            $selected={currentBarberIndex === 0}
-          ></Button>
-          <Button
-            onClick={nextBarber}
-            $selected={currentBarberIndex === 1}
-          ></Button>
-        </ButtonWrap>
-      )}
       <Footer>
         <BottomPart style={{ backgroundColor: "#eeebde" }}>
           <span></span>
@@ -247,7 +241,7 @@ const CoverText = styled.div`
   z-index: 10;
 `;
 const Footer = styled.div`
-  position: fixed;
+  position: absolute;
   bottom: 0;
   width: 100vw;
   font-family: "Helvetica Neue", sans-serif;
@@ -260,66 +254,45 @@ const NameDescriptionWrap = styled.div`
   width: 100%;
   height: 100%;
 `;
-const ButtonWrap = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 3vw;
-  position: absolute;
-  left: 50%;
-  top: 18vh;
-  transform: translateX(-50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  padding: 10px 20px;
-  border-radius: 10px;
-  z-index: 3;
-`;
 
-const Button = styled.button`
-  background-color: ${(props) =>
-    props.$selected ? "rgba(7, 144, 97, 0.5)" : "rgba(255, 255, 255, 0.3)"};
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  color: white;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-  z-index: 3;
-  transition: 0.2s ease-in-out;
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.5);
-  }
-`;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   background-color: #eeebde;
   width: 100%;
-  height: 92vh;
   position: relative;
   top: 8vh;
+  padding-bottom: 10vh;
 `;
 
 const BarberWrapper = styled.div`
   z-index: 3;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 130vh;
+  top: 10vh;
 `;
 
 const Barber = styled.div`
   z-index: 1000;
   display: grid;
-  grid-template-columns: 40% 60%;
+  grid-template-columns: 35% 65%;
+  align-items: center;
+  justify-content: center;
   width: 80vw;
   height: 50vh;
-  border-radius: 10px;
+  border-bottom: 1px solid #006044;
 `;
 const ProfilePic = styled.img`
   z-index: 3;
   width: 100%;
-  border-radius: 10px;
+  object-fit: cover;
 `;
 const Name = styled.h2`
   z-index: 3;
@@ -334,7 +307,7 @@ const Description = styled.p`
   z-index: 3;
   color: #006044;
   padding: 3% 5%;
-  font-size: 20px;
+  font-size: 18px;
   text-align: center;
   @media (max-width: 1000px) {
     font-size: 16px;
