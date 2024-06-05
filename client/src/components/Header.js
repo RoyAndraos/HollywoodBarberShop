@@ -130,7 +130,14 @@ const Header = ({ isShowing }) => {
                 key={"logoForPC"}
                 src={onlyNameLogo}
                 ref={(el) => (logoNotHomeRef = el)}
-                style={{ maxHeight: "15vh", zIndex: "900", top: "3vh" }}
+                style={{
+                  maxHeight: "15vh",
+                  zIndex: "900",
+                  top: "3vh",
+                  backgroundColor: "#eeebde",
+                  padding: "1vh 1vw",
+                  borderRadius: "5px",
+                }}
                 onClick={() => {
                   setIsSelected("");
                   navigate("/");

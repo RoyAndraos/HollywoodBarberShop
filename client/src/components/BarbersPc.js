@@ -10,18 +10,21 @@ import {
   BackButton,
 } from "./FooterPc";
 import { TimelineLite } from "gsap";
+import Loader from "./float-fixed/Loader";
+import { BookButton } from "./Reviews";
+import { useNavigate } from "react-router-dom";
 const BarbersPc = () => {
   const { barberInfo } = useContext(BarberContext);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const navigate = useNavigate();
   let coverRef = useRef(null);
   let otherCoverRef = useRef(null);
   let coverRef2 = useRef(null);
   let otherCoverRef2 = useRef(null);
   useEffect(() => {
     const tl = new TimelineLite();
-    if (imageLoaded && coverRef && coverRef2) {
+    if (coverRef && coverRef2) {
       tl.to(coverRef, { height: 0, duration: 0.8, delay: 1 })
         .to(coverRef2, {
           height: 0,
@@ -35,7 +38,7 @@ const BarbersPc = () => {
           delay: -0.8,
         });
     }
-  }, [imageLoaded]);
+  }, []);
 
   const handlePrivacy = () => {
     if (isTermsOpen) {
@@ -49,7 +52,15 @@ const BarbersPc = () => {
     }
     setIsTermsOpen(!isTermsOpen);
   };
-
+  if (!barberInfo) {
+    return (
+      <Wrapper>
+        <BarberWrapper style={{ height: "70vh" }}>
+          <Loader />
+        </BarberWrapper>
+      </Wrapper>
+    );
+  }
   return (
     <Wrapper id="barbers-section">
       <BarberWrapper>
@@ -63,7 +74,7 @@ const BarbersPc = () => {
                 <ProfilePic
                   src={barber.picture}
                   alt={barber.name}
-                  onLoad={() => setImageLoaded(true)}
+                  key={"owner"}
                 />
                 {index === 0 && <Cover ref={(el) => (coverRef = el)} />}
                 {index === 1 && <Cover ref={(el) => (otherCoverRef = el)} />}
@@ -76,6 +87,14 @@ const BarbersPc = () => {
                 <CoverText ref={(el) => (coverRef2 = el)} key={"textSide"} />
               )}
               {index === 1 && <Cover ref={(el) => (otherCoverRef2 = el)} />}
+              <BookButton
+                style={{ marginTop: "10%", padding: "1vh 2vw" }}
+                onClick={() => {
+                  navigate("/book");
+                }}
+              >
+                Book With {barber.given_name}
+              </BookButton>
             </NameDescriptionWrap>
           </Barber>
         ))}
@@ -291,7 +310,7 @@ const Barber = styled.div`
 `;
 const ProfilePic = styled.img`
   z-index: 3;
-  width: 100%;
+  max-height: 45vh;
   object-fit: cover;
 `;
 const Name = styled.h2`

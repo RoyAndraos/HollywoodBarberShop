@@ -7,19 +7,19 @@ import Loader from "../float-fixed/Loader";
 import Header from "../Header";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
+import { TextContext } from "../contexts/TextContext";
 const ImageSlideShow = () => {
   const [imagePos, setImagePos] = useState(0);
   const navigate = useNavigate();
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
   const [slideShowImages, setSlideShowImages] = useState(null);
-  const [homepageText, setHomepageText] = useState(null);
+  const { text } = useContext(TextContext);
   useEffect(() => {
-    fetch("https://hollywoodbarbershop.onrender.com/getHomePage")
+    fetch("https://hollywoodbarbershop.onrender.com/getSlideShowImages")
       .then((res) => res.json())
       .then((data) => {
-        setSlideShowImages(data.homeSlideshow);
-        setHomepageText(data.homeText);
+        setSlideShowImages(data.data);
       });
   }, []);
 
@@ -49,6 +49,7 @@ const ImageSlideShow = () => {
       setImagePos((prev) => prev - (slideShowImages.length - 1) * 100);
     }
   };
+  const homepageText = text.filter((item) => item._id === "homepage");
   if (!slideShowImages || !homepageText) {
     return <Loader />;
   }

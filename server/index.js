@@ -7,6 +7,7 @@ const {
   deleteReservation,
   getReservations,
   addReservation,
+  getSlideShowImages,
   getReservationById,
 } = require("./server");
 const PORT = process.env.PORT || 4000;
@@ -29,6 +30,7 @@ express()
   .use(express.static("public"))
   .get("/getWebsiteInfo", getWebsiteInfo)
   .get("/getReservations", getReservations)
+  .get("/getSlideShowImages", getSlideShowImages)
   .get("/getRes/:_id", getReservationById)
   .post("/addReservation", addReservation)
   .delete("/deleteReservation", deleteReservation)

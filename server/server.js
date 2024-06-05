@@ -52,7 +52,20 @@ const getReservationById = async (req, res) => {
     client.close();
   }
 };
-
+const getSlideShowImages = async (req, res) => {
+  const client = new MongoClient(MONGO_URI_RALF);
+  const qurey = { filename: "slideShow" };
+  try {
+    await client.connect();
+    const db = client.db("HollywoodBarberShop");
+    const data = await db.collection("Images").findOne(qurey);
+    res.status(200).json({ status: 200, data: data });
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  } finally {
+    client.close();
+  }
+};
 const getReservations = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
   try {
@@ -281,4 +294,5 @@ module.exports = {
   addReservation,
   getReservationById,
   deleteReservation,
+  getSlideShowImages,
 };
