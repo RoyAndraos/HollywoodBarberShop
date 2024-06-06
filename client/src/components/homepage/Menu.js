@@ -1,131 +1,112 @@
 import styled from "styled-components";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
 import Loader from "../float-fixed/Loader";
+import { ServiceContext } from "../contexts/ServiceContext";
+import { TextContext } from "../contexts/TextContext";
+import ServiceHeader from "./ServiceHeader";
 const Menu = () => {
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
-  const [textState, setText] = useState(null);
-  const [servicesState, setServices] = useState(null);
-  useEffect(() => {
-    fetch("https://hollywoodbarbershop.onrender.com/getMenu")
-      .then((res) => res.json())
-      .then((data) => {
-        setText(data.menuText[0]);
-        setServices(data.services[0]);
-      });
-  }, []);
-  if (!textState || !servicesState) {
+  const { text } = useContext(TextContext);
+  const { services } = useContext(ServiceContext);
+
+  const MenuText = text.filter((item) => item._id === "underMenu");
+  if (!text || !services) {
     return <Loader />;
   }
   return (
-    <Wrapper
-      id="menu-section"
-      key={"menu-section"}
-      className="snap-element"
-      $isMobile={isMobile}
-    >
-      <TitleWrapper>
-        <Title>{language === "en" ? "Our Prices" : "Nos Prix"}</Title>
-      </TitleWrapper>
-      <ThanksWrapper>
-        * <br />* <br />* <br />*<br /> * <br />* <br />* <br />* <br />*
-        <Appreciate>
-          {language === "en" ? textState.content : textState.french}
-        </Appreciate>
-        * <br />* <br />* <br />*<br /> * <br />* <br />* <br />* <br />*
-      </ThanksWrapper>
+    <Wrapper id="menu-section" key={"menu-section"} $isMobile={isMobile}>
+      <ServiceHeader />
       <MenuWrapper>
-        {servicesState.map((service) => {
+        {services.map((service) => {
           return (
             <Service key={service._id}>
               <p>{language === "en" ? service.english : service.name}</p>
-              <Price>{service.price}</Price>
+              <p>{service.price}$</p>
             </Service>
           );
         })}
       </MenuWrapper>
+      <FooterWrapper>
+        <p>{language === "en" ? MenuText[0].content : MenuText[0].french}</p>
+        <button>{language === "en" ? "BOOK NOW!" : "RESERVER!"}</button>
+      </FooterWrapper>
     </Wrapper>
   );
 };
-
+const FooterWrapper = styled.div`
+  width: 85vw;
+  margin-top: 8vh;
+  margin-bottom: 5vh;
+  display: flex;
+  justify-content: space-between;
+  button {
+    width: 40vw;
+    border: 1px solid transparent;
+    font-family: "Helvetica Neue", sans-serif;
+    font-weight: 200;
+    letter-spacing: 1px;
+    font-size: 1.1rem;
+    color: #006044;
+    box-shadow: -6px 6px 6px 0 rgb(0 0 0 / 15%);
+  }
+  p {
+    width: 40vw;
+    font-size: 0.65rem;
+  }
+`;
 export const Wrapper = styled.div`
-  border-left: ${(props) => (props.$isMobile ? "5px solid #011c13" : "none")};
-  border-right: ${(props) => (props.$isMobile ? "5px solid #011c13" : "none")};
-  background-color: ${(props) => (props.$isMobile ? "#011c13" : "whitesmoke")};
+  background-color: #eeebde;
   padding-top: 3px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  color: white;
-  min-height: 100vh;
+  background-color: #006044;
+  color: whitesmoke;
   position: relative;
   scroll-snap-align: start;
 `;
 const Service = styled.div`
   display: grid;
   grid-template-columns: 80% 20%;
-  gap: 20px;
-  background-color: rgba(3, 94, 63, 0.7);
-  padding: 10px 25px;
-  border-radius: 3px;
+  gap: 10px;
+  padding-top: 10px;
   align-content: center;
   align-items: center;
   width: 85vw;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.4);
+  &:first-of-type {
+    padding-top: 0;
+  }
 `;
 const MenuWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  min-height: 50vh;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 8vh;
 `;
 export const Title = styled.p`
-  color: white;
+  color: whitesmoke;
+  border-bottom: 1px solid #006044;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 2vw 0 2vw;
-  font-size: 1.3rem;
-  letter-spacing: 2px;
-  width: 100%;
-  border-radius: 10px;
-  background-color: #035e3f;
-  height: 50%;
-  font-family: "roboto", sans-serif;
-  border-bottom: 6px solid rgba(0, 0, 0, 0.9);
+  font-size: 1.2rem;
+  padding: 0 10px;
+  color: #006044;
+  background-color: transparent;
 `;
 export const TitleWrapper = styled.div`
   display: flex;
   justify-content: center;
+  position: relative;
   align-items: center;
   width: 98vw;
   height: 13vh;
 `;
-const Appreciate = styled.p`
-  font-size: 1rem;
-  margin: 5px 15% 5px 15%;
-  line-height: 1.5;
-  font-style: italic;
-  letter-spacing: 2px;
-  color: #e7e7b0;
-  font-family: "Brandon Grotesque Regular", sans-serif;
-`;
-const Price = styled.p`
-  font-size: 1rem;
-  line-height: 1.5;
-  letter-spacing: 2px;
-  font-weight: 700;
-  color: #e7e7b0;
-  font-family: "Brandon Grotesque Regular", sans-serif;
-`;
-const ThanksWrapper = styled.div`
-  display: flex;
-  width: 77vw;
-  justify-content: center;
-  align-items: center;
-  height: 20vh;
-  text-align: center;
-`;
+
 export default Menu;

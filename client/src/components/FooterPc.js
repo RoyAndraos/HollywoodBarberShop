@@ -1,9 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import styled from "styled-components";
 import { TimelineLite } from "gsap";
+import { LanguageContext } from "./contexts/LanguageContext";
 const FooterPc = () => {
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
+  const { language } = useContext(LanguageContext);
   let rigthRef = useRef(null);
   let leftRef = useRef(null);
   let wrapperRef = useRef(null);
@@ -54,15 +56,29 @@ const FooterPc = () => {
     <Wrapper>
       <TopPart ref={(el) => (wrapperRef = el)}>
         <BusinesssHours ref={(el) => (rigthRef = el)}>
-          <Title>Business Hours</Title>
-          <Day>Sunday - Monday: closed</Day>
-          <Day>Tuesday - Friday: 9am-7pm</Day>
-          <Day>Saturday: 9am-6pm</Day>
+          <Title>
+            {language === "en" ? "Business Hours" : "Heures d'ouverture"}
+          </Title>
+          <Day>
+            {language === "en"
+              ? "Sunday - Monday: closed"
+              : "Dimanche - Lundi: fermé"}
+          </Day>
+          <Day>
+            {language === "en"
+              ? "Tuesday - Friday: 9am-7pm"
+              : "Mardi - Vendredi: 9h-19h"}
+          </Day>
+          <Day>
+            {language === "en" ? "Saturday: 9am-6pm" : "Samedi: 9h-18h"}
+          </Day>
         </BusinesssHours>
         <Location ref={(el) => (leftRef = el)}>
-          <Title>Address</Title>
+          <Title>Address{language === "fr" && "e"}</Title>
           <Day>18 Av. Fairmount O, Montréal, QC H2T 2M1</Day>
-          <Title style={{ marginTop: "10px" }}>Number</Title>
+          <Title style={{ marginTop: "10px" }}>
+            {language === "en" ? "Number" : "Numero"}
+          </Title>
           <Day>+1(514) 271-4247</Day>
         </Location>
       </TopPart>

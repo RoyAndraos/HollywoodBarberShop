@@ -2,7 +2,12 @@ import styled, { keyframes } from "styled-components";
 import { useContext, useRef } from "react";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { TimelineLite } from "gsap";
-const SubmitButton = ({ isLoading }) => {
+const SubmitButton = ({
+  isLoading,
+  selectedService,
+  selectedBarber,
+  selectedSlot,
+}) => {
   const { language } = useContext(LanguageContext);
   let buttonRef = useRef(null);
   const handleGetOff = () => {
@@ -21,11 +26,15 @@ const SubmitButton = ({ isLoading }) => {
       { backgroundColor: "#fff", color: "#006044", duration: 0.1 }
     );
   };
-  console.log(buttonRef);
   return (
     <StyledSubmit
       type="submit"
-      disabled={isLoading}
+      disabled={
+        isLoading ||
+        !selectedService ||
+        !selectedBarber ||
+        selectedSlot.length === 0
+      }
       onMouseEnter={() => handleHover()}
       onMouseLeave={() => {
         handleGetOff();
@@ -48,6 +57,14 @@ const StyledSubmit = styled.button`
   font-size: 16px;
   transition: 0.3s ease-in-out;
   font-family: "Helvetica Neue", sans-serif;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  &:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+  }
 `;
 
 const rotate = keyframes`

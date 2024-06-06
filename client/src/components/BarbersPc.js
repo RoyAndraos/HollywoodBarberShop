@@ -68,8 +68,11 @@ const BarbersPc = () => {
           <Barber key={barber._id} id="barber-wrapper">
             {barber.picture !== "" && (
               <div
-                style={{ position: "relative", height: "100%", width: "100%" }}
-                id="barber-wrapper"
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginRight: "30px",
+                }}
               >
                 <ProfilePic
                   src={barber.picture}
@@ -81,14 +84,20 @@ const BarbersPc = () => {
               </div>
             )}
             <NameDescriptionWrap>
-              <Name>{barber.given_name + " " + barber.family_name}</Name>
+              <Name>
+                {barber.given_name}
+                {barber.family_name ? " " + barber.family_name : ""}
+              </Name>
               <Description>"{barber.description}"</Description>
               {index === 0 && (
                 <CoverText ref={(el) => (coverRef2 = el)} key={"textSide"} />
               )}
               {index === 1 && <Cover ref={(el) => (otherCoverRef2 = el)} />}
               <BookButton
-                style={{ marginTop: "10%", padding: "1vh 2vw" }}
+                style={{
+                  marginTop: "10%",
+                  padding: "1vh 2vw",
+                }}
                 onClick={() => {
                   navigate("/book");
                 }}
@@ -269,7 +278,7 @@ const NameDescriptionWrap = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   height: 100%;
 `;
@@ -284,10 +293,10 @@ const Wrapper = styled.div`
   position: relative;
   top: 8vh;
   padding-bottom: 10vh;
+  z-index: 1;
 `;
 
 const BarberWrapper = styled.div`
-  z-index: 3;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -299,9 +308,8 @@ const BarberWrapper = styled.div`
 `;
 
 const Barber = styled.div`
-  z-index: 1000;
   display: grid;
-  grid-template-columns: 35% 65%;
+  grid-template-columns: 50% 50%;
   align-items: center;
   justify-content: center;
   width: 80vw;
@@ -309,12 +317,10 @@ const Barber = styled.div`
   border-bottom: 1px solid #006044;
 `;
 const ProfilePic = styled.img`
-  z-index: 3;
   max-height: 45vh;
   object-fit: cover;
 `;
 const Name = styled.h2`
-  z-index: 3;
   color: #006044;
   margin: 30px 0 20px;
   font-size: 30px;
@@ -323,11 +329,10 @@ const Name = styled.h2`
   }
 `;
 const Description = styled.p`
-  z-index: 3;
   color: #006044;
-  padding: 3% 5%;
+  padding: 3% 0;
   font-size: 18px;
-  text-align: center;
+  text-align: left;
   @media (max-width: 1000px) {
     font-size: 16px;
   }

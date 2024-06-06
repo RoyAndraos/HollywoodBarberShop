@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect, useRef } from "react";
 import { LanguageContext } from "./contexts/LanguageContext";
 import styled from "styled-components";
-import imgSrc from "../assets/homepagebg.webp";
+import imgSrc from "../assets/clockWall.jpg";
 import { TextContext } from "./contexts/TextContext";
 import { TimelineLite } from "gsap";
 import PreviousLooks from "./PreviousLooks";
@@ -29,14 +29,18 @@ const AboutPC = () => {
         <StoryWrapper>
           <Story>
             {language === "en"
-              ? aboutText[0].content.split(".")[0]
-              : aboutText[0].french.split(".")[0]}
+              ? aboutText[0].content.split(".")[0] +
+                aboutText[0].content.split(".")[1]
+              : aboutText[0].french.split(".")[0] +
+                aboutText[0].french.split(".")[1]}
             .
           </Story>
           <Story>
             {language === "en"
-              ? aboutText[0].content.split(".")[1]
-              : aboutText[0].french.split(".")[1]}
+              ? aboutText[0].content.split(".")[1] +
+                aboutText[0].content.split(".")[1]
+              : aboutText[0].french.split(".")[1] +
+                aboutText[0].french.split(".")[1]}
             .
           </Story>
         </StoryWrapper>

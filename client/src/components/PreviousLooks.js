@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import styled, { keyframes } from "styled-components";
 import examplePic from "../assets/hollywoodWebDesign.jpg";
 import examplePic2 from "../assets/hollywoodWebDesign1.jpg";
 import { FaChevronLeft } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
+import { LanguageContext } from "./contexts/LanguageContext";
 
 const PreviousLooks = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [fullscreenImage, setFullscreenImage] = useState(null);
+  const { language } = useContext(LanguageContext);
 
   const handleNextSlide = (e) => {
     e.preventDefault();
@@ -41,7 +43,11 @@ const PreviousLooks = () => {
 
   return (
     <Wrapper>
-      <Title>CHECKOUT SOME OF OUR CUTS</Title>
+      <Title>
+        {language === "en"
+          ? "CHECKOUT SOME OF OUR CUTS"
+          : "DÉCOUVREZ QUELQUES COUPES"}
+      </Title>
       <ButtonSlideWrap>
         <SlideLeft onClick={handlePrevSlide} />
         <SlideShowContainer>

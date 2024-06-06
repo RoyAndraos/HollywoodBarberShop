@@ -1,35 +1,22 @@
-import { useContext, useEffect, useState } from "react";
-import { Title, Wrapper, TitleWrapper } from "./Menu";
+import { useContext } from "react";
 import { styled } from "styled-components";
 import { LanguageContext } from "../contexts/LanguageContext";
-import { IsMobileContext } from "../contexts/IsMobileContext";
 import Loader from "../float-fixed/Loader";
+import { TextContext } from "../contexts/TextContext";
 const About = () => {
   const { language } = useContext(LanguageContext);
-  const { isMobile } = useContext(IsMobileContext);
-  const [textState, setText] = useState(null);
-  const [aboutImage, setAboutImage] = useState(null);
-  useEffect(() => {
-    fetch("https://hollywoodbarbershop.onrender.com/getAbout")
-      .then((res) => res.json())
-      .then((data) => {
-        setText(data.aboutText[0]);
-        setAboutImage(data.aboutImage[0]);
-      });
-  }, []);
-  if (!textState || !aboutImage) {
+  const { text } = useContext(TextContext);
+  const aboutText = text.filter((item) => item._id === "about");
+  if (!text) {
     return <Loader />;
   }
   return (
-    <Wrapper
-      key={"about-section"}
-      style={{ paddingBottom: "20px" }}
-      $isMobile={isMobile}
-      id="about-section"
-    >
-      <TitleWrapper>
-        <Title>{language === "en" ? "About" : "A propos"}</Title>
-      </TitleWrapper>
+    <Wrapper>
+      <Title>
+        {language === "en"
+          ? "YOUR FAVORITE BARBERSHOP"
+          : "VOS BARBIERS PRÉFÉRÉS"}
+      </Title>
       <StoryContainer>
         <div
           style={{
@@ -40,67 +27,53 @@ const About = () => {
         >
           <Story>
             {language === "en"
-              ? textState.content.split(".")[0]
-              : textState.french.split(".")[0]}
+              ? aboutText[0].content.split(".")[0]
+              : aboutText[0].french.split(".")[0]}
             .
           </Story>
           <Story>
             {language === "en"
-              ? textState.content.split(".")[1]
-              : textState.french.split(".")[1]}
+              ? aboutText[0].content.split(".")[1] +
+                aboutText[0].content.split(".")[2]
+              : aboutText[0].french.split(".")[1] +
+                aboutText[0].french.split(".")[2]}
             .
           </Story>
         </div>
-        {isMobile
-          ? "* * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-          : ""}
-        <ImageContainer>
-          <StyledImage src={aboutImage.src} alt="shop image"></StyledImage>
-        </ImageContainer>
-        {isMobile
-          ? "* * * * * * * * * * * * * * * * * * * * * * * * * * * *"
-          : ""}
       </StoryContainer>
-      ***
     </Wrapper>
   );
 };
-
+const Wrapper = styled.div`
+  margin-top: 10vh;
+  margin-bottom: 15vh;
+`;
+const Title = styled.h1`
+  font-size: 1rem;
+  font-weight: unset;
+  color: #006044;
+  text-align: right;
+  margin-right: 7.5vw;
+  margin-bottom: 3vh;
+`;
 const StoryContainer = styled.div`
-  width: 90vw;
-  height: 70vh;
+  width: 85vw;
+  left: 7.5vw;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  background-color: #035e3f;
-  padding: 20px 0;
-  border-radius: 20px;
-  margin-bottom: 20px;
+  color: #006044;
 `;
 const Story = styled.div`
-  width: 90%;
   font-size: 1rem;
   line-height: 1.1;
-  letter-spacing: 0.1rem;
-  font-family: "Lato", sans-serif;
-  margin: 20px 0 20px 0;
+  color: #006044;
+  margin: 20px 0 0 0;
   &:last-of-type {
     margin-bottom: 40px;
   }
 `;
-const StyledImage = styled.img`
-  border-radius: 20px;
-  max-height: 30vh;
-  width: 70vw;
-  object-fit: cover;
-`;
-const ImageContainer = styled.div`
-  background-color: transparent;
-  width: 90vw;
-  display: flex;
-  justify-content: center;
-  padding-bottom: 2vh;
-  padding-top: 10px;
-`;
+
 export default About;

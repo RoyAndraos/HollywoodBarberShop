@@ -181,9 +181,10 @@ export const BookButton = styled.button`
     transform 0.3s ease-in-out;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 400;
   padding: 9px 25px;
   border: none;
+  position: relative;
   border-radius: 15px;
   &:hover {
     background-position: 100% 50%;

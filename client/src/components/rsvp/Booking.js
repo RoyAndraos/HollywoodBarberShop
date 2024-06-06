@@ -13,14 +13,7 @@ import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
 import { InputLabelWrap } from "./GuestFormRsvp";
 import SubmitButton from "./SubmitButton";
-import {
-  SmallTitle,
-  Text,
-  StyledButton,
-  BottomPart,
-  PrivacyWrapper,
-  BackButton,
-} from "../FooterPc";
+import logoNotHome from "../../assets/onlyNameLogo.svg";
 const Booking = () => {
   const [reservations, setReservations] = useState([]);
   const [formData, setFormData] = useState({
@@ -31,26 +24,13 @@ const Booking = () => {
   const [selectedService, setSelectedService] = useState(null);
   const [barberIsOff, setBarberIsOff] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState([]);
-  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
-  const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { barberInfo } = useContext(BarberContext);
   const { services } = useContext(ServiceContext);
   const { userInfo } = useContext(UserContext);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
-  const handlePrivacy = () => {
-    if (isTermsOpen) {
-      setIsTermsOpen(false);
-    }
-    setIsPrivacyOpen(!isPrivacyOpen);
-  };
-  const handleTerms = () => {
-    if (isPrivacyOpen) {
-      setIsPrivacyOpen(false);
-    }
-    setIsTermsOpen(!isTermsOpen);
-  };
+
   const todayDate = new Date();
   const formattedDate = moment(todayDate).format("ddd MMM DD YYYY").toString();
   const isToday =
@@ -286,6 +266,15 @@ const Booking = () => {
 
   return (
     <Wrapper>
+      {isMobile && (
+        <Logo
+          src={logoNotHome}
+          alt="hollywood barbershop logo"
+          onClick={() => {
+            navigate("/");
+          }}
+        />
+      )}
       <Title>{language === "FR" ? "Réservation" : "Booking"}</Title>
       <form onSubmit={handleSubmit}>
         <InputLabelWrap
@@ -328,7 +317,7 @@ const Booking = () => {
           ))}
         </BarberList>
         <SlotList>
-          <LabelWarningWrap>
+          <div>
             <StyledLabel>
               {language === "en" ? "Slots" : "Disponibilités"}
             </StyledLabel>
@@ -341,7 +330,7 @@ const Booking = () => {
             ) : (
               ""
             )}
-          </LabelWarningWrap>
+          </div>
           <SlotWrap>
             {filteredAvailableSlots.map((slot) => (
               <Slot
@@ -354,173 +343,28 @@ const Booking = () => {
             ))}
           </SlotWrap>
         </SlotList>
-        <SubmitButton isLoading={isLoading} />
-        {/* <StyledSubmit type="submit">
-          {language === "FR" ? "Confirmer" : "Confirm"}
-        </StyledSubmit> */}
+        <SubmitButton
+          isLoading={isLoading}
+          selectedBarber={selectedBarber}
+          selectedService={selectedService}
+          selectedSlot={selectedSlot}
+        />
       </form>
-      {!isMobile && (
-        <Footer>
-          <BottomPart style={{ backgroundColor: "#eeebde" }}>
-            <span></span>
-            <StyledButton
-              onClick={() => {
-                handlePrivacy();
-              }}
-              key={"Privacy"}
-            >
-              Privacy Policy
-            </StyledButton>
-            <span>|</span>
-            <StyledButton
-              onClick={() => {
-                handleTerms();
-              }}
-              key={"Terms"}
-            >
-              Terms of Service
-            </StyledButton>
-            <span>|</span>
-            <StyledButton>
-              Copyright Hollywood Fairmount Barbershop ©{" "}
-              {new Date().getFullYear()}
-            </StyledButton>
-          </BottomPart>
-          {isPrivacyOpen && (
-            <PrivacyWrapper>
-              <Text>
-                <BackButton
-                  onClick={() => {
-                    setIsPrivacyOpen(false);
-                  }}
-                >
-                  X
-                </BackButton>
-                <SmallTitle>Privacy Policy:</SmallTitle>
-                <br />
-                Hollywood Fairmount Barbershop is committed to protecting the
-                privacy of our website visitors and clients. This Privacy Policy
-                outlines how we collect, use, and protect your personal
-                information when you visit our website or use our services.
-                <SmallTitle> Information We Collect:</SmallTitle>
-                <br />
-                We collect personal information such as your full name, email
-                address, and phone number when you make a booking appointment
-                through our website. This information is used solely for the
-                purpose of scheduling and contacting you regarding your
-                appointment.
-                <br />
-                <SmallTitle>
-                  How We Use Your Information:
-                </SmallTitle> <br /> We use the information you provide to
-                schedule appointments and communicate with you regarding your
-                bookings. We may also use your email address or phone number to
-                send appointment reminders or notify you of any changes to your
-                appointment.
-                <br />
-                <SmallTitle>Protection of Your Information:</SmallTitle>
-                <br /> We take appropriate measures to safeguard your personal
-                information against unauthorized access, alteration, disclosure,
-                or destruction. We use industry-standard encryption and security
-                protocols to protect your data. Sharing of Your Information: We
-                do not sell, trade, or otherwise transfer your personal
-                information to outside parties. Your information is only shared
-                with our trusted partners or service providers who assist us in
-                operating our website or conducting our business, and they are
-                required to keep your information confidential. <br />
-                <SmallTitle>Your Rights:</SmallTitle> <br />
-                You have the right to access, update, or delete your personal
-                information at any time. If you would like to do so, please
-                contact us using the information provided below.
-                <br />
-                <SmallTitle>Cookies:</SmallTitle> <br />
-                We may use cookies and similar tracking technologies to enhance
-                your browsing experience on our website. You can set your
-                browser to refuse cookies or alert you when cookies are being
-                sent.
-                <br />
-                <SmallTitle>Changes to This Policy:</SmallTitle>
-                <br /> We reserve the right to update or change this Privacy
-                Policy at any time. Any changes will be effective immediately
-                upon posting on this page. If you have any questions or concerns
-                regarding our Privacy Policy, please contact us at
-                hollywoodfairmount@gmail.com.
-              </Text>
-            </PrivacyWrapper>
-          )}
-          {isTermsOpen && (
-            <PrivacyWrapper key={"TermsOfServices"}>
-              <Text key={"TermsOfServ"}>
-                <BackButton
-                  onClick={() => {
-                    setIsTermsOpen(false);
-                  }}
-                >
-                  X
-                </BackButton>
-                <br />
-                <br />
-                <br />
-                <br />
-                Terms of Service These Terms of Service ("Terms") govern your
-                use of www.hollywoodfairmount.com and the services provided by
-                hollywood Fairmount Barbershop. By accessing or using our
-                website or services, you agree to be bound by these Terms.
-                <br />
-                <SmallTitle>Booking Appointments:</SmallTitle>
-                <br /> When booking appointments through our website, you agree
-                to provide accurate and complete information, including your
-                full name, email address, and phone number. <br />
-                <SmallTitle>Cancellation and Rescheduling:</SmallTitle> If you
-                need to cancel or reschedule your appointment, please contact us
-                at least 24h in advance.
-                <br />
-                <SmallTitle>Payment:</SmallTitle>
-                <br /> Payment for services is due at the time of your
-                appointment. We accept cash, credit/debit cards .<br />
-                <SmallTitle>Use of Services:</SmallTitle>
-                <br /> You agree to use our services only for lawful purposes
-                and in compliance with these Terms. You may not use our services
-                to harass, abuse, or harm others or to engage in any illegal
-                activities.
-                <br />
-                <SmallTitle>Intellectual Property:</SmallTitle> <br />
-                All content on our website, including text, images, logos, and
-                graphics, is the property of Hollywood Fairmount Barbershop and
-                is protected by copyright laws. You may not reproduce,
-                distribute, or transmit any content without our prior written
-                consent.
-                <br />
-                <SmallTitle>Limitation of Liability:</SmallTitle> <br />
-                In no event shall Hollywood Fairmount Barbershop be liable for
-                any damages arising out of or in connection with your use of our
-                website or services, including but not limited to indirect,
-                incidental, consequential, or punitive damages. <br />
-                <br />
-                If you have any questions or concerns regarding our Terms of
-                Service, please contact us at hollywoodfairmount@gmail.com.
-              </Text>
-            </PrivacyWrapper>
-          )}
-        </Footer>
-      )}
     </Wrapper>
   );
 };
 
-const LabelWarningWrap = styled.div``;
+const Logo = styled.img`
+  width: 35vw;
+  margin: 5vh 0 3vh 0;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+`;
 
 const SlotsWarning = styled.span`
   color: #b50000;
   padding-left: 10px;
-`;
-
-const Footer = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
-  font-family: "Helvetica Neue", sans-serif;
 `;
 
 const StyledLabel = styled.label`
@@ -559,9 +403,17 @@ const Wrapper = styled.div`
   background-color: transparent;
   border-radius: 10px;
   font-family: "Helvetica Neue", sans-serif;
-  max-height: 75vh;
+  max-height: 80vh;
   overflow-y: scroll;
+  position: relative;
+  top: 15vh;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  @media (max-width: 1000px) {
+    width: 100vw;
+    max-height: unset;
+    top: unset;
+    position: unset;
+  }
 `;
 
 const BarberList = styled.div`

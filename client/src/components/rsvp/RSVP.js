@@ -20,8 +20,6 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  top: 8vh;
-  height: 92vh;
   position: relative;
 `;
 

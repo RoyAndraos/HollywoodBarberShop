@@ -4,12 +4,14 @@ import { UserContext } from "../contexts/UserContext";
 import { FaArrowRight } from "react-icons/fa";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { BookButton } from "../Reviews";
+import logoNotHome from "../../assets/onlyNameLogo.svg";
 const FormRsvp = () => {
   const { setUserInfo } = useContext(UserContext);
   const { isMobile } = useContext(IsMobileContext);
   const [isPhoneValid, setIsPhoneValid] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fname: "",
     lname: "",
@@ -50,40 +52,52 @@ const FormRsvp = () => {
         handleSubmit(e);
       }}
     >
+      {isMobile && (
+        <Logo
+          src={logoNotHome}
+          alt="hollywood barbershop logo"
+          onClick={() => {
+            navigate("/");
+          }}
+        />
+      )}
       <SmallWrapper $isMobile={isMobile}>
-        <InputLabelWrap>
+        <InputLabelWrap $isMobile={isMobile}>
           <StyledLabel>
             {language === "en" ? "First Name" : "Prénom"}
             <Required>*</Required>
           </StyledLabel>
           <OverLay />
           <StyledInput
+            $isMobile={isMobile}
             name="fname"
             onChange={(e) => {
               handleChange(e);
             }}
           ></StyledInput>
         </InputLabelWrap>
-        <InputLabelWrap>
+        <InputLabelWrap $isMobile={isMobile}>
           <StyledLabel>
             {language === "en" ? "Last Name" : "Nom De Famille"}
             <Required>*</Required>
           </StyledLabel>
           <OverLay />
           <StyledInput
+            $isMobile={isMobile}
             name="lname"
             onChange={(e) => {
               handleChange(e);
             }}
           ></StyledInput>
         </InputLabelWrap>
-        <InputLabelWrap>
+        <InputLabelWrap $isMobile={isMobile}>
           <StyledLabel>
             {language === "en" ? "Phone Number" : "Téléphone"}
             <Required>*</Required>
           </StyledLabel>
           <OverLay />
           <StyledInput
+            $isMobile={isMobile}
             name="number"
             onChange={(e) => {
               handleChange(e);
@@ -96,10 +110,11 @@ const FormRsvp = () => {
             {language === "en" ? "Invalid phone number" : "Numero invalide"}
           </Error>
         )}
-        <InputLabelWrap>
-          <StyledLabel>Email</StyledLabel>
+        <InputLabelWrap $isMobile={isMobile}>
+          <StyledLabel>{language === "en" ? "Email" : "Courriel"}</StyledLabel>
           <OverLay />
           <StyledInput
+            $isMobile={isMobile}
             name="email"
             onChange={(e) => {
               handleChange(e);
@@ -125,13 +140,11 @@ const FormRsvp = () => {
             }}
           ></input>
 
-          <label
-            style={{ zIndex: "2", fontSize: "1.2rem", marginLeft: "10px" }}
-          >
+          <Label $isMobile={isMobile}>
             {language === "en"
               ? "I agree to receive automated confirmation SMS to this mobile number."
               : "Je consens à recevoir des SMS de confirmation automatisés à ce numéro de téléphone."}
-          </label>
+          </Label>
           <Required style={{ marginLeft: "10px" }}>*</Required>
         </div>
 
@@ -170,7 +183,15 @@ export const Required = styled.span`
   color: #b50000;
   font-size: 1.2rem;
 `;
-
+const Logo = styled.img`
+  width: 35vw;
+  margin: 5vh 0 3vh 0;
+`;
+const Label = styled.label`
+  z-index: 2;
+  font-size: ${(props) => (props.$isMobile ? "1rem" : "1.2rem")};
+  margin-left: 10px;
+`;
 export const InputLabelWrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -180,7 +201,7 @@ export const InputLabelWrap = styled.div`
   gap: 1vh;
   margin-top: 2vh;
   position: relative;
-  width: 65%;
+  width: ${(props) => (props.$isMobile ? "85vw" : "70%")};
   &:first-of-type {
     margin-top: 0;
   }
@@ -188,18 +209,30 @@ export const InputLabelWrap = styled.div`
 export const StyledLabel = styled.label`
   color: #006044;
   margin-bottom: 1rem;
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
 `;
 const CancelWrapper = styled.div`
   color: #006044;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  @media (max-width: 768px) {
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+  }
 `;
 const StyledNavLink = styled(NavLink)`
   color: black;
   transition: all 0.3s ease-in-out;
   font-size: 1.2rem;
-  margin: 0 0.5rem;
+  margin: 1rem 0.5rem;
   &:hover {
     color: #035e3f;
+  }
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    margin: 0;
   }
 `;
 const StyledForm = styled.form`
@@ -208,13 +241,14 @@ const StyledForm = styled.form`
   align-items: center;
   justify-content: space-evenly;
   position: relative;
-  top: 3vh;
+  top: 15vh;
   height: 70vh;
-  @media (min-width: 768px) {
+  @media (max-width: 768px) {
     height: 100vh;
     justify-content: center;
     align-items: center;
     gap: 2rem;
+    top: 0;
   }
 `;
 export const OverLay = styled.div`
@@ -238,12 +272,12 @@ export const SmallWrapper = styled.div`
 `;
 
 export const StyledInput = styled.input`
-  padding: 1rem 2rem 0 1rem;
+  padding: 1rem 0 0 0;
   border: none;
   border-bottom: 1px solid #006044;
   font-size: 1.2rem;
   outline: none;
-  width: 92.5%;
+  width: ${(props) => (props.$isMobile ? "85vw" : "92.5%")};
   background-color: transparent;
   color: #006044;
   text-align: center;

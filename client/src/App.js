@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import GlobalStyles from "./GlobalStyles";
-import ImageSlideShow from "./components/homepage/ImageSlideShow";
 import { Routes, Route } from "react-router-dom";
 import RSVP from "./components/rsvp/RSVP";
 import { useContext, useEffect } from "react";
@@ -10,10 +9,7 @@ import Header from "./components/Header";
 import { IsMobileContext } from "./components/contexts/IsMobileContext";
 import CancelReservation from "./components/CancelReservation";
 import AboutPC from "./components/AboutPC";
-import About from "./components/homepage/About";
-import Menu from "./components/homepage/Menu";
 import MenuPC from "./components/MenuPC";
-import Barbers from "./components/homepage/Barbers";
 import BarbersPc from "./components/BarbersPc";
 import TransitionComponent from "./components/TransitionComponent";
 import PCHomePage from "./components/PCHomePage";
@@ -21,6 +17,7 @@ import { BarberContext } from "./components/contexts/BarberContext";
 import { ServiceContext } from "./components/contexts/ServiceContext";
 import { TextContext } from "./components/contexts/TextContext";
 import Loader from "./components/float-fixed/Loader";
+import MobileHome from "./components/homepage/MobileHome";
 
 const App = () => {
   const { isMobile } = useContext(IsMobileContext);
@@ -44,40 +41,7 @@ const App = () => {
       {!isMobile && <Header />}
       <Routes>
         {isMobile ? (
-          <>
-            <Route
-              path={"/"}
-              element={
-                <TransitionComponent>
-                  <ImageSlideShow />
-                </TransitionComponent>
-              }
-            />
-            <Route
-              path={"/about"}
-              element={
-                <TransitionComponent>
-                  <About />
-                </TransitionComponent>
-              }
-            />
-            <Route
-              path={"/ourServices"}
-              element={
-                <TransitionComponent>
-                  <Menu />
-                </TransitionComponent>
-              }
-            />
-            <Route
-              path={"/ourTeam"}
-              element={
-                <TransitionComponent>
-                  <Barbers />
-                </TransitionComponent>
-              }
-            />
-          </>
+          <Route path="/" element={<MobileHome />}></Route>
         ) : (
           <>
             <Route

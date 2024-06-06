@@ -21,6 +21,7 @@ export default createGlobalStyle`
       font-size: 100%;
       vertical-align: baseline;
       scroll-behavior: smooth;
+      font-family: 'Helvetica Neue', sans-serif;
   }
 
   article, aside, details, figcaption, figure,
@@ -29,8 +30,10 @@ export default createGlobalStyle`
   }
   body {
       line-height: 1;
-      font-family: 'Brandon Grotesque Black', sans-serif;
+      font-family: 'Helvetica Neue', sans-serif;
       background-color: #eeebde;
+      scrollbar-width: none; /* Hide scroll bar */
+
   }
   ol, ul {
       list-style: none;
@@ -49,8 +52,4 @@ export default createGlobalStyle`
       display: none;
   }
 
-  /* Hide scroll bar for Firefox */
-  body {
-      scrollbar-width: none; /* Hide scroll bar */
-  }
 `;
