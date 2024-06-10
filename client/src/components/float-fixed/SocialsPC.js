@@ -42,6 +42,7 @@ const SocialsPC = () => {
         <a
           href="https://www.facebook.com/profile.php?id=100095015610230"
           style={{ all: "unset" }}
+          aria-label="facebook link"
         >
           <ImFacebook2 />
         </a>
@@ -53,6 +54,7 @@ const SocialsPC = () => {
         <a
           href="https://instagram.com/hollywood.barbers?igshid=MjEwN2IyYWYwYw=="
           style={{ all: "unset" }}
+          aria-label="instagram link"
         >
           <SiInstagram />
         </a>

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Reviews from "./Reviews";
-import bgSrc from ".././assets/homepagebg.webp";
+import bgSrc from ".././assets/homepagebg.jpg";
 import FooterPc from "./FooterPc";
 import logoHomeCenter from "../assets/logoHomeCenter.svg";
 import { TimelineLite } from "gsap";
