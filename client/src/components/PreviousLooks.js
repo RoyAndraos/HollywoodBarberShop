@@ -4,7 +4,6 @@ import cut1 from "../assets/hollywood-web design-16.jpg";
 import cut2 from "../assets/hollywood-web design-17.jpg";
 import cut3 from "../assets/hollywood-web design-18.jpg";
 import cut4 from "../assets/hollywood-web design-19.jpg";
-
 import cut5 from "../assets/hollywood-web design-20.jpg";
 import cut6 from "../assets/hollywood-web design-21.jpg";
 import cut7 from "../assets/hollywood-web design-22.jpg";
@@ -20,12 +19,13 @@ import { FaChevronLeft } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
 import { LanguageContext } from "./contexts/LanguageContext";
+import { IsMobileContext } from "./contexts/IsMobileContext";
 
 const PreviousLooks = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [fullscreenImage, setFullscreenImage] = useState(null);
   const { language } = useContext(LanguageContext);
-
+  const { isMobile } = useContext(IsMobileContext);
   const handleNextSlide = (e) => {
     e.preventDefault();
     setCurrentSlide((prevSlide) => (prevSlide === 11 ? 0 : prevSlide + 1));
@@ -87,7 +87,7 @@ const PreviousLooks = () => {
       </ButtonSlideWrap>
       {fullscreenImage && (
         <FullscreenWrapper onClick={handleCloseFullscreen}>
-          <CloseButton onClick={handleCloseFullscreen} />
+          {isMobile && <CloseButton onClick={handleCloseFullscreen} />}
           <FullscreenImage src={fullscreenImage} alt="Fullscreen view" />
         </FullscreenWrapper>
       )}

@@ -60,7 +60,7 @@ const Wrapper = styled.div`
   background-color: #006044;
   display: flex;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   place-content: center;
   position: relative;
 `;
@@ -85,6 +85,9 @@ const BottomWrapper = styled.div`
   top: 40vh;
   height: 52vh;
   letter-spacing: 1px;
+  background-color: #006044;
+  height: 100%;
+  padding-bottom: 20px;
 `;
 
 const StyledImg = styled.img`

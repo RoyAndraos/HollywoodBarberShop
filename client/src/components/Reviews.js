@@ -220,6 +220,7 @@ const ReviewWrapper = styled.div`
   z-index: 1000;
   border-radius: 35px;
   visibility: hidden;
+  padding-top: 2rem;
 `;
 const StarsWrapper = styled.div`
   color: #dfc844;
@@ -227,6 +228,6 @@ const StarsWrapper = styled.div`
 `;
 const ReviewSlideShow = styled.div`
   width: 80%;
-  height: 60%;
+  height: 100%;
 `;
 export default Reviews;

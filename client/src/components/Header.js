@@ -18,23 +18,28 @@ const Header = () => {
   const logoNotHomeRef = useRef(null);
   const lineRef = useRef(null);
   const aboutLogoRef = useRef(null);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 0) {
         if (logoNotHomeRef.current) {
+          setScrolled(true);
           gsap.to(logoNotHomeRef.current, {
-            height: "8vh",
-            top: "1vh",
-            duration: 0.3,
+            left: "-3vw",
+            top: "3vh",
+            height: "10vh",
+            duration: 0.5,
           });
         }
       } else {
         if (logoNotHomeRef.current) {
+          setScrolled(false);
           gsap.to(logoNotHomeRef.current, {
-            height: "15vh",
+            left: "10vh",
             top: "3vh",
-            duration: 0.3,
+            height: "15vh",
+            duration: 0.5,
           });
         }
       }
@@ -94,7 +99,7 @@ const Header = () => {
   if (isMobile) return null;
 
   return (
-    <WrapperPC $location={location.pathname}>
+    <WrapperPC $location={location.pathname} $scrolled={scrolled}>
       <div style={{ position: "relative", maxHeight: "100%" }}>
         {location.pathname === "/" ? (
           <Logo
@@ -168,6 +173,7 @@ const RightSideWrapper = styled.div`
   max-width: 80vw;
   justify-content: space-around;
   margin-right: 3vw;
+  border-bottom: ${(props) => (props.$scrolled ? "1px solid #006044" : "none")};
 `;
 
 const Logo = styled.img`
