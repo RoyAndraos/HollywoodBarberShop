@@ -186,6 +186,8 @@ export const BookButton = styled.button`
   border: none;
   position: relative;
   border-radius: 15px;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
   &:hover {
     background-position: 100% 50%;
     clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
@@ -193,6 +195,14 @@ export const BookButton = styled.button`
   }
   &:active {
     transform: translateX(0px);
+  }
+  &:disabled {
+    background: #999;
+    &:hover {
+      background: #999;
+      transform: translateX(0px);
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 100% 100%, 0 100%);
+    }
   }
 `;
 const ReviewWrapper = styled.div`

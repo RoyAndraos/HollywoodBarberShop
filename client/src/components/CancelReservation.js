@@ -53,7 +53,6 @@ const CancelReservation = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.status === 200) {
           if (data.message === "Reservation is in the past.") {
             if (language === "en") {

@@ -1,106 +1,106 @@
 import { styled } from "styled-components";
 import { useState, useRef, useEffect, useContext } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import NavBarPC from "./float-fixed/NavBarPC";
 import SocialsPC from "./float-fixed/SocialsPC";
 import { TimelineLite } from "gsap";
-import { useNavigate } from "react-router-dom";
 import logoSrc from "../assets/headerLogo.svg";
 import onlyNameLogo from "../assets/onlyNameLogo.svg";
 import { IsMobileContext } from "./contexts/IsMobileContext";
+import { gsap } from "gsap";
 
 const Header = () => {
   const [isSelected, setIsSelected] = useState("");
   const { isMobile } = useContext(IsMobileContext);
   const navigate = useNavigate();
   const location = useLocation();
-  let logoRef = useRef(null);
-  let logoNotHomeRef = useRef(null);
-  let lineRef = useRef(null);
-  let aboutLogoRef = useRef(null);
+  const logoRef = useRef(null);
+  const logoNotHomeRef = useRef(null);
+  const lineRef = useRef(null);
+  const aboutLogoRef = useRef(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        if (logoNotHomeRef.current) {
+          gsap.to(logoNotHomeRef.current, {
+            height: "8vh",
+            top: "1vh",
+            duration: 0.3,
+          });
+        }
+      } else {
+        if (logoNotHomeRef.current) {
+          gsap.to(logoNotHomeRef.current, {
+            height: "15vh",
+            top: "3vh",
+            duration: 0.3,
+          });
+        }
+      }
+    };
+
+    if (location.pathname === "/ourTeam") {
+      window.addEventListener("scroll", handleScroll);
+    }
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [location.pathname]);
+
   useEffect(() => {
     const tl = new TimelineLite();
-    if (aboutLogoRef) {
+    if (aboutLogoRef.current) {
       tl.fromTo(
-        aboutLogoRef,
-        {
-          opacity: 0,
-          x: -50,
-          ease: "power2.out",
-        },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.6,
-          delay: 2,
-        }
+        aboutLogoRef.current,
+        { opacity: 0, x: -50, ease: "power2.out" },
+        { opacity: 1, x: 0, duration: 0.6, delay: 2 }
       );
     }
-    if (!logoRef) return;
-    tl.fromTo(
-      logoRef,
-      {
-        opacity: 0,
-        x: -50,
-        ease: "power2.out",
-      },
-      {
-        opacity: 1,
-        x: 0,
-        duration: 0.3,
-        delay: 1,
-      }
-    );
+    if (logoRef.current) {
+      tl.fromTo(
+        logoRef.current,
+        { opacity: 0, x: -50, ease: "power2.out" },
+        { opacity: 1, x: 0, duration: 0.3, delay: 1 }
+      );
+    }
   }, [location.pathname]);
+
   useEffect(() => {
     const tl = new TimelineLite();
-    if (!lineRef) return;
-    tl.fromTo(
-      lineRef,
-      {
-        opacity: 0,
-        ease: "power2.out",
-      },
-      {
-        opacity: 1,
-        duration: 0.3,
-        delay: 2,
-      }
-    );
+    if (lineRef.current) {
+      tl.fromTo(
+        lineRef.current,
+        { opacity: 0, ease: "power2.out" },
+        { opacity: 1, duration: 0.3, delay: 2 }
+      );
+    }
   }, []);
+
   useEffect(() => {
     if (location.pathname === "/") return;
     const tl = new TimelineLite();
-    if (!logoNotHomeRef) return;
-    tl.fromTo(
-      logoNotHomeRef,
-      {
-        opacity: 0,
-        x: -50,
-        ease: "power2.out",
-      },
-      {
-        opacity: 1,
-        x: 0,
-        duration: 0.6,
-        delay: 1,
-      }
-    );
+    if (logoNotHomeRef.current) {
+      tl.fromTo(
+        logoNotHomeRef.current,
+        { opacity: 0, x: -50, ease: "power2.out" },
+        { opacity: 1, x: 0, duration: 0.6, delay: 1 }
+      );
+    }
   }, [location.pathname]);
-  if (isMobile) return;
+
+  if (isMobile) return null;
+
   return (
     <WrapperPC $location={location.pathname}>
-      <div
-        style={{
-          position: "relative",
-          maxHeight: "100%",
-        }}
-      >
+      <div style={{ position: "relative", maxHeight: "100%" }}>
         {location.pathname === "/" ? (
           <Logo
-            key={"logoForPC"}
+            key="logoForPC"
             src={logoSrc}
-            ref={(el) => (logoRef = el)}
+            ref={logoRef}
             alt="Hollywood Fairmount Barbers"
             onClick={() => {
               setIsSelected("");
@@ -109,10 +109,10 @@ const Header = () => {
           />
         ) : location.pathname === "/about" ? (
           <Logo
-            key={"logoForPC"}
+            key="logoForAbout"
             src={onlyNameLogo}
+            ref={aboutLogoRef}
             alt="Hollywood Fairmount Barbers"
-            ref={(el) => (aboutLogoRef = el)}
             style={{
               top: "3vh",
               height: "15vh",
@@ -125,9 +125,9 @@ const Header = () => {
           />
         ) : (
           <Logo
-            key={"logoForPC"}
+            key="logoNotHome"
             src={onlyNameLogo}
-            ref={(el) => (logoNotHomeRef = el)}
+            ref={logoNotHomeRef}
             alt="Hollywood Fairmount Barbers"
             style={{
               top: "3vh",
@@ -146,7 +146,7 @@ const Header = () => {
       </div>
       <RightSideWrapper>
         <NavBarPC isSelected={isSelected} setIsSelected={setIsSelected} />
-        <Line $location={location.pathname} ref={(el) => (lineRef = el)} />
+        <Line $location={location.pathname} ref={lineRef} />
         <SocialsPC />
       </RightSideWrapper>
     </WrapperPC>
@@ -159,6 +159,7 @@ const Line = styled.div`
   background-color: ${(props) =>
     props.$location !== "/" ? "#006044" : "#eeebde"};
 `;
+
 const RightSideWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -169,7 +170,7 @@ const RightSideWrapper = styled.div`
   margin-right: 3vw;
 `;
 
-export const Logo = styled.img`
+const Logo = styled.img`
   position: relative;
   height: 7vh;
   margin-left: 10vw;
@@ -185,7 +186,7 @@ const WrapperPC = styled.div`
   background-color: ${(props) => {
     if (props.$location === "/") return "#006044";
     if (props.$location === "/about") return "transparent";
-    else return "#eeebde";
+    return "#eeebde";
   }};
   gap: 1vw;
   width: 100vw;
@@ -194,4 +195,5 @@ const WrapperPC = styled.div`
   transition: all 0.3s ease-in-out;
   z-index: 1000;
 `;
+
 export default Header;

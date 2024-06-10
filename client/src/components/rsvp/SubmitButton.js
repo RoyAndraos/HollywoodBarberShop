@@ -10,8 +10,14 @@ const SubmitButton = ({
 }) => {
   const { language } = useContext(LanguageContext);
   let buttonRef = useRef(null);
+  const disabled =
+    !selectedService ||
+    !selectedBarber ||
+    selectedSlot.length === 0 ||
+    selectedSlot.length === 0;
   const handleGetOff = () => {
     const tl = new TimelineLite();
+    if (disabled) return;
     tl.fromTo(
       buttonRef.current,
       { backgroundColor: "#fff", color: "#006044" },
@@ -20,6 +26,7 @@ const SubmitButton = ({
   };
   const handleHover = () => {
     const tl = new TimelineLite();
+    if (disabled) return;
     tl.fromTo(
       buttonRef.current,
       { backgroundColor: "#006044", color: "#fff" },
@@ -29,12 +36,7 @@ const SubmitButton = ({
   return (
     <StyledSubmit
       type="submit"
-      disabled={
-        isLoading ||
-        !selectedService ||
-        !selectedBarber ||
-        selectedSlot.length === 0
-      }
+      disabled={disabled}
       onMouseEnter={() => handleHover()}
       onMouseLeave={() => {
         handleGetOff();

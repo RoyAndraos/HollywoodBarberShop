@@ -257,13 +257,12 @@ const Booking = () => {
       .then((data) => {
         if (data.status === 200) {
           setIsLoading(false);
-          navigate("/profile");
+          navigate(`/yourReservation/${data.data._id}`);
         } else {
           console.log("something went wrong");
         }
       });
   };
-
   return (
     <Wrapper>
       {isMobile && (

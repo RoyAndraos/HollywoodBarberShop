@@ -1,7 +1,21 @@
 import { useState, useContext } from "react";
 import styled, { keyframes } from "styled-components";
-import examplePic from "../assets/hollywoodWebDesign.jpg";
-import examplePic2 from "../assets/hollywoodWebDesign1.jpg";
+import cut1 from "../assets/hollywood-web design-16.jpg";
+import cut2 from "../assets/hollywood-web design-17.jpg";
+import cut3 from "../assets/hollywood-web design-18.jpg";
+import cut4 from "../assets/hollywood-web design-19.jpg";
+
+import cut5 from "../assets/hollywood-web design-20.jpg";
+import cut6 from "../assets/hollywood-web design-21.jpg";
+import cut7 from "../assets/hollywood-web design-22.jpg";
+import cut8 from "../assets/hollywood-web design-23.jpg";
+import cut9 from "../assets/hollywood-web design-24.jpg";
+import cut10 from "../assets/hollywood-web design-25.jpg";
+import cut11 from "../assets/hollywood-web design-26.jpg";
+import cut12 from "../assets/hollywood-web design-27.jpg";
+import cut13 from "../assets/hollywood-web design-28.jpg";
+import cut14 from "../assets/hollywood-web design-29.jpg";
+import cut15 from "../assets/hollywood-web design-30.jpg";
 import { FaChevronLeft } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa";
 import { FaTimes } from "react-icons/fa";
@@ -14,12 +28,12 @@ const PreviousLooks = () => {
 
   const handleNextSlide = (e) => {
     e.preventDefault();
-    setCurrentSlide((prevSlide) => (prevSlide === 2 ? 0 : prevSlide + 1));
+    setCurrentSlide((prevSlide) => (prevSlide === 11 ? 0 : prevSlide + 1));
   };
 
   const handlePrevSlide = (e) => {
     e.preventDefault();
-    setCurrentSlide((prevSlide) => (prevSlide === 0 ? 2 : prevSlide - 1));
+    setCurrentSlide((prevSlide) => (prevSlide === 0 ? 11 : prevSlide - 1));
   };
 
   const handleImageClick = (image) => {
@@ -31,14 +45,21 @@ const PreviousLooks = () => {
   };
 
   const slideShow = [
-    examplePic,
-    examplePic2,
-    examplePic,
-    examplePic2,
-    examplePic,
-    examplePic2,
-    examplePic,
-    examplePic2,
+    cut1,
+    cut2,
+    cut3,
+    cut4,
+    cut5,
+    cut6,
+    cut7,
+    cut8,
+    cut9,
+    cut10,
+    cut11,
+    cut12,
+    cut13,
+    cut14,
+    cut15,
   ];
 
   return (
@@ -135,7 +156,8 @@ const SlideShowContainer = styled.div`
 const SlideShow = styled.div`
   display: flex;
   transition: transform 0.5s ease-in-out;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-left: 2.5%;
   gap: 5%;
   transform: ${({ $currentSlide }) => `translateX(-${$currentSlide * 25}%)`};
 `;
