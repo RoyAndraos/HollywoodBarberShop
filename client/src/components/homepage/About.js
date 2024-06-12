@@ -50,15 +50,17 @@ const Wrapper = styled.div`
 `;
 const Title = styled.h1`
   font-size: 1rem;
-  font-weight: unset;
+  font-weight: 300;
+  letter-spacing: 1px;
   color: #006044;
-  text-align: right;
-  margin-right: 7.5vw;
+  text-align: left;
+  margin-left: 7.5vw;
   margin-bottom: 3vh;
 `;
 const StoryContainer = styled.div`
   width: 85vw;
   left: 7.5vw;
+  font-weight: 200;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -68,7 +70,7 @@ const StoryContainer = styled.div`
 `;
 const Story = styled.div`
   font-size: 1rem;
-  line-height: 1.1;
+  line-height: 1.8;
   color: #006044;
   margin: 20px 0 0 0;
   &:last-of-type {

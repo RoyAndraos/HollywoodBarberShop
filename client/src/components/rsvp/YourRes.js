@@ -60,8 +60,7 @@ const YourRes = () => {
 const Wrapper = styled.div`
   color: whitesmoke;
   font-family: sans-serif;
-  background-color: ${({ $isMobile }) =>
-    $isMobile ? "#011c13" : "rgba(0, 0, 0, 0.8)"};
+  background-color: #eeebde;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -71,10 +70,8 @@ const Wrapper = styled.div`
   z-index: 3;
 `;
 const SmallWrapper = styled.div`
-  color: whitesmoke;
+  color: #006044;
   font-family: sans-serif;
-  background-color: ${({ $isMobile }) =>
-    $isMobile ? "#011c13" : "rgba(0, 0, 0, 0.8)"};
   height: ${({ $isMobile }) => ($isMobile ? "100vh" : "60vh")};
   display: flex;
   flex-direction: column;
@@ -93,13 +90,21 @@ const StyledDiv = styled.div`
 `;
 const StyledInfo = styled.p`
   margin-left: 20px;
-  color: #e7e797;
+  color: #006044;
+  font-weight: bold;
   font-style: italic;
 `;
 const Message = styled.p`
   width: 70%;
-  text-align: center;
-  line-height: 1.5;
+  text-align: left;
+  margin-bottom: 40px;
+  font-weight: 500;
+  text-decoration: underline;
+  &:last-of-type {
+    margin-bottom: 0;
+    margin-top: 40px;
+    text-align: center;
+  }
 `;
 
 export default YourRes;

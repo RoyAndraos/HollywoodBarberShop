@@ -94,7 +94,10 @@ const Reviews = () => {
       <ArrowRight onClick={handleNextReview}>
         <img src={arrowright} alt="arrow pointing right" />
       </ArrowRight>
-      <BookButton onClick={() => navigate("/book")}>
+      <BookButton
+        onClick={() => navigate("/book")}
+        style={{ marginTop: "40px", translateX: "-5px" }}
+      >
         {language === "en" ? "BOOK NOW!" : "RESERVER"}
       </BookButton>
     </ReviewWrapper>
@@ -124,14 +127,15 @@ const Review = styled.div`
 const ReviewText = styled.p`
   font-family: "Noto Sans KR", sans-serif;
   line-height: 1.5;
+  font-weight: 600;
 `;
 const ArrowLeft = styled.div`
   position: absolute;
   top: 60%;
-  left: -6%;
+  left: -4%;
   transform: translateY(-50%);
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.3rem;
+  height: 1.3rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -151,10 +155,10 @@ const ArrowRight = styled.div`
   position: absolute;
   top: 60%;
   z-index: 1000;
-  right: -6%;
+  right: -4%;
   transform: translateY(-50%);
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.3rem;
+  height: 1.3rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -174,20 +178,21 @@ export const BookButton = styled.button`
   background-size: 200% 100%;
   background-position: 0% 50%;
   color: whitesmoke;
-  font-size: clamp(1rem, 1.5vw, 1.6rem);
+  font-size: 1.3rem;
   cursor: pointer;
   clip-path: polygon(0 0, 100% 0, 100% 100%, 100% 100%, 0 100%);
   transition: background-position 0.3s ease-in-out, clip-path 0.3s ease-in-out,
     transform 0.3s ease-in-out;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Helvetica Neue", sans-serif;
   font-style: normal;
-  font-weight: 400;
-  padding: 9px 25px;
+  font-weight: 500;
+  padding: 13px 25px;
   border: none;
   position: relative;
   border-radius: 15px;
   margin-top: 1rem;
   margin-bottom: 2rem;
+  letter-spacing: 0.1rem;
   &:hover {
     background-position: 100% 50%;
     clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);

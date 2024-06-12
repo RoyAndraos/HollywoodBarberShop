@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { Error } from "./rsvp/GuestFormRsvp";
 import { LanguageContext } from "./contexts/LanguageContext";
 import Header from "./Header";
-import { ImageContext } from "./contexts/ImageContext";
 
 const CancelReservation = () => {
   const { isMobile } = useContext(IsMobileContext);
@@ -15,10 +14,7 @@ const CancelReservation = () => {
   const [resIdError, setResIdError] = useState("");
   const [cancelError, setCancelError] = useState("");
   const { language } = useContext(LanguageContext);
-  const { images } = useContext(ImageContext);
-  const homepageBackground = images.filter(
-    (image) => image.filename === "homepageBackground"
-  )[0].src;
+
   //make a validation function to check if the phone number is valid and if the reservation id is valid
   useEffect(() => {
     if (phone.length !== 10 && phone.length !== 0) {
@@ -131,7 +127,6 @@ const CancelReservation = () => {
           {language === "en" ? "Cancel Reservation" : "Annuler la réservation"}
         </CancelButton>
       </SmallWrapper>
-      {!isMobile && <StyledBg key={"cancel"} src={homepageBackground} />}
     </Wrapper>
   );
 };
@@ -144,23 +139,24 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #011c13;
   @media (max-width: 768px) {
     top: 0;
     height: 100vh;
   }
 `;
 const Instructions = styled.div`
-  color: whitesmoke;
+  color: #006044;
   font-size: 1.2rem;
   text-align: center;
+  margin-bottom: 50px;
   @media (max-width: 768px) {
     font-size: 1rem;
   }
 `;
 const Label = styled.label`
   font-size: 1.2rem;
-  color: #e7e797;
+  color: #006044;
+
   @media (max-width: 768px) {
     font-size: 1rem;
   }
@@ -181,10 +177,8 @@ const SmallWrapper = styled.div`
   padding: 50px;
   height: 50vh;
   width: 40vw;
-  color: whitesmoke;
   position: absolute;
   z-index: 2;
-  background-color: rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   @media (max-width: 768px) {
     width: 98vw;
@@ -235,11 +229,5 @@ const HeaderWrapper = styled.div`
   z-index: 10;
   background-color: black;
 `;
-const StyledBg = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  position: absolute;
-  z-index: 0;
-`;
+
 export default CancelReservation;

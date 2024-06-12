@@ -43,7 +43,7 @@ const ServiceHeader = () => {
 const Title = styled.h1`
   font-size: 0.9rem;
   font-weight: unset;
-  color: whitesmoke;
+  color: #eeebde;
   position: absolute;
   width: 10%;
   text-decoration: underline;

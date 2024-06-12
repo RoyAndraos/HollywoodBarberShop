@@ -198,8 +198,7 @@ export const InputLabelWrap = styled.div`
   align-items: flex-start;
   justify-content: center;
   font-size: 1.2rem;
-  gap: 1vh;
-  margin-top: 2vh;
+  margin-top: 4vh;
   position: relative;
   width: ${(props) => (props.$isMobile ? "85vw" : "70%")};
   &:first-of-type {
@@ -208,7 +207,8 @@ export const InputLabelWrap = styled.div`
 `;
 export const StyledLabel = styled.label`
   color: #006044;
-  margin-bottom: 1rem;
+  position: relative;
+  bottom: -8px;
   @media (max-width: 768px) {
     font-size: 1rem;
     margin-bottom: 0.5rem;
@@ -282,6 +282,8 @@ export const StyledInput = styled.input`
   color: #006044;
   text-align: center;
   z-index: 2;
+  font-family: "Source Code Pro", "Courier New", Courier, "Lucida Console",
+    monospace;
 `;
 
 export const Error = styled.p`

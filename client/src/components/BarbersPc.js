@@ -94,10 +94,6 @@ const BarbersPc = () => {
               )}
               {index === 1 && <Cover ref={(el) => (otherCoverRef2 = el)} />}
               <BookButton
-                style={{
-                  marginTop: "10%",
-                  padding: "1vh 2vw",
-                }}
                 onClick={() => {
                   navigate("/book");
                 }}
@@ -277,8 +273,8 @@ const Footer = styled.div`
 const NameDescriptionWrap = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 100%;
 `;
@@ -301,7 +297,7 @@ const BarberWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
   width: 100%;
   height: 130vh;
   top: 10vh;
@@ -310,14 +306,20 @@ const BarberWrapper = styled.div`
 const Barber = styled.div`
   display: grid;
   grid-template-columns: 50% 50%;
-  align-items: center;
-  justify-content: center;
+  place-content: center;
   width: 80vw;
   height: 50vh;
+  padding-bottom: 5vh;
   border-bottom: 1px solid #006044;
+  &:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+    padding-top: 5vh;
+  }
 `;
 const ProfilePic = styled.img`
   max-height: 45vh;
+  width: 25vw;
   object-fit: cover;
 `;
 const Name = styled.h2`
@@ -332,7 +334,7 @@ const Description = styled.p`
   color: #006044;
   padding: 3% 0;
   font-size: 18px;
-  text-align: left;
+  text-align: center;
   @media (max-width: 1000px) {
     font-size: 16px;
   }

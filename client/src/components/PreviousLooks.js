@@ -15,17 +15,18 @@ import cut12 from "../assets/hollywood-web design-27.jpg";
 import cut13 from "../assets/hollywood-web design-28.jpg";
 import cut14 from "../assets/hollywood-web design-29.jpg";
 import cut15 from "../assets/hollywood-web design-30.jpg";
-import { FaChevronLeft } from "react-icons/fa";
+import {
+  FaArrowAltCircleLeft,
+  FaArrowAltCircleRight,
+  FaChevronLeft,
+} from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa";
-import { FaTimes } from "react-icons/fa";
 import { LanguageContext } from "./contexts/LanguageContext";
-import { IsMobileContext } from "./contexts/IsMobileContext";
 
 const PreviousLooks = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [fullscreenImage, setFullscreenImage] = useState(null);
   const { language } = useContext(LanguageContext);
-  const { isMobile } = useContext(IsMobileContext);
   const handleNextSlide = (e) => {
     e.preventDefault();
     setCurrentSlide((prevSlide) => (prevSlide === 11 ? 0 : prevSlide + 1));
@@ -40,8 +41,27 @@ const PreviousLooks = () => {
     setFullscreenImage(image);
   };
 
-  const handleCloseFullscreen = () => {
+  const handleCloseFullscreen = (e) => {
+    if (e.target[Object.keys(e.target)[0]].elementType !== "div") return;
     setFullscreenImage(null);
+  };
+  const handleChangeImageFS = (direction) => {
+    const currentImageIndex = slideShow.findIndex(
+      (slide) => slide === fullscreenImage
+    );
+    if (direction === "left") {
+      if (currentImageIndex === 0) {
+        setFullscreenImage(slideShow[slideShow.length - 1]);
+      } else {
+        setFullscreenImage(slideShow[currentImageIndex - 1]);
+      }
+    } else {
+      if (currentImageIndex === slideShow.length - 1) {
+        setFullscreenImage(slideShow[0]);
+      } else {
+        setFullscreenImage(slideShow[currentImageIndex + 1]);
+      }
+    }
   };
 
   const slideShow = [
@@ -86,9 +106,18 @@ const PreviousLooks = () => {
         <SlideRight onClick={handleNextSlide} />
       </ButtonSlideWrap>
       {fullscreenImage && (
-        <FullscreenWrapper onClick={handleCloseFullscreen}>
-          {isMobile && <CloseButton onClick={handleCloseFullscreen} />}
+        <FullscreenWrapper onClick={(e) => handleCloseFullscreen(e)}>
           <FullscreenImage src={fullscreenImage} alt="Fullscreen view" />
+          <Left
+            onClick={() => {
+              handleChangeImageFS("left");
+            }}
+          />
+          <Right
+            onClick={() => {
+              handleChangeImageFS("right");
+            }}
+          />
         </FullscreenWrapper>
       )}
     </Wrapper>
@@ -103,6 +132,32 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   gap: 1rem;
+`;
+const Left = styled(FaArrowAltCircleLeft)`
+  font-size: 4rem;
+  position: absolute;
+  top: 50%;
+  left: 15%;
+  transform: translateY(-50%);
+  color: #eeebde;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+const Right = styled(FaArrowAltCircleRight)`
+  font-size: 4rem;
+  position: absolute;
+  top: 50%;
+  right: 15%;
+  transform: translateY(-50%);
+  color: #eeebde;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 const SlideLeft = styled(FaChevronLeft)`
@@ -142,7 +197,7 @@ const ButtonSlideWrap = styled.div`
 
 const Title = styled.h1`
   font-size: 1.2rem;
-  color: whitesmoke;
+  color: #eeebde;
   text-decoration: underline;
   font-family: "Helvetica Neue", sans-serif;
   font-weight: unset;
@@ -197,17 +252,17 @@ const FullscreenImage = styled.img`
   animation: ${scaleUp} 0.5s ease-in-out;
 `;
 
-const CloseButton = styled(FaTimes)`
-  position: absolute;
-  top: 10vh;
-  right: 20vw;
-  font-size: 2rem;
-  color: #fff;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  &:hover {
-    opacity: 0.8;
-  }
-`;
+// const CloseButton = styled(FaTimes)`
+//   position: absolute;
+//   top: 10vh;
+//   right: 20vw;
+//   font-size: 2rem;
+//   color: #fff;
+//   cursor: pointer;
+//   transition: all 0.2s ease-in-out;
+//   &:hover {
+//     opacity: 0.8;
+//   }
+// `;
 
 export default PreviousLooks;

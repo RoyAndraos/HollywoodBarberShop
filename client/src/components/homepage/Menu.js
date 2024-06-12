@@ -6,11 +6,13 @@ import Loader from "../float-fixed/Loader";
 import { ServiceContext } from "../contexts/ServiceContext";
 import { TextContext } from "../contexts/TextContext";
 import ServiceHeader from "./ServiceHeader";
+import { useNavigate } from "react-router-dom";
 const Menu = () => {
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
   const { text } = useContext(TextContext);
   const { services } = useContext(ServiceContext);
+  const navigate = useNavigate();
 
   const MenuText = text.filter((item) => item._id === "underMenu");
   if (!text || !services) {
@@ -24,14 +26,20 @@ const Menu = () => {
           return (
             <Service key={service._id}>
               <p>{language === "en" ? service.english : service.name}</p>
-              <p>{service.price}$</p>
+              <p style={{ textAlign: "right" }}>{service.price}</p>
             </Service>
           );
         })}
       </MenuWrapper>
       <FooterWrapper>
         <p>{language === "en" ? MenuText[0].content : MenuText[0].french}</p>
-        <button>{language === "en" ? "BOOK NOW!" : "RESERVER!"}</button>
+        <button
+          onClick={() => {
+            navigate("/book");
+          }}
+        >
+          {language === "en" ? "BOOK NOW!" : "RESERVER!"}
+        </button>
       </FooterWrapper>
     </Wrapper>
   );
@@ -46,15 +54,16 @@ const FooterWrapper = styled.div`
     width: 40vw;
     border: 1px solid transparent;
     font-family: "Helvetica Neue", sans-serif;
-    font-weight: 200;
+    font-weight: 300;
     letter-spacing: 1px;
     font-size: 1.1rem;
     color: #006044;
+    background-color: #eeebde;
     box-shadow: -6px 6px 6px 0 rgb(0 0 0 / 15%);
   }
   p {
     width: 40vw;
-    font-size: 0.65rem;
+    font-size: 0.68rem;
   }
 `;
 export const Wrapper = styled.div`
@@ -65,19 +74,20 @@ export const Wrapper = styled.div`
   align-items: center;
   justify-content: flex-start;
   background-color: #006044;
-  color: whitesmoke;
+  color: #eeebde;
   position: relative;
   scroll-snap-align: start;
 `;
 const Service = styled.div`
-  display: grid;
-  grid-template-columns: 80% 20%;
+  display: flex;
+  justify-content: space-between;
   gap: 10px;
   padding-top: 10px;
   align-content: center;
   align-items: center;
   width: 85vw;
   border-bottom: 0.5px solid rgba(255, 255, 255, 0.4);
+  padding-bottom: 3px;
   &:first-of-type {
     padding-top: 0;
   }

@@ -1,16 +1,41 @@
 import styled from "styled-components";
 import { useState, useContext } from "react";
 import { useSwipeable } from "react-swipeable";
-import PcSize1 from "../../assets/PcSize1.jpg";
-import PcSize2 from "../../assets/PcSize2.jpg"; // Add more images as needed
-import PcSize3 from "../../assets/PcSize3.jpg"; // Add more images as needed
+import hollywood18 from "../../assets/hollywood-web design-18.jpg";
+import hollywood19 from "../../assets/hollywood-web design-19.jpg";
+import hollywood20 from "../../assets/hollywood-web design-20.jpg";
+import hollywood21 from "../../assets/hollywood-web design-21.jpg";
+import hollywood22 from "../../assets/hollywood-web design-22.jpg";
+import hollywood23 from "../../assets/hollywood-web design-23.jpg";
+import hollywood24 from "../../assets/hollywood-web design-24.jpg";
+import hollywood25 from "../../assets/hollywood-web design-25.jpg";
+import hollywood26 from "../../assets/hollywood-web design-26.jpg";
+import hollywood27 from "../../assets/hollywood-web design-27.jpg";
+import hollywood28 from "../../assets/hollywood-web design-28.jpg";
+import hollywood29 from "../../assets/hollywood-web design-29.jpg";
+import hollywood30 from "../../assets/hollywood-web design-30.jpg";
+
 import { LanguageContext } from "../contexts/LanguageContext";
 
 const DiscoverLooks = () => {
   const [showImages, setShowImages] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
   const { language } = useContext(LanguageContext);
-  const images = [PcSize1, PcSize2, PcSize3]; // Add more images to the array as needed
+  const images = [
+    hollywood18,
+    hollywood19,
+    hollywood20,
+    hollywood21,
+    hollywood22,
+    hollywood23,
+    hollywood24,
+    hollywood25,
+    hollywood26,
+    hollywood27,
+    hollywood28,
+    hollywood29,
+    hollywood30,
+  ]; // Add more images to the array as needed
 
   const handlers = useSwipeable({
     onSwipedLeft: () => setCurrentSlide((currentSlide + 1) % images.length),
@@ -97,7 +122,9 @@ const SlideShow = styled.div`
 `;
 
 const StyledImg = styled.img`
-  width: 100vw;
+  width: 90vw;
+  margin-left: 5vw;
+  margin-right: 5vw;
   flex-shrink: 0;
   object-fit: contain;
 `;

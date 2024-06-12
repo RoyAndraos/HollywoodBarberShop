@@ -17,42 +17,55 @@ const HeaderMobile = () => {
     <Wrapper>
       <LeftWrap>
         <img src={logo} alt="Hollywood Fairmount Barbers" />
-        <button
-          onClick={() => handleToggleLanguage("en")}
-          style={{ padding: "13px 5px" }}
-        >
-          {language === "en" ? "FR" : "EN"}
-        </button>
       </LeftWrap>
-      <button
-        onClick={() => {
-          navigate("/book");
-        }}
-      >
-        {language === "en" ? "BOOK NOW!" : "RESERVER!"}
-      </button>
+      <ButtonsWrap>
+        <FrButton onClick={() => handleToggleLanguage("en")}>
+          {language === "en" ? "FR" : "EN"}
+        </FrButton>
+        <BookButton
+          onClick={() => {
+            navigate("/book");
+          }}
+        >
+          {language === "en" ? "BOOK NOW!" : "RESERVER!"}
+        </BookButton>
+      </ButtonsWrap>
     </Wrapper>
   );
 };
+
+const ButtonsWrap = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+`;
+const BookButton = styled.button`
+  background-color: #006044;
+  border: none;
+  color: whitesmoke;
+  font-size: 1.1rem;
+  padding: 13px 10px;
+`;
+
+const FrButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #006044;
+  font-size: 1.1rem;
+  padding: 0;
+  border-bottom: 1px solid #006044;
+`;
+
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 30px 30px;
-
-  button {
-    background-color: #006044;
-    border: none;
-    color: whitesmoke;
-    font-size: 1.1rem;
-    padding: 13px 10px;
-  }
 `;
 const LeftWrap = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  gap: 20px;
+  justify-content: space-between;
   img {
     width: 30vw;
   }

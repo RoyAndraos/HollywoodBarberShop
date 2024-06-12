@@ -61,6 +61,7 @@ const Wrapper = styled.div`
   display: flex;
   width: 100%;
   min-height: 100vh;
+  color: #eeebde;
   place-content: center;
   position: relative;
 `;
@@ -68,7 +69,7 @@ const Story = styled.p`
   text-align: center;
   font-size: 20px;
   line-height: 1.5;
-  color: whitesmoke;
+  color: #eeebde;
   padding: 0 20px 0 20px;
   @media (max-width: 1000px) {
     font-size: 16px;
