@@ -134,8 +134,29 @@ const Booking = () => {
               .map((slot) => {
                 return slot.slot;
               });
+
+          let filteredSlotsBeforeNow = filteredForOverlappingSlots.map(
+            (elem) => {
+              const now = moment().format("hh:mm A"); // Use 12-hour format with AM/PM
+              const elemTime = moment(elem.split("-")[1], "hh:mm A").format(
+                "hh:mm A"
+              ); // Parse in 12-hour format with AM/PM
+
+              if (
+                !moment(elemTime, "hh:mm A").isBefore(moment(now, "hh:mm A"))
+              ) {
+                return elem;
+              } else {
+                return "";
+              }
+            }
+          );
+          filteredSlotsBeforeNow = filteredSlotsBeforeNow.filter(
+            (elem) => elem !== ""
+          );
+
           setFilteredAvailableSlots(
-            filteredForOverlappingSlots
+            filteredSlotsBeforeNow
               .filter((slot) => {
                 const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
                 return minutes !== "45" && minutes !== "15";
