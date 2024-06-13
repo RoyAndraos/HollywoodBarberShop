@@ -25,7 +25,7 @@ const CancelReservation = () => {
       setPhoneError("");
     }
 
-    if (resId.length !== 36 && resId.length !== 0) {
+    if (resId.length !== 5 && resId.length !== 0) {
       setResIdError("Invalid reservation id");
     } else if (resId.length === 0) {
       setResIdError("empty");
@@ -86,8 +86,8 @@ const CancelReservation = () => {
       <SmallWrapper>
         <Instructions>
           {language === "en"
-            ? "To cancel your reservation, please enter your phone number and thereservation id. find the reservation id in the confirmation SMS recieved when booking."
-            : "Pour annuler votre réservation, veuillez entrer votre numéro de téléphone et l'identifiant de réservation. Trouvez l'identifiant de réservation dans le SMS de confirmation reçu lors de la réservation."}
+            ? "To cancel your reservation, please enter your phone number and the first 5 characters of your reservation id. find the reservation id in the confirmation SMS recieved when booking."
+            : "Pour annuler votre réservation, veuillez entrer votre numéro de téléphone et les 5 premiers caractères de l'identifiant de réservation. Trouvez l'identifiant de réservation dans le SMS de confirmation reçu lors de la réservation."}
         </Instructions>
         <InputWrapper>
           <Label>{language === "en" ? "Phone Number" : "Telephone"}</Label>

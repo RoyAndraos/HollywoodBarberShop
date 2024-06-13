@@ -207,10 +207,10 @@ const deleteReservation = async (req, res) => {
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
-    const reservation = await db.collection("reservations").findOne({
-      _id: resId,
-      number: phone,
-    });
+    //since resId is the 1st 5 characters of the reservation's _id, we can use it to find the reservation when _id includes resId
+    const reservation = await db
+      .collection("reservations")
+      .findOne({ _id: { $regex: resId, $options: "i" }, number: phone });
     if (reservation === null) {
       res.status(404).json({ status: 404, message: "Reservation not found" });
     } else {
