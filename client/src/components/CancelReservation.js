@@ -40,6 +40,7 @@ const CancelReservation = () => {
   }, [resId]);
   const navigate = useNavigate();
   const handleDeleteReservation = () => {
+    console.log({ phone: phone, resId: resId });
     fetch("https://hollywoodbarbershop.onrender.com/deleteReservation", {
       method: "DELETE",
       headers: {

@@ -18,7 +18,7 @@ import { ServiceContext } from "./components/contexts/ServiceContext";
 import { TextContext } from "./components/contexts/TextContext";
 import Loader from "./components/float-fixed/Loader";
 import MobileHome from "./components/homepage/MobileHome";
-
+import ConfirmCancel from "./components/ConfirmCancel";
 const App = () => {
   const { isMobile } = useContext(IsMobileContext);
   const containerRef = useRef(null);
@@ -99,6 +99,14 @@ const App = () => {
           element={
             <TransitionComponent>
               <CancelReservation />
+            </TransitionComponent>
+          }
+        />
+        <Route
+          path={"/confirmedCancel"}
+          element={
+            <TransitionComponent>
+              <ConfirmCancel />
             </TransitionComponent>
           }
         />
