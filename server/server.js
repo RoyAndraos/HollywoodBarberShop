@@ -267,15 +267,15 @@ const deleteReservation = async (req, res) => {
           .status(200)
           .json({ status: 200, reservation: reservation, message: message });
       } else if (differenceInHours < 0) {
-        res.status(404).json({
-          status: 404,
+        res.status(200).json({
+          status: 200,
           reservation: reservation,
           message: "Reservation is in the past.",
         });
       } else {
         // Reservation is within 3 hours from now
-        res.status(404).json({
-          status: 404,
+        res.status(200).json({
+          status: 200,
           reservation: reservation,
           message: "Reservation is in less than 3 hours.",
         });

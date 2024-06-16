@@ -27,7 +27,7 @@ const Booking = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { barberInfo } = useContext(BarberContext);
   const { services } = useContext(ServiceContext);
-  const { userInfo } = useContext(UserContext);
+  const { setUserInfo, userInfo } = useContext(UserContext);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
 
@@ -278,6 +278,7 @@ const Booking = () => {
       .then((data) => {
         if (data.status === 200) {
           setIsLoading(false);
+          setUserInfo();
           navigate(`/yourReservation/${data.data._id}`);
         } else {
           console.log("something went wrong");
