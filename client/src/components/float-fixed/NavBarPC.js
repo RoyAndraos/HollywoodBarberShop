@@ -150,5 +150,8 @@ const NavButton = styled.button`
       props.$location === "/" ? "2px solid whitesmoke" : "2px solid #006044"};
   }
   outline: none;
+  @media (max-width: 1200px) {
+    font-size: 1rem;
+  }
 `;
 export default NavBarPC;

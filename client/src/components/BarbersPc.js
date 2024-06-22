@@ -334,6 +334,7 @@ const Description = styled.p`
   color: #006044;
   padding: 3% 0;
   font-size: 18px;
+  line-height: 1.5;
   text-align: center;
   @media (max-width: 1000px) {
     font-size: 16px;

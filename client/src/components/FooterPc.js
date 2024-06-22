@@ -74,15 +74,20 @@ const FooterPc = () => {
           </Day>
         </BusinesssHours>
         <Location ref={(el) => (leftRef = el)}>
-          <Title>Address{language === "fr" && "e"}</Title>
-          <Day>
-            <a
-              style={{ all: "unset", cursor: "pointer" }}
-              href="https://www.google.com/maps?sca_esv=3697c3e79dce3da7&sca_upv=1&sxsrf=ADLYWIKCjKpaJBF9JlhmPyLNAWFtlfXp9A:1718208071176&uact=5&gs_lp=Egxnd3Mtd2l6LXNlcnAiE2hvbGx5d29vZCBmYWlybW91bnQyBBAjGCcyBBAjGCcyDhAuGIAEGMcBGI4FGK8BMgUQABiABDIFEAAYgAQyCBAAGAgYChgeMgIQJjILEAAYgAQYhgMYigUyCxAAGIAEGIYDGIoFMgsQABiABBiGAxiKBUi6B1AAWI8DcAB4AZABAJgB8AGgAcECqgEFMS4wLjG4AQPIAQD4AQGYAgKgAsoCwgIEEAAYHsICCBAAGIAEGKIEmAMAkgcFMS4wLjGgB_8R&um=1&ie=UTF-8&fb=1&gl=ca&sa=X&geocode=KaG3HhJ-GclMMUE3U7AsM7FE&daddr=18+Av.+Fairmount+O,+Montr%C3%A9al,+QC+H2T+2M1"
-            >
-              18 Av. Fairmount O, Montréal, QC H2T 2M1
-            </a>
-          </Day>
+          <a
+            style={{
+              all: "unset",
+              cursor: "pointer",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+            href="https://www.google.com/maps?sca_esv=3697c3e79dce3da7&sca_upv=1&sxsrf=ADLYWIKCjKpaJBF9JlhmPyLNAWFtlfXp9A:1718208071176&uact=5&gs_lp=Egxnd3Mtd2l6LXNlcnAiE2hvbGx5d29vZCBmYWlybW91bnQyBBAjGCcyBBAjGCcyDhAuGIAEGMcBGI4FGK8BMgUQABiABDIFEAAYgAQyCBAAGAgYChgeMgIQJjILEAAYgAQYhgMYigUyCxAAGIAEGIYDGIoFMgsQABiABBiGAxiKBUi6B1AAWI8DcAB4AZABAJgB8AGgAcECqgEFMS4wLjG4AQPIAQD4AQGYAgKgAsoCwgIEEAAYHsICCBAAGIAEGKIEmAMAkgcFMS4wLjGgB_8R&um=1&ie=UTF-8&fb=1&gl=ca&sa=X&geocode=KaG3HhJ-GclMMUE3U7AsM7FE&daddr=18+Av.+Fairmount+O,+Montr%C3%A9al,+QC+H2T+2M1"
+          >
+            <Title>Address{language === "fr" && "e"}</Title>
+            <Day>18 Av. Fairmount O, Montréal, QC H2T 2M1</Day>
+          </a>
+
           <Title style={{ marginTop: "10px" }}>
             {language === "en" ? "Number" : "Numero"}
           </Title>
@@ -270,6 +275,9 @@ const Day = styled.p`
   margin: 0.1rem 0;
   font-size: 1rem;
   color: #006044;
+  @media (max-width: 1200px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const Title = styled.h3`
@@ -279,6 +287,9 @@ const Title = styled.h3`
   font-weight: 400;
   margin-bottom: 0.5rem;
   color: #006044;
+  @media (max-width: 1200px) {
+    font-size: 0.8rem;
+  }
 `;
 const Location = styled.div`
   display: flex;
@@ -287,6 +298,9 @@ const Location = styled.div`
   justify-content: center;
   height: 100%;
   width: 27%;
+  @media (max-width: 1200px) {
+    font-size: 0.8rem;
+  }
 `;
 export const StyledButton = styled.button`
   color: #006044;
@@ -297,6 +311,9 @@ export const StyledButton = styled.button`
   transition: all 0.3s ease-in-out;
   &:hover {
     color: #006044;
+  }
+  @media (max-width: 1200px) {
+    font-size: 0.8rem;
   }
 `;
 export const PrivacyWrapper = styled.div`

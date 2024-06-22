@@ -84,6 +84,9 @@ const Loader = styled.div`
   border-radius: 50%;
   width: 20px;
   height: 20px;
+  position: relative;
+  left: 50%;
+  transform: transalteX(-50%);
   animation: ${rotate} 1s linear infinite;
 `;
 

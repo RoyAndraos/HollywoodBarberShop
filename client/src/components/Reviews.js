@@ -25,7 +25,7 @@ const Reviews = () => {
       },
       {
         opacity: 1,
-        y: 0,
+        y: "-6vh",
         duration: 1,
         delay: 1,
       }
@@ -110,6 +110,9 @@ const Name = styled.span`
   font-weight: 600;
   color: #001c00;
   margin-right: 1rem;
+  @media (max-width: 1200px) {
+    font-size: 1rem;
+  }
 `;
 const Review = styled.div`
   position: relative;
@@ -128,6 +131,9 @@ const ReviewText = styled.p`
   font-family: "Noto Sans KR", sans-serif;
   line-height: 1.5;
   font-weight: 600;
+  @media (max-width: 1200px) {
+    font-size: 0.8rem;
+  }
 `;
 const ArrowLeft = styled.div`
   position: absolute;
@@ -209,15 +215,19 @@ export const BookButton = styled.button`
       clip-path: polygon(0 0, 100% 0, 100% 100%, 100% 100%, 0 100%);
     }
   }
+  @media (max-width: 1200px) {
+    font-size: 1rem;
+  }
 `;
 const ReviewWrapper = styled.div`
   position: absolute;
   background-color: #efede0;
   width: 45%;
-  height: 25vh;
+  min-height: 25vh;
+  max-height: 40vh;
   left: 50%;
-  top: 70vh;
-  transform: translate(-50%, -50%);
+  bottom: 0vh;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -225,11 +235,14 @@ const ReviewWrapper = styled.div`
   z-index: 1000;
   border-radius: 35px;
   visibility: hidden;
-  padding-top: 2rem;
+  padding-top: 2vh;
 `;
 const StarsWrapper = styled.div`
   color: #dfc844;
   font-size: 1.3rem;
+  @media (max-width: 1200px) {
+    font-size: 1rem;
+  }
 `;
 const ReviewSlideShow = styled.div`
   width: 80%;

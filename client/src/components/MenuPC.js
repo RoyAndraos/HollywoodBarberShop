@@ -359,6 +359,7 @@ const Service = styled.div`
   justify-content: space-between;
   color: #006044;
   border-bottom: 1px solid #006044;
+  cursor: pointer;
   @media (max-width: 1000px) {
     padding: 0.5rem;
   }
