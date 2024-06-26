@@ -91,7 +91,7 @@ const FooterPc = () => {
           <Title style={{ marginTop: "10px" }}>
             {language === "en" ? "Number" : "Numero"}
           </Title>
-          <Day>+1(514) 271-4247</Day>
+          <Day>+1(438) 923-7297</Day>
         </Location>
       </TopPart>
       <BottomPart>
