@@ -50,12 +50,19 @@ const Booking = () => {
       .then((data) => {
         setReservations(data.data);
       });
+    const day = new Date().getDay();
+    if (day === 0) {
+      setSelectedDate(moment().add(2, "days").toDate());
+    } else if (day === 1) {
+      setSelectedDate(moment().add(1, "days").toDate());
+    }
   }, []);
 
   useEffect(() => {
     if (selectedBarber === null) {
       return;
     } else {
+      //check for the barber's time off, if is inside of time off, set barberIsOff to true
       if (selectedBarber.time_off.length !== 0) {
         const startDate = moment(selectedBarber.time_off[0].startDate)._i;
         const endDate = moment(selectedBarber.time_off[0].endDate)._i;
@@ -63,7 +70,8 @@ const Booking = () => {
         setBarberIsOff(timeOff);
         return;
       }
-
+      //since barber isnt off, take out the barbers availability: false slots
+      ////////////////////////////////////////////////////////////////////////////
       const originalAvailableSlots = selectedBarber.availability
         .filter((slot) =>
           slot.slot.includes(handleFormatDateForSlots(selectedDate))
@@ -75,7 +83,10 @@ const Booking = () => {
             return "";
           }
         });
+      ////////////////////////////////////////////////////////////////////////////
 
+      //filter out the slots taken by the selected date's reservations (for the selected barber)
+      ////////////////////////////////////////////////////////////////////////////
       const todayReservations = reservations.filter((reservation) => {
         const today =
           formatDate(new Date(reservation.date)) === formatDate(selectedDate);
@@ -104,28 +115,59 @@ const Booking = () => {
           }
         });
       });
+      ////////////////////////////////////////////////////////////////////////////
 
       if (selectedService !== null) {
+        //when the user selects his service (so now we have the service duration AND the barbers availability and reservations)
+        //filter out overlapping slots for the selected service's duration from the availability slots or the reservations slots
+        ////////////////////////////////////////////////////////////////////////////
+        //simply remove the empty elements
         const finalAvailableSlots = filteredSlots.filter((slot) => {
           return slot !== "";
         });
+        //get the slots that are not available for today
+        const todayAvailabilitySlotsObjects =
+          selectedBarber.dailyAvailability.filter((slot) => {
+            return slot.available === false;
+          });
+        const todayAvailabilitySlots = todayAvailabilitySlotsObjects.map(
+          (slot) => {
+            return slot.slot;
+          }
+        );
+
+        //get the starting time of the reservations for today
         const todayReservationStartingSlots = todayReservations.map(
           (reservation) => {
             return reservation.slot[0].split("-")[1];
           }
         );
-        const slotsToRemoveForOverlapping = removeSlotsForOverLapping(
+        //remove the slots that are overlapping with the selected service's duration
+        const slotsToRemoveForOverlappingRes = removeSlotsForOverLapping(
           selectedService.duration,
           todayReservationStartingSlots
         );
-        const filteredForOverlappingSlots = finalAvailableSlots.filter(
-          (slot) => {
+        //remove the slots that are overlapping with the barber's unavailable slots
+        const slotsToRemoveForOverLappingAvailability =
+          removeSlotsForOverLapping(
+            selectedService.duration,
+            todayAvailabilitySlots
+          );
+
+        const filteredSlotsForOverlappingAvailability =
+          finalAvailableSlots.filter((slot) => {
             const time = slot.split("-")[1];
-            return !slotsToRemoveForOverlapping.includes(time);
-          }
-        );
+            return !slotsToRemoveForOverLappingAvailability.includes(time);
+          });
+        //filter the slots that are overlapping with both the reservations and the barber's unavailable slots
+        const filteredForOverlappingSlots =
+          filteredSlotsForOverlappingAvailability.filter((slot) => {
+            const time = slot.split("-")[1];
+            return !slotsToRemoveForOverlappingRes.includes(time);
+          });
 
         if (isToday) {
+          //if the date is today's date, check for daily availabilty slots that are not available
           const dailyAvailabilityFilteredSlots =
             selectedBarber.dailyAvailability
               .filter((slot) => {
@@ -134,7 +176,7 @@ const Booking = () => {
               .map((slot) => {
                 return slot.slot;
               });
-
+          //remove all the slots that have passed
           let filteredSlotsBeforeNow = filteredForOverlappingSlots.map(
             (elem) => {
               const now = moment().format("hh:mm A"); // Use 12-hour format with AM/PM
@@ -156,6 +198,7 @@ const Booking = () => {
           );
 
           setFilteredAvailableSlots(
+            //remove the 15min slot (aka 15 and 45)
             filteredSlotsBeforeNow
               .filter((slot) => {
                 const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
@@ -167,6 +210,7 @@ const Booking = () => {
                 );
               })
           );
+          ////////////////////////////////////////////////////////////////////////////
         } else {
           setFilteredAvailableSlots(
             filteredForOverlappingSlots.filter((slot) => {
@@ -310,6 +354,10 @@ const Booking = () => {
             selected={selectedDate}
             dateFormat="MMMM d, yyyy"
             onChange={handleDateChange}
+            filterDate={(date) => {
+              const day = date.getDay();
+              return day !== 0 && day !== 1;
+            }}
           />
         </InputLabelWrap>
         <ServiceList>
