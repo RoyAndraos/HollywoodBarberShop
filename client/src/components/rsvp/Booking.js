@@ -68,7 +68,10 @@ const Booking = () => {
         const endDate = moment(selectedBarber.time_off[0].endDate)._i;
         const timeOff = moment(selectedDate).isBetween(startDate, endDate);
         setBarberIsOff(timeOff);
-        return;
+        if (timeOff) {
+          setFilteredAvailableSlots([]);
+          return;
+        }
       }
       //since barber isnt off, take out the barbers availability: false slots
       ////////////////////////////////////////////////////////////////////////////
@@ -92,7 +95,6 @@ const Booking = () => {
           formatDate(new Date(reservation.date)) === formatDate(selectedDate);
         return selectedBarber.given_name === reservation.barber && today;
       });
-
       const filteredSlots = originalAvailableSlots.filter((slot) => {
         return !todayReservations.some((reservation) => {
           if (reservation.slot.length === 1) {
@@ -274,6 +276,7 @@ const Booking = () => {
 
   const handleServiceClick = (service) => {
     setSelectedService(service);
+    setSelectedSlot([]);
     handleChange("service", service);
   };
 
@@ -355,8 +358,10 @@ const Booking = () => {
             dateFormat="MMMM d, yyyy"
             onChange={handleDateChange}
             filterDate={(date) => {
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
               const day = date.getDay();
-              return day !== 0 && day !== 1;
+              return date >= today && day !== 0 && day !== 1;
             }}
           />
         </InputLabelWrap>
