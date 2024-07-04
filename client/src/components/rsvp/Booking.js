@@ -415,6 +415,9 @@ const Booking = () => {
                 {slot.split("-")[1]}
               </Slot>
             ))}
+            {filteredAvailableSlots.length === 0 &&
+              selectedBarber &&
+              selectedService && <p>No Slots Available</p>}
           </SlotWrap>
         </SlotList>
         <SubmitButton
