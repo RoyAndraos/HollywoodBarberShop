@@ -25,11 +25,13 @@ const getWebsiteInfo = async (req, res) => {
     const barbers = await db.collection("admin").find().toArray();
     const text = await db.collection("web_text").find().toArray();
     const services = await db.collection("services").find().toArray();
+    const servicesEmp = await db.collection("servicesEmp").find().toArray();
     res.status(200).json({
       status: 200,
       barbers: barbers,
       text: text,
       services: services,
+      servicesEmp: servicesEmp,
     });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });

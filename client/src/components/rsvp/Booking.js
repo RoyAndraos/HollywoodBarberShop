@@ -14,6 +14,7 @@ import { IsMobileContext } from "../contexts/IsMobileContext";
 import { InputLabelWrap } from "./GuestFormRsvp";
 import SubmitButton from "./SubmitButton";
 import logoNotHome from "../../assets/onlyNameLogo.svg";
+import { ServicesEmpContext } from "../contexts/ServicesEmpContext";
 const Booking = () => {
   const [reservations, setReservations] = useState([]);
   const [formData, setFormData] = useState({
@@ -30,7 +31,9 @@ const Booking = () => {
   const { setUserInfo, userInfo } = useContext(UserContext);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
-
+  const { servicesEmp } = useContext(ServicesEmpContext);
+  const [servicesRendered, setServicesRendered] = useState(services);
+  console.log(servicesEmp, services);
   const todayDate = new Date();
   const formattedDate = moment(todayDate).format("ddd MMM DD YYYY").toString();
   const isToday =
@@ -43,7 +46,13 @@ const Booking = () => {
     const options = { weekday: "short" };
     return date.toLocaleDateString(undefined, options);
   };
-
+  useEffect(() => {
+    if (selectedBarber && selectedBarber === barberInfo[0]) {
+      setServicesRendered(services);
+    } else {
+      setServicesRendered(servicesEmp);
+    }
+  }, [barberInfo, selectedBarber, services, servicesEmp]);
   useEffect(() => {
     fetch("https://hollywoodbarbershop.onrender.com/getReservations")
       .then((res) => res.json())
@@ -149,6 +158,7 @@ const Booking = () => {
           selectedService.duration,
           todayReservationStartingSlots
         );
+
         //remove the slots that are overlapping with the barber's unavailable slots
         const slotsToRemoveForOverLappingAvailability =
           removeSlotsForOverLapping(
@@ -185,7 +195,6 @@ const Booking = () => {
               const elemTime = moment(elem.split("-")[1], "hh:mm A").format(
                 "hh:mm A"
               ); // Parse in 12-hour format with AM/PM
-
               if (
                 !moment(elemTime, "hh:mm A").isBefore(moment(now, "hh:mm A"))
               ) {
@@ -198,7 +207,6 @@ const Booking = () => {
           filteredSlotsBeforeNow = filteredSlotsBeforeNow.filter(
             (elem) => elem !== ""
           );
-
           setFilteredAvailableSlots(
             //remove the 15min slot (aka 15 and 45)
             filteredSlotsBeforeNow
@@ -266,9 +274,6 @@ const Booking = () => {
   };
 
   const handleBarberClick = (barber) => {
-    if (selectedService === null) {
-      return;
-    }
     setSelectedBarber(barber);
     setSelectedSlot([]);
     handleChange("barber", barber.given_name);
@@ -365,18 +370,6 @@ const Booking = () => {
             }}
           />
         </InputLabelWrap>
-        <ServiceList>
-          <StyledLabel>Service</StyledLabel>
-          {services.map((service) => (
-            <Service
-              key={service.id}
-              $isSelected={selectedService === service}
-              onClick={() => handleServiceClick(service)}
-            >
-              {language === "FR" ? service.name : service.english}
-            </Service>
-          ))}
-        </ServiceList>
         <BarberList>
           <StyledLabel>{language === "en" ? "Barber" : "Barbier"}</StyledLabel>
           {barberInfo.map((barber) => (
@@ -390,6 +383,19 @@ const Booking = () => {
             </Barber>
           ))}
         </BarberList>
+        <ServiceList>
+          <StyledLabel>Service</StyledLabel>
+          {servicesRendered.map((service) => (
+            <Service
+              key={service.id}
+              $isSelected={selectedService === service}
+              onClick={() => handleServiceClick(service)}
+            >
+              {language === "fr" ? service.name : service.english}
+            </Service>
+          ))}
+        </ServiceList>
+
         <SlotList>
           <div>
             <StyledLabel>

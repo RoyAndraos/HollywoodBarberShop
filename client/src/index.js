@@ -11,6 +11,7 @@ import { ServiceProvider } from "./components/contexts/ServiceContext";
 import { LanguageProvider } from "./components/contexts/LanguageContext";
 import { IsMobileProvider } from "./components/contexts/IsMobileContext";
 import { TransitionProvider } from "./components/contexts/TransitionContext";
+import { ServicesEmpProvider } from "./components/contexts/ServicesEmpContext";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
@@ -24,7 +25,9 @@ root.render(
                 <ServiceProvider>
                   <LanguageProvider>
                     <IsMobileProvider>
-                      <App>{Children}</App>
+                      <ServicesEmpProvider>
+                        <App>{Children}</App>
+                      </ServicesEmpProvider>
                     </IsMobileProvider>
                   </LanguageProvider>
                 </ServiceProvider>
