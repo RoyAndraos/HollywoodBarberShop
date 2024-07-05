@@ -33,7 +33,6 @@ const Booking = () => {
   const { isMobile } = useContext(IsMobileContext);
   const { servicesEmp } = useContext(ServicesEmpContext);
   const [servicesRendered, setServicesRendered] = useState(services);
-  console.log(servicesEmp, services);
   const todayDate = new Date();
   const formattedDate = moment(todayDate).format("ddd MMM DD YYYY").toString();
   const isToday =
@@ -276,6 +275,8 @@ const Booking = () => {
   const handleBarberClick = (barber) => {
     setSelectedBarber(barber);
     setSelectedSlot([]);
+    setFilteredAvailableSlots([]);
+    setSelectedService(null);
     handleChange("barber", barber.given_name);
   };
 
@@ -401,7 +402,8 @@ const Booking = () => {
             <StyledLabel>
               {language === "en" ? "Slots" : "Disponibilités"}
             </StyledLabel>
-            {filteredAvailableSlots.length === 0 && !selectedBarber ? (
+            {filteredAvailableSlots.length === 0 &&
+            (!selectedBarber || !selectedService) ? (
               <SlotsWarning>
                 {language === "en"
                   ? " (Select service and barber first)"
