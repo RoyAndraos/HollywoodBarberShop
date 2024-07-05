@@ -101,6 +101,7 @@ const addReservation = async (req, res) => {
   const userInfo = req.body[1];
   const _id = uuid();
   const client_id = uuid();
+
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
@@ -116,6 +117,23 @@ const addReservation = async (req, res) => {
       number: userInfo.number,
       client_id: client_id,
     };
+    //sendSms to barbers
+    await twilioClient.messages.create({
+      body: `New Reservation for ${reservation.barber}
+  
+          ${reservation.date}, ${reservation.slot[0].split("-")[1]}. 
+          ~${reservation.fname} ${reservation.lname || ""}`,
+      messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
+      to: "4389237297",
+    });
+    // await twilioClient.messages.create({
+    //   body: `New Reservation for ${reservation.barber}
+
+    //   ${reservation.date}, ${reservation.slot[0].split("-")[1]}.
+    //   ~${reservation.fname} ${reservation.lname || ""}`,
+    //   messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
+    //   to: "Ty's Number",
+    // });
 
     // check if client exists
     const isClient = await db
