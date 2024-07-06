@@ -359,7 +359,7 @@ const Booking = () => {
             padding: "1vh 0",
           }}
         >
-          <StyledLabel>Date</StyledLabel>
+          <StyledLabel for={"date"}>Date</StyledLabel>
           <StyledDatePicker
             selected={selectedDate}
             dateFormat="MMMM d, yyyy"
@@ -373,20 +373,21 @@ const Booking = () => {
           />
         </InputLabelWrap>
         <BarberList>
-          <StyledLabel>{language === "en" ? "Barber" : "Barbier"}</StyledLabel>
+          <StyledLabel for={"barber"}>
+            {language === "en" ? "Barber" : "Barbier"}
+          </StyledLabel>
           {barberInfo.map((barber) => (
             <Barber
               key={barber._id}
               $isSelected={selectedBarber === barber}
               onClick={() => handleBarberClick(barber)}
-              isOff={barberIsOff}
             >
               {barber.given_name}
             </Barber>
           ))}
         </BarberList>
         <ServiceList>
-          <StyledLabel>Service</StyledLabel>
+          <StyledLabel for={"service"}>Service</StyledLabel>
           {servicesRendered.map((service) => (
             <Service
               key={service.id}
@@ -400,7 +401,7 @@ const Booking = () => {
 
         <SlotList>
           <div>
-            <StyledLabel>
+            <StyledLabel for={"slots"}>
               {language === "en" ? "Slots" : "Disponibilités"}
             </StyledLabel>
             {filteredAvailableSlots.length === 0 &&

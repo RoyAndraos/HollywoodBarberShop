@@ -19,16 +19,22 @@ const FormRsvp = () => {
     number: "",
     reservations: [],
     note: "",
+    numberValid: false,
   });
   const { language } = useContext(LanguageContext);
-
-  // check if phone number is valid
+  //Validate phone number
   useEffect(() => {
-    if (formData.number.length !== 10 && formData.number.length !== 0) {
-      setIsPhoneValid(false);
-    } else {
-      setIsPhoneValid(true);
-    }
+    const validatePhoneNumber = () => {
+      if (formData.number.length !== 10 && formData.number.length !== 0) {
+        setIsPhoneValid(false);
+        setFormData((prev) => ({ ...prev, numberValid: false }));
+      } else {
+        setIsPhoneValid(true);
+        setFormData((prev) => ({ ...prev, numberValid: true }));
+      }
+    };
+
+    validatePhoneNumber();
   }, [formData.number]);
 
   const handleChange = (e) => {
@@ -41,6 +47,15 @@ const FormRsvp = () => {
     setFormData((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
+    if (e.target.name === "number") {
+      const isValid =
+        e.target.value.length === 10 || e.target.value.length === 0;
+      setIsPhoneValid(isValid);
+      setFormData((prev) => ({
+        ...prev,
+        numberValid: isValid,
+      }));
+    }
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -71,6 +86,7 @@ const FormRsvp = () => {
           <StyledInput
             $isMobile={isMobile}
             name="fname"
+            required
             onChange={(e) => {
               handleChange(e);
             }}
@@ -85,6 +101,7 @@ const FormRsvp = () => {
           <StyledInput
             $isMobile={isMobile}
             name="lname"
+            required
             onChange={(e) => {
               handleChange(e);
             }}
@@ -107,7 +124,9 @@ const FormRsvp = () => {
         </InputLabelWrap>
         {!isPhoneValid && (
           <Error>
-            {language === "en" ? "Invalid phone number" : "Numero invalide"}
+            {language === "en"
+              ? "If you don't have a canadian number, you will not recieve any confirmation, reminder or cancelation messages."
+              : "Si vous n'avez pas de numéro canadien, vous ne recevrez aucun message de confirmation, de rappel ou d'annulation."}
           </Error>
         )}
         <InputLabelWrap $isMobile={isMobile}>
@@ -158,9 +177,7 @@ const FormRsvp = () => {
             fontSize: "1.3rem",
           }}
           disabled={
-            isPhoneValid && formData.fname && formData.lname && formData.number
-              ? false
-              : true
+            formData.fname && formData.lname && formData.number ? false : true
           }
         >
           {language === "en" ? "Next Step" : "Prochaine Etape"}
@@ -289,6 +306,13 @@ export const StyledInput = styled.input`
 export const Error = styled.p`
   color: #b50000;
   font-size: 1.2rem;
+  width: 75%;
+  margin: 20px 0 0 0;
+  text-align: center;
   z-index: 2;
+  @media (max-width: 768px) {
+    font-size: 1rem;
+    width: 85%;
+  }
 `;
 export default FormRsvp;
