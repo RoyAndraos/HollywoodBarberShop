@@ -59,12 +59,6 @@ const Booking = () => {
       .then((data) => {
         setReservations(data.data);
       });
-    const day = new Date().getDay();
-    if (day === 0) {
-      setSelectedDate(moment().add(2, "days").toDate());
-    } else if (day === 1) {
-      setSelectedDate(moment().add(1, "days").toDate());
-    }
   }, []);
 
   useEffect(() => {
