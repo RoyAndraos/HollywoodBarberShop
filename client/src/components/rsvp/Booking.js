@@ -243,9 +243,10 @@ const Booking = () => {
     if (newTimeMinute === 60) {
       newTimeMinute = "00";
       const newHour = parseInt(slot.split("-")[1].split(":")[0]) + 1;
-      if (newHour === 12) {
+      if (newHour === 13) {
+        const newerHour = 1;
         AMPM = "pm";
-        return `${day}-${newHour}:${newTimeMinute}${AMPM}`;
+        return `${day}-${newerHour}:${newTimeMinute}${AMPM}`;
       } else {
         return `${day}-${newHour}:${newTimeMinute}${AMPM}`;
       }
@@ -310,7 +311,6 @@ const Booking = () => {
   if (!reservations) {
     return <Loader />;
   }
-
   const handleSubmit = (e) => {
     formData.slot = selectedSlot;
     setIsLoading(true);
