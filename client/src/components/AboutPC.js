@@ -38,9 +38,11 @@ const AboutPC = () => {
           <Story>
             {language === "en"
               ? aboutText[0].content.split(".")[1] +
-                aboutText[0].content.split(".")[1]
+                "." +
+                aboutText[0].content.split(".")[2]
               : aboutText[0].french.split(".")[1] +
-                aboutText[0].french.split(".")[1]}
+                "." +
+                aboutText[0].french.split(".")[2]}
             .
           </Story>
         </StoryWrapper>
