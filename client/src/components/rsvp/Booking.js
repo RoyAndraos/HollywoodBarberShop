@@ -41,10 +41,9 @@ const Booking = () => {
     moment(selectedDate).format("ddd MMM DD YYYY").toString().slice(0, 15);
   const [filteredAvailableSlots, setFilteredAvailableSlots] = useState([]);
   const navigate = useNavigate();
-
-  const handleFormatDateForSlots = (date) => {
+  const handleFormatDateForSlots = (date, locale = "en-US") => {
     const options = { weekday: "short" };
-    return date.toLocaleDateString(undefined, options);
+    return date.toLocaleDateString(locale, options);
   };
   useEffect(() => {
     if (selectedBarber && selectedBarber === barberInfo[0]) {
@@ -98,6 +97,7 @@ const Booking = () => {
           formatDate(new Date(reservation.date)) === formatDate(selectedDate);
         return selectedBarber.given_name === reservation.barber && today;
       });
+
       const filteredSlots = originalAvailableSlots.filter((slot) => {
         return !todayReservations.some((reservation) => {
           if (reservation.slot.length === 1) {
@@ -121,7 +121,6 @@ const Booking = () => {
         });
       });
       ////////////////////////////////////////////////////////////////////////////
-
       if (selectedService !== null) {
         //when the user selects his service (so now we have the service duration AND the barbers availability and reservations)
         //filter out overlapping slots for the selected service's duration from the availability slots or the reservations slots
@@ -260,7 +259,6 @@ const Booking = () => {
       return { ...prev, [key]: value };
     });
   };
-
   const handleDateChange = (date) => {
     setSelectedDate(date);
     setSelectedSlot([]);
