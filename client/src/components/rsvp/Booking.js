@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styled from "styled-components";
@@ -15,7 +15,7 @@ import { InputLabelWrap } from "./GuestFormRsvp";
 import SubmitButton from "./SubmitButton";
 import logoNotHome from "../../assets/onlyNameLogo.svg";
 import { ServicesEmpContext } from "../contexts/ServicesEmpContext";
-
+import { FaCalendarAlt } from "react-icons/fa";
 const Booking = () => {
   const [reservations, setReservations] = useState([]);
   const [formData, setFormData] = useState({
@@ -35,6 +35,7 @@ const Booking = () => {
   const { servicesEmp } = useContext(ServicesEmpContext);
   const [servicesRendered, setServicesRendered] = useState(services);
   const todayDate = new Date();
+  let datePickerRef = useRef(null);
   const formattedDate = moment(todayDate).format("ddd MMM DD YYYY").toString();
   const isToday =
     formattedDate ===
@@ -352,17 +353,40 @@ const Booking = () => {
           }}
         >
           <StyledLabel for={"date"}>Date</StyledLabel>
-          <StyledDatePicker
-            selected={selectedDate}
-            dateFormat="MMMM d, yyyy"
-            onChange={handleDateChange}
-            filterDate={(date) => {
-              const today = new Date();
-              today.setHours(0, 0, 0, 0);
-              const day = date.getDay();
-              return date >= today && day !== 0 && day !== 1;
+          <div
+            style={{
+              display: "grid",
+              alignItems: "center",
+              gridTemplateColumns: "80% 20%",
+              width: "100%",
             }}
-          />
+          >
+            <StyledDatePicker
+              ref={datePickerRef}
+              selected={selectedDate}
+              dateFormat="MMMM d, yyyy"
+              onChange={handleDateChange}
+              filterDate={(date) => {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const day = date.getDay();
+                return date >= today && day !== 0 && day !== 1;
+              }}
+            />
+            <FaCalendarAlt
+              style={{
+                fontSize: "2rem",
+                color: "#006044",
+                width: "100%",
+                cursor: "pointer",
+              }}
+              onClick={() => {
+                if (datePickerRef.current) {
+                  datePickerRef.current.setFocus();
+                }
+              }}
+            />
+          </div>
         </InputLabelWrap>
         <BarberList>
           <StyledLabel for={"barber"}>
@@ -455,7 +479,7 @@ const StyledLabel = styled.label`
   font-family: "Helvetica Neue", sans-serif;
 `;
 const StyledDatePicker = styled(DatePicker)`
-  width: 45.5vw;
+  width: 100%;
   margin: 5px;
   border: 2px solid #ccc;
   border-radius: 5px;
