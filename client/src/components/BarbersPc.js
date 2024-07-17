@@ -13,11 +13,13 @@ import { TimelineLite } from "gsap";
 import Loader from "./float-fixed/Loader";
 import { BookButton } from "./Reviews";
 import { useNavigate } from "react-router-dom";
+import { LanguageContext } from "./contexts/LanguageContext";
 const BarbersPc = () => {
   const { barberInfo } = useContext(BarberContext);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const navigate = useNavigate();
+  const { language } = useContext(LanguageContext);
   let coverRef = useRef(null);
   let otherCoverRef = useRef(null);
   let coverRef2 = useRef(null);
@@ -88,7 +90,13 @@ const BarbersPc = () => {
                 {barber.given_name}
                 {barber.family_name ? " " + barber.family_name : ""}
               </Name>
-              <Description>"{barber.description}"</Description>
+              <Description>
+                "
+                {language === "en"
+                  ? barber.description
+                  : barber.french_description}
+                "
+              </Description>
               {index === 0 && (
                 <CoverText ref={(el) => (coverRef2 = el)} key={"textSide"} />
               )}
@@ -98,7 +106,9 @@ const BarbersPc = () => {
                   navigate("/book");
                 }}
               >
-                Book With {barber.given_name}
+                {language === "en"
+                  ? `Book With ${barber.given_name}`
+                  : `Réserver avec ${barber.given_name}`}
               </BookButton>
             </NameDescriptionWrap>
           </Barber>
