@@ -159,10 +159,6 @@ const Booking = () => {
             selectedService.duration,
             todayAvailabilitySlots
           );
-        console.log(
-          "slotsToRemoveForOverLappingAvailability",
-          slotsToRemoveForOverLappingAvailability
-        );
 
         const filteredSlotsForOverlappingAvailability =
           finalAvailableSlots.filter((slot) => {
