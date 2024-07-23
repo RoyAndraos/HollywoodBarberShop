@@ -15,7 +15,7 @@ export const filterSlotBeforeFor2Duration = (slot) => {
   } else {
     const newMinute = "45";
     const hourToEdit = slot.slice(0, -2).split(":")[0];
-    if (hourToEdit !== "12") {
+    if (hourToEdit !== "1") {
       const newHour = parseInt(slot.slice(0, -2).split(":")[0]) - 1;
       if (newHour.toString().length === 2) {
         return newHour.toString() + ":" + newMinute + slot.slice(-2);
@@ -23,8 +23,8 @@ export const filterSlotBeforeFor2Duration = (slot) => {
         return "0" + newHour.toString() + ":" + newMinute + slot.slice(-2);
       }
     } else {
-      const newHour = "11";
-      return newHour + ":" + newMinute + "am";
+      const newHour = "12";
+      return newHour + ":" + newMinute + "pm";
     }
   }
 };
