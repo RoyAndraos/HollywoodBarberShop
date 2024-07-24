@@ -249,7 +249,6 @@ const getMonthIndex = (monthName) => {
 const deleteReservation = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
   const { resId } = req.body;
-  console.log(resId);
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
