@@ -7,7 +7,6 @@ import YourRes from "./components/rsvp/YourRes";
 import { useRef } from "react";
 import Header from "./components/Header";
 import { IsMobileContext } from "./components/contexts/IsMobileContext";
-import CancelReservation from "./components/CancelReservation";
 import AboutPC from "./components/AboutPC";
 import MenuPC from "./components/MenuPC";
 import BarbersPc from "./components/BarbersPc";
@@ -20,6 +19,7 @@ import Loader from "./components/float-fixed/Loader";
 import MobileHome from "./components/homepage/MobileHome";
 import ConfirmCancel from "./components/ConfirmCancel";
 import { ServicesEmpContext } from "./components/contexts/ServicesEmpContext";
+import CancelRes from "./components/CancelRes";
 const App = () => {
   const { isMobile } = useContext(IsMobileContext);
   const containerRef = useRef(null);
@@ -98,18 +98,18 @@ const App = () => {
           }
         />
         <Route
-          path={"/cancelReservation"}
+          path={"/confirmCancel"}
           element={
             <TransitionComponent>
-              <CancelReservation />
+              <ConfirmCancel />
             </TransitionComponent>
           }
         />
         <Route
-          path={"/confirmedCancel"}
+          path={"/cancel/:_id"}
           element={
             <TransitionComponent>
-              <ConfirmCancel />
+              <CancelRes />
             </TransitionComponent>
           }
         />

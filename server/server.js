@@ -17,6 +17,27 @@ const MONGO_URI_RALF = process.env.MONGO_URI_RALF;
 //GET ENDPOINTS
 // ---------------------------------------------------------------------------------------------
 
+const getReservationForDelete = async (req, res) => {
+  const client = new MongoClient(MONGO_URI_RALF);
+  const resId = req.params._id;
+  try {
+    await client.connect();
+    const db = client.db("HollywoodBarberShop");
+    const reservation = await db
+      .collection("reservations")
+      .findOne({ _id: resId });
+    if (reservation === null) {
+      res.status(404).json({ status: 404, message: "Reservation not found" });
+    } else {
+      res.status(200).json({ status: 200, reservation: reservation });
+    }
+  } catch (err) {
+    res.status(500).json({ status: 500, message: err.message });
+  } finally {
+    client.close();
+  }
+};
+
 const getWebsiteInfo = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
   try {
@@ -181,7 +202,9 @@ const addReservation = async (req, res) => {
           reservation.service.english
         } for ${reservation.service.price}. ~${reservation.barber}
       
-      ID: ${_id}
+      Pour annuler (to cancel): https://hollywoodbarbershop.com/cancel/${
+        reservation._id
+      }
       `,
         messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
         to: userInfo.number,
@@ -225,14 +248,15 @@ const getMonthIndex = (monthName) => {
 
 const deleteReservation = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
-  const { phone, resId } = req.body;
+  const { resId } = req.body;
+  console.log(resId);
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
     //since resId is the 1st 5 characters of the reservation's _id, we can use it to find the reservation when _id includes resId
     const reservation = await db
       .collection("reservations")
-      .findOne({ _id: { $regex: resId, $options: "i" }, number: phone });
+      .findOne({ _id: resId });
     if (reservation === null) {
       res.status(404).json({ status: 404, message: "Reservation not found" });
     } else {
@@ -240,7 +264,6 @@ const deleteReservation = async (req, res) => {
       // check if reservation is in more than 3 hours
       // get the day
       const dateParts = reservation.date.split(" "); // Split date string into parts
-
       const suffix = reservation.slot[0].split("-")[1].slice(-2); // Extract AM/PM
       let time = reservation.slot[0].split("-")[1].slice(0, -2); // Extract time, e.g., "12:30"
       if (suffix === "pm" && time.split(":")[0] !== "12") {
@@ -275,7 +298,6 @@ const deleteReservation = async (req, res) => {
         // Reservation is more than 3 hours away from now
         await db.collection("reservations").deleteOne({
           _id: resId,
-          number: phone,
         });
         //send sms to the user that the reservation is cancelled
         await twilioClient.messages.create({
@@ -283,23 +305,24 @@ const deleteReservation = async (req, res) => {
           
           Hello ${reservation.fname} ${reservation.lname}, your reservation at Hollywood Barbershop is cancelled. ~Hollywood Barbershop`,
           messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
-          to: phone,
+          to: reservation.number,
         });
         res
           .status(200)
           .json({ status: 200, reservation: reservation, message: message });
       } else if (differenceInHours < 0) {
-        res.status(200).json({
-          status: 200,
+        res.status(400).json({
+          status: 400,
           reservation: reservation,
           message: "Reservation is in the past.",
         });
       } else {
         // Reservation is within 3 hours from now
-        res.status(200).json({
-          status: 200,
+        res.status(400).json({
+          status: 400,
           reservation: reservation,
-          message: "Reservation is in less than 3 hours.",
+          message:
+            "Reservation is in less than 3 hours. If you still wish to cancel, please call the shop.",
         });
       }
     }
@@ -317,4 +340,5 @@ module.exports = {
   getReservationById,
   deleteReservation,
   getSlideShowImages,
+  getReservationForDelete,
 };

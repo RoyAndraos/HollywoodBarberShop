@@ -4,7 +4,7 @@ import { UserContext } from "../contexts/UserContext";
 import { FaArrowRight } from "react-icons/fa";
 import { LanguageContext } from "../contexts/LanguageContext";
 import { IsMobileContext } from "../contexts/IsMobileContext";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { BookButton } from "../Reviews";
 import logoNotHome from "../../assets/onlyNameLogo.svg";
 const FormRsvp = () => {
@@ -183,15 +183,6 @@ const FormRsvp = () => {
           {language === "en" ? "Next Step" : "Prochaine Etape"}
           <FaArrowRight style={{ marginLeft: "10px", color: "whitesmoke" }} />
         </BookButton>
-        <CancelWrapper>
-          {language === "en" ? "Or" : "Ou"}{" "}
-          <StyledNavLink to="/cancelReservation">
-            {language === "en" ? "click here" : "cliquez ici"}
-          </StyledNavLink>{" "}
-          {language === "en"
-            ? "to cancel an existing reservation."
-            : "pour annuler une réservation existante."}
-        </CancelWrapper>
       </SmallWrapper>
     </StyledForm>
   );
@@ -231,27 +222,7 @@ export const StyledLabel = styled.label`
     margin-bottom: 0.5rem;
   }
 `;
-const CancelWrapper = styled.div`
-  color: #006044;
-  font-size: 1rem;
-  @media (max-width: 768px) {
-    margin-top: 2vh;
-    margin-bottom: 2vh;
-  }
-`;
-const StyledNavLink = styled(NavLink)`
-  color: black;
-  transition: all 0.3s ease-in-out;
-  font-size: 1.2rem;
-  margin: 1rem 0.5rem;
-  &:hover {
-    color: #035e3f;
-  }
-  @media (max-width: 768px) {
-    font-size: 1rem;
-    margin: 0;
-  }
-`;
+
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
