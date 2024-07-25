@@ -185,30 +185,34 @@ const addReservation = async (req, res) => {
 
     // send SMS to the user
     if (userInfo.numberValid) {
-      await twilioClient.messages.create({
-        body: `Bonjour ${reservation.fname} ${
-          reservation.lname !== "" && reservation.lname
-        }, votre réservation au Hollywood Barbershop est confirmée pour ${
-          reservation.date
-        } à ${reservation.slot[0].split("-")[1]}. Vous recevrez une ${
-          reservation.service.name
-        } pour ${reservation.service.price} CAD. ~${reservation.barber}
-      
-      Hello ${reservation.fname} ${
-          reservation.lname !== "" && reservation.lname
-        }, your reservation at Hollywood Barbershop is confirmed for ${
-          reservation.date
-        } at ${reservation.slot[0].split("-")[1]}. You will be getting a ${
-          reservation.service.english
-        } for ${reservation.service.price}. ~${reservation.barber}
-      
-      Pour annuler (to cancel): https://hollywoodbarbershop.com/cancel/${
-        reservation._id
+      try {
+        await twilioClient.messages.create({
+          body: `Bonjour ${reservation.fname} ${
+            reservation.lname !== "" && reservation.lname
+          }, votre réservation au Hollywood Barbershop est confirmée pour ${
+            reservation.date
+          } à ${reservation.slot[0].split("-")[1]}. Vous recevrez une ${
+            reservation.service.name
+          } pour ${reservation.service.price} CAD. ~${reservation.barber}
+        
+        Hello ${reservation.fname} ${
+            reservation.lname !== "" && reservation.lname
+          }, your reservation at Hollywood Barbershop is confirmed for ${
+            reservation.date
+          } at ${reservation.slot[0].split("-")[1]}. You will be getting a ${
+            reservation.service.english
+          } for ${reservation.service.price}. ~${reservation.barber}
+        
+        Pour annuler (to cancel): https://hollywoodbarbershop.com/cancel/${
+          reservation._id
+        }
+        `,
+          messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
+          to: userInfo.number,
+        });
+      } catch (err) {
+        console.log(err);
       }
-      `,
-        messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
-        to: userInfo.number,
-      });
     }
 
     // send response to the client
