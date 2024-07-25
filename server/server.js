@@ -203,7 +203,7 @@ const addReservation = async (req, res) => {
             reservation.service.english
           } for ${reservation.service.price}. ~${reservation.barber}
         
-        Pour annuler (to cancel): https://hollywoodbarbershop.com/cancel/${
+        Pour annuler (to cancel): https://hollywoodfairmountbarbers.com/cancel/${
           reservation._id
         }
         `,
