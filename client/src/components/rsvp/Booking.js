@@ -201,27 +201,49 @@ const Booking = () => {
           filteredSlotsBeforeNow = filteredSlotsBeforeNow.filter(
             (elem) => elem !== ""
           );
-          setFilteredAvailableSlots(
-            //remove the 15min slot (aka 15 and 45)
-            filteredSlotsBeforeNow
-              .filter((slot) => {
-                const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
-                return minutes !== "45" && minutes !== "15";
-              })
-              .filter((item) => {
+
+          if (selectedBarber.given_name === "Ty") {
+            setFilteredAvailableSlots(
+              filteredSlotsBeforeNow.filter((item) => {
                 return !dailyAvailabilityFilteredSlots.some((slot) =>
                   item.includes(slot)
                 );
               })
-          );
+            );
+          } else {
+            setFilteredAvailableSlots(
+              //remove the 15min slot (aka 15 and 45)
+              filteredSlotsBeforeNow
+                .filter((slot) => {
+                  const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
+                  return minutes !== "45" && minutes !== "15";
+                })
+                .filter((item) => {
+                  return !dailyAvailabilityFilteredSlots.some((slot) =>
+                    item.includes(slot)
+                  );
+                })
+            );
+          }
+
           ////////////////////////////////////////////////////////////////////////////
         } else {
-          setFilteredAvailableSlots(
-            filteredForOverlappingSlots.filter((slot) => {
-              const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
-              return minutes !== "45" && minutes !== "15";
-            })
-          );
+          if (selectedBarber.given_name === "Ty") {
+            setFilteredAvailableSlots(
+              filteredForOverlappingSlots.filter((item) => {
+                return !todayAvailabilitySlots.some((slot) =>
+                  item.includes(slot)
+                );
+              })
+            );
+          } else {
+            setFilteredAvailableSlots(
+              filteredForOverlappingSlots.filter((slot) => {
+                const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
+                return minutes !== "45" && minutes !== "15";
+              })
+            );
+          }
         }
       }
     }

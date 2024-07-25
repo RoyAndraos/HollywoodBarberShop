@@ -15,13 +15,15 @@ export const filterSlotBeforeFor2Duration = (slot) => {
   } else {
     const newMinute = "45";
     const hourToEdit = slot.slice(0, -2).split(":")[0];
-    if (hourToEdit !== "1") {
+    if (hourToEdit !== "1" && hourToEdit !== "12") {
       const newHour = parseInt(slot.slice(0, -2).split(":")[0]) - 1;
       if (newHour.toString().length === 2) {
         return newHour.toString() + ":" + newMinute + slot.slice(-2);
       } else {
         return "0" + newHour.toString() + ":" + newMinute + slot.slice(-2);
       }
+    } else if (hourToEdit === "12") {
+      return "11:" + newMinute + "am";
     } else {
       const newHour = "12";
       return newHour + ":" + newMinute + "pm";
