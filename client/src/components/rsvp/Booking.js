@@ -98,7 +98,6 @@ const Booking = () => {
           formatDate(new Date(reservation.date)) === formatDate(selectedDate);
         return selectedBarber.given_name === reservation.barber && today;
       });
-
       const filteredSlots = originalAvailableSlots.filter((slot) => {
         return !todayReservations.some((reservation) => {
           if (reservation.slot.length === 1) {
@@ -269,6 +268,9 @@ const Booking = () => {
         const newerHour = 1;
         AMPM = "pm";
         return `${day}-${newerHour}:${newTimeMinute}${AMPM}`;
+      } else if (newHour === 12) {
+        AMPM = "pm";
+        return `${day}-${newHour}:${newTimeMinute}${AMPM}`;
       } else {
         return `${day}-${newHour}:${newTimeMinute}${AMPM}`;
       }
@@ -276,7 +278,6 @@ const Booking = () => {
       return `${day}-${hour}:${newTimeMinute}${AMPM}`;
     }
   };
-
   const handleChange = (key, value) => {
     setFormData((prev) => {
       return { ...prev, [key]: value };
