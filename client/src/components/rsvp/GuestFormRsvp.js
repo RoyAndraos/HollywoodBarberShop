@@ -7,11 +7,15 @@ import { IsMobileContext } from "../contexts/IsMobileContext";
 import { useNavigate } from "react-router-dom";
 import { BookButton } from "../Reviews";
 import logoNotHome from "../../assets/onlyNameLogo.svg";
+import { countryCodes } from "../helpers";
+import Select from "react-select";
 const FormRsvp = () => {
   const { setUserInfo } = useContext(UserContext);
   const { isMobile } = useContext(IsMobileContext);
   const [isPhoneValid, setIsPhoneValid] = useState(false);
+  const [isCanadianFormat, setIsCanadianFormat] = useState("");
   const navigate = useNavigate();
+  const [selectedCountryCode, setSelectedCountryCode] = useState("+1");
   const [formData, setFormData] = useState({
     fname: "",
     lname: "",
@@ -25,37 +29,76 @@ const FormRsvp = () => {
   //Validate phone number
   useEffect(() => {
     const validatePhoneNumber = () => {
-      if (formData.number.length !== 10 && formData.number.length !== 0) {
+      // Remove all non-digit characters
+      const cleanedValue = formData.number.replace(/\D/g, "");
+
+      // Check if the cleaned value has the correct length
+      const isCanadian = selectedCountryCode === "+1";
+      const isValidLength = isCanadian
+        ? cleanedValue.length === 10
+        : cleanedValue.length === 10;
+
+      if (isCanadian && !isValidLength) {
+        setIsPhoneValid(false);
+        setIsCanadianFormat("Please enter a valid Canadian phone number");
+        setFormData((prev) => ({ ...prev, numberValid: false }));
+      } else if (!isCanadian && !isValidLength) {
         setIsPhoneValid(false);
         setFormData((prev) => ({ ...prev, numberValid: false }));
-      } else {
+      } else if (!isCanadian && isValidLength) {
+        setIsPhoneValid(false);
+      } else if (isCanadian && isValidLength) {
         setIsPhoneValid(true);
+        setIsCanadianFormat("");
         setFormData((prev) => ({ ...prev, numberValid: true }));
       }
     };
-
     validatePhoneNumber();
-  }, [formData.number]);
+  }, [formData.number, selectedCountryCode, isCanadianFormat, isPhoneValid]);
+
+  useEffect(() => {
+    const styleSheet = document.createElement("style");
+    styleSheet.type = "text/css";
+    styleSheet.innerText = `
+      .css-bio7mv-option {
+        background-color: #006044;
+        color: whitesmoke;
+        font-family: 'Source Code Pro', monospace;
+        z-index: 1001;
+        padding: 0.5rem ;
+      }
+      .css-bio7mv-option:hover {
+        background-color: #004d36; /* Hover background color */
+        color: #ffffff; /* Hover text color */
+      }
+    `;
+    document.head.appendChild(styleSheet);
+
+    return () => {
+      document.head.removeChild(styleSheet); // Clean up the style element on unmount
+    };
+  }, []);
 
   const handleChange = (e) => {
-    if (
-      (e.target.name === "fname" || e.target.name === "lname") &&
-      e.target.value.length === 1
-    ) {
-      e.target.value = e.target.value.toUpperCase();
-    }
-    setFormData((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
-    if (e.target.name === "number") {
-      const isValid =
-        e.target.value.length === 10 || e.target.value.length === 0;
-      setIsPhoneValid(isValid);
+    const { name, value } = e.target;
+
+    if (name === "number") {
+      const cleanedValue = value.replace(/\D/g, "");
       setFormData((prev) => ({
         ...prev,
-        numberValid: isValid,
+        [name]: cleanedValue,
       }));
+      return;
     }
+
+    if ((name === "fname" || name === "lname") && value.length === 1) {
+      e.target.value = value.toUpperCase();
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -112,20 +155,32 @@ const FormRsvp = () => {
             {language === "en" ? "Phone Number" : "Téléphone"}
             <Required>*</Required>
           </StyledLabel>
-          <OverLay />
+          <OverLay style={{ height: "100%", bottom: "-30%" }} />
+          <StyledSelect
+            unstyled
+            options={countryCodes}
+            $isMobile={isMobile}
+            defaultValue={{ label: "Canada (+1)", value: "+1", iso: "CA" }}
+            onChange={(e) => {
+              setSelectedCountryCode(e.value);
+            }}
+          />
           <StyledInput
             $isMobile={isMobile}
             name="number"
             onChange={(e) => {
               handleChange(e);
             }}
+            style={{ padding: "0" }}
             required
           ></StyledInput>
         </InputLabelWrap>
         {!isPhoneValid && (
           <Error>
-            {language === "en"
-              ? "If you don't have a canadian number, you will not recieve any confirmation, reminder or cancelation messages."
+            {isCanadianFormat
+              ? isCanadianFormat // Display the Canadian-specific error message
+              : language === "en"
+              ? "If you don't have a Canadian number, you will not receive any confirmation, reminder, or cancellation messages."
               : "Si vous n'avez pas de numéro canadien, vous ne recevrez aucun message de confirmation, de rappel ou d'annulation."}
           </Error>
         )}
@@ -274,16 +329,34 @@ export const StyledInput = styled.input`
     monospace;
 `;
 
+const StyledSelect = styled(Select)`
+  width: 100%;
+  z-index: 4;
+  margin: 1rem 2rem 1rem 0;
+  font-size: 1rem;
+  color: #b50000;
+  transition: 0.2s all ease-in-out;
+  & div {
+    cursor: pointer;
+  }
+  & svg {
+    margin-right: ${(props) => (props.$isMobile ? "50vw" : "25vw")};
+  }
+`;
+
 export const Error = styled.p`
   color: #b50000;
-  font-size: 1.2rem;
+  font-size: 1rem;
   width: 75%;
   margin: 20px 0 0 0;
   text-align: center;
+  background-color: #eeebde;
   z-index: 2;
   @media (max-width: 768px) {
     font-size: 1rem;
-    width: 85%;
+    width: 100%;
+    padding: 1rem 0.5rem;
   }
 `;
+
 export default FormRsvp;
