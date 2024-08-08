@@ -145,7 +145,7 @@ const addReservation = async (req, res) => {
           ${reservation.date}, ${reservation.slot[0].split("-")[1]}. 
           ~${reservation.fname} ${reservation.lname || ""}`,
       messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
-      to: "4389237297",
+      to: "5147173591",
     });
     // await twilioClient.messages.create({
     //   body: `New Reservation for ${reservation.barber}
