@@ -296,7 +296,10 @@ const deleteReservation = async (req, res) => {
       );
 
       const differenceInMilliseconds = dateTime.getTime() - now.getTime();
-      const differenceInHours = differenceInMilliseconds / (1000 * 60 * 60); //Convert milliseconds to hours
+      const differenceInHours = Math.floor(
+        differenceInMilliseconds / (1000 * 60 * 60)
+      ); //Convert milliseconds to hours
+
       if (differenceInHours > 3) {
         // Reservation is more than 3 hours away from now
         await db.collection("reservations").deleteOne({
