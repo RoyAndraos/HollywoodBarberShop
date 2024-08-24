@@ -32,6 +32,7 @@ const CancelRes = () => {
       .then((data) => {
         if (data.status === 400) {
           setError(data.message);
+          return;
         } else if (data.status === 200) {
           navigate("/confirmCancel");
         }
