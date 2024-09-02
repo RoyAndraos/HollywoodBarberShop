@@ -30,10 +30,10 @@ const CancelRes = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.status === 400) {
+        if (data.message !== "success") {
           setError(data.message);
           return;
-        } else if (data.status === 200) {
+        } else {
           navigate("/confirmCancel");
         }
       });
@@ -88,7 +88,7 @@ const CancelRes = () => {
       >
         Cancel Reservation
       </BookButton>
-      {error !== "" && <p>{error}</p>}
+      {error !== "" && <Error>{error}</Error>}
     </Wrapper>
   );
 };
@@ -122,6 +122,14 @@ const Logo = styled.img`
   width: 20vh;
   position: absolute;
   top: 1rem;
+`;
+const Error = styled.p`
+  color: #c30000;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0 1rem;
+  text-align: center;
+  margin-top: 1rem;
 `;
 
 export default CancelRes;

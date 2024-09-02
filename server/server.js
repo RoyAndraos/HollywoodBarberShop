@@ -294,12 +294,11 @@ const deleteReservation = async (req, res) => {
           new Date().getMinutes()
         )
       );
-
       const differenceInMilliseconds = dateTime.getTime() - now.getTime();
-      const differenceInHours = Math.floor(
-        differenceInMilliseconds / (1000 * 60 * 60)
-      ); //Convert milliseconds to hours
-
+      const differenceInHours = (
+        differenceInMilliseconds /
+        (1000 * 60 * 60)
+      ).toFixed(2); //Convert milliseconds to hours
       if (differenceInHours > 3) {
         // Reservation is more than 3 hours away from now
         await db.collection("reservations").deleteOne({
@@ -313,22 +312,23 @@ const deleteReservation = async (req, res) => {
           messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
           to: reservation.number,
         });
+        message = "success";
         res
           .status(200)
           .json({ status: 200, reservation: reservation, message: message });
       } else if (differenceInHours < 0) {
-        res.status(400).json({
-          status: 400,
+        res.status(200).json({
+          status: 200,
           reservation: reservation,
           message: "Reservation is in the past.",
         });
       } else {
         // Reservation is within 3 hours from now
-        res.status(400).json({
-          status: 400,
+        res.status(200).json({
+          status: 200,
           reservation: reservation,
           message:
-            "Reservation is in less than 3 hours. If you still wish to cancel, please call the shop.",
+            "Reservation is in less than 3 hours. If you still wish to cancel, please call the shop at +1(438) 923-7297.",
         });
       }
     }

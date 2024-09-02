@@ -351,7 +351,9 @@ const Booking = () => {
           setUserInfo();
           navigate(`/yourReservation/${data.data._id}`);
         } else {
-          console.log("something went wrong");
+          window.alert(
+            "Something went wrong, please refresh and try again. Sorry for the inconvenience."
+          );
         }
       });
   };
