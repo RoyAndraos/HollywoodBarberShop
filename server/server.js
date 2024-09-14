@@ -139,14 +139,14 @@ const addReservation = async (req, res) => {
       client_id: client_id,
     };
     //sendSms to barbers
-    await twilioClient.messages.create({
-      body: `New Reservation for ${reservation.barber}
-  
-          ${reservation.date}, ${reservation.slot[0].split("-")[1]}. 
-          ~${reservation.fname} ${reservation.lname || ""}`,
-      messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
-      to: "4389237297",
-    });
+    // await twilioClient.messages.create({
+    //   body: `New Reservation for ${reservation.barber}
+
+    //       ${reservation.date}, ${reservation.slot[0].split("-")[1]}.
+    //       ~${reservation.fname} ${reservation.lname || ""}`,
+    //   messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
+    //   to: "4389237297",
+    // });
     // await twilioClient.messages.create({
     //   body: `New Reservation for ${reservation.barber}
 
