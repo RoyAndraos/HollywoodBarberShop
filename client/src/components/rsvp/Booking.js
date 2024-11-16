@@ -66,12 +66,27 @@ const Booking = () => {
       return;
     } else {
       //check for the barber's time off, if is inside of time off, set barberIsOff to true
+
       if (selectedBarber.time_off.length !== 0) {
-        const startDate = moment(selectedBarber.time_off[0].startDate)._i;
-        const endDate = moment(selectedBarber.time_off[0].endDate)._i;
-        const timeOff = moment(selectedDate).isBetween(startDate, endDate);
-        setBarberIsOff(timeOff);
-        if (timeOff) {
+        //here i only check for the first time off, if there are multiple time off, it will only check for the first one
+        //i will need to change this to check for all time off
+        // const startDate = moment(selectedBarber.time_off[0].startDate)._i;
+        // const endDate = moment(selectedBarber.time_off[0].endDate)._i;
+        // const timeOff = moment(selectedDate).isBetween(startDate, endDate);
+        // setBarberIsOff(timeOff);
+        // if (timeOff) {
+        //   setFilteredAvailableSlots([]);
+        //   return;
+        // }
+        const timeOffCard = selectedBarber.time_off.map((elem) => {
+          const startDate = moment(elem.startDate)._i;
+          const endDate = moment(elem.endDate)._i;
+          const timeOff = moment(selectedDate).isBetween(startDate, endDate);
+          return timeOff;
+        });
+
+        if (timeOffCard.includes(true)) {
+          setBarberIsOff(true);
           setFilteredAvailableSlots([]);
           return;
         }
