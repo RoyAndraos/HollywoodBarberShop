@@ -301,9 +301,14 @@ const deleteReservation = async (req, res) => {
       ).toFixed(2); //Convert milliseconds to hours
       if (differenceInHours > 3) {
         // Reservation is more than 3 hours away from now
-        await db.collection("reservations").deleteOne({
+        const deleteResult = await db.collection("reservations").deleteOne({
           _id: resId,
         });
+        if (deleteResult.deletedCount === 0) {
+          res
+            .status(500)
+            .json({ status: 500, message: "Failed to delete reservation" });
+        }
         //send sms to the user that the reservation is cancelled
         await twilioClient.messages.create({
           body: `Bonjour ${reservation.fname} ${reservation.lname}, votre réservation au Hollywood Barbershop est annulée. ~Hollywood Barbershop
@@ -327,6 +332,7 @@ const deleteReservation = async (req, res) => {
         res.status(200).json({
           status: 200,
           reservation: reservation,
+          difference: differenceInHours,
           message:
             "Reservation is in less than 3 hours. If you still wish to cancel, please call the shop at +1(438) 923-7297.",
         });
