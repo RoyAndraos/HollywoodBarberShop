@@ -410,7 +410,8 @@ const Booking = () => {
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
                 const day = date.getDay();
-                return date >= today && day !== 0 && day !== 1;
+                //&& day !== 1
+                return date >= today && day !== 0;
               }}
             />
             <FaCalendarAlt
