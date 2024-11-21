@@ -233,8 +233,8 @@ const Booking = () => {
                   return minutes !== "45" && minutes !== "15";
                 })
                 .filter((item) => {
-                  return !dailyAvailabilityFilteredSlots.some((slot) =>
-                    item.includes(slot)
+                  return !dailyAvailabilityFilteredSlots.some(
+                    (slot) => item.slice(4) === slot
                   );
                 })
             );
