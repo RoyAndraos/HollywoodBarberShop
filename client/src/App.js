@@ -32,8 +32,8 @@ const App = () => {
       .then((res) => res.json())
       .then((data) => {
         setBarberInfo(data.barbers);
-        setServices(data.services);
         setText(data.text);
+        setServices(data.services);
         setServicesEmp(data.servicesEmp);
       });
   }, [setBarberInfo, setServices, setText, setServicesEmp]);

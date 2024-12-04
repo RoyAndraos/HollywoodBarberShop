@@ -48,7 +48,7 @@ const getWebsiteInfo = async (req, res) => {
         .collection("admin")
         .find({}, { projection: { picture: 0 } })
         .toArray(),
-      db.collection("text").find().toArray(),
+      db.collection("web_text").find().toArray(),
       db.collection("services").find().toArray(),
       db.collection("servicesEmp").find().toArray(),
     ]);
