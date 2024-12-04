@@ -7,7 +7,6 @@ const {
   deleteReservation,
   getReservations,
   addReservation,
-  getSlideShowImages,
   getReservationById,
   getReservationForDelete,
 } = require("./server");
@@ -32,7 +31,6 @@ express()
   .get("/getWebsiteInfo", getWebsiteInfo)
   .get("/getReservationForDelete/:_id", getReservationForDelete)
   .get("/getReservations", getReservations)
-  .get("/getSlideShowImages", getSlideShowImages)
   .get("/getRes/:_id", getReservationById)
   .post("/addReservation", addReservation)
   .delete("/deleteReservation", deleteReservation)

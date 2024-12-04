@@ -41,12 +41,18 @@ const getReservationForDelete = async (req, res) => {
 const getWebsiteInfo = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
   try {
-    await client.connect();
     const db = client.db("HollywoodBarberShop");
-    const barbers = await db.collection("admin").find().toArray();
-    const text = await db.collection("web_text").find().toArray();
-    const services = await db.collection("services").find().toArray();
-    const servicesEmp = await db.collection("servicesEmp").find().toArray();
+
+    const [barbers, text, services, servicesEmp] = await Promise.all([
+      db
+        .collection("admin")
+        .find({}, { projection: { picture: 0 } })
+        .toArray(),
+      db.collection("text").find().toArray(),
+      db.collection("services").find().toArray(),
+      db.collection("servicesEmp").find().toArray(),
+    ]);
+
     res.status(200).json({
       status: 200,
       barbers: barbers,
@@ -75,40 +81,69 @@ const getReservationById = async (req, res) => {
     client.close();
   }
 };
-const getSlideShowImages = async (req, res) => {
-  const client = new MongoClient(MONGO_URI_RALF);
-  const qurey = { filename: "slideShow" };
-  try {
-    await client.connect();
-    const db = client.db("HollywoodBarberShop");
-    const data = await db.collection("Images").findOne(qurey);
-    res.status(200).json({ status: 200, data: data });
-  } catch (err) {
-    res.status(500).json({ status: 500, message: err.message });
-  } finally {
-    client.close();
-  }
-};
+
 const getReservations = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
   try {
-    await client.connect();
+    await client.connect(); // Make sure the client connects before querying
     const db = client.db("HollywoodBarberShop");
-    const rsvps = await db.collection("reservations").find().toArray();
-    const rsvpsWithoutPersonalInfo = rsvps.map((rsvp) => {
-      return {
-        date: rsvp.date,
-        barber: rsvp.barber,
-        service: rsvp.service,
-        slot: rsvp.slot,
-      };
-    });
 
-    res.status(200).json({ status: 200, data: rsvpsWithoutPersonalInfo });
+    // Get the current date and determine the months to query
+    const now = new Date();
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const currentMonth = now.getMonth();
+
+    // Calculate the months to query
+    const monthsToQuery = [
+      months[currentMonth], // Current month
+      months[(currentMonth + 1) % 12], // Next month
+      months[(currentMonth + 2) % 12], // Month after next
+    ];
+
+    // Fetch reservations for all months in parallel
+    const reservationsArrays = await Promise.all(
+      monthsToQuery.map((month) => {
+        const query = { date: { $regex: month, $options: "i" } };
+        return db
+          .collection("reservations")
+          .find(query, {
+            projection: {
+              client_id: 0,
+              fname: 0,
+              lname: 0,
+              email: 0,
+              number: 0,
+              service: 0,
+            },
+          })
+          .toArray();
+      })
+    );
+
+    // Flatten the results
+    const reservations = reservationsArrays.flat();
+
+    // Send the response
+    res.status(200).json({ status: 200, data: reservations });
   } catch (err) {
+    console.error("Error in getReservations:", err);
     res.status(500).json({ status: 500, message: err.message });
   } finally {
-    client.close();
+    // Ensure the client is closed only after all operations are complete
+    await client.close();
   }
 };
 
@@ -351,6 +386,5 @@ module.exports = {
   addReservation,
   getReservationById,
   deleteReservation,
-  getSlideShowImages,
   getReservationForDelete,
 };

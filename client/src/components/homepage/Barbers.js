@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { LanguageContext } from "../contexts/LanguageContext";
 import Loader from "../float-fixed/Loader";
 import { BarberContext } from "../contexts/BarberContext";
+import ralf from "../../assets/ralf.webp";
+import ty from "../../assets/Ty.webp";
 const Barbers = () => {
   const navigate = useNavigate();
   const { language } = useContext(LanguageContext);
@@ -21,8 +23,10 @@ const Barbers = () => {
       {barberInfo.map((barber, index) => {
         return (
           <BarberWrapper key={barber._id}>
-            {barber.picture !== "" && (
-              <Avatar src={barber.picture} alt="barber"></Avatar>
+            {barber.given_name !== "Ralph" ? (
+              <Avatar src={ty} alt="barber"></Avatar>
+            ) : (
+              <Avatar src={ralf} alt="barber"></Avatar>
             )}
             <BarberTitle>
               {barber.given_name} {barber.family_name ? barber.family_name : ""}

@@ -14,6 +14,8 @@ import Loader from "./float-fixed/Loader";
 import { BookButton } from "./Reviews";
 import { useNavigate } from "react-router-dom";
 import { LanguageContext } from "./contexts/LanguageContext";
+import ralf from "../assets/ralf.webp";
+import Ty from "../assets/Ty.webp";
 const BarbersPc = () => {
   const { barberInfo } = useContext(BarberContext);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
@@ -68,23 +70,22 @@ const BarbersPc = () => {
       <BarberWrapper>
         {barberInfo.map((barber, index) => (
           <Barber key={barber._id} id="barber-wrapper">
-            {barber.picture !== "" && (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  marginRight: "30px",
-                }}
-              >
-                <ProfilePic
-                  src={barber.picture}
-                  alt={barber.name}
-                  key={"owner"}
-                />
-                {index === 0 && <Cover ref={(el) => (coverRef = el)} />}
-                {index === 1 && <Cover ref={(el) => (otherCoverRef = el)} />}
-              </div>
-            )}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                marginRight: "30px",
+              }}
+            >
+              {barber.given_name === "Ralph" ? (
+                <ProfilePic src={ralf} alt={barber.name} key={"owner"} />
+              ) : (
+                <ProfilePic src={Ty} alt={barber.name} key={"employee"} />
+              )}
+              {index === 0 && <Cover ref={(el) => (coverRef = el)} />}
+              {index === 1 && <Cover ref={(el) => (otherCoverRef = el)} />}
+            </div>
+
             <NameDescriptionWrap>
               <Name>
                 {barber.given_name}
@@ -297,7 +298,6 @@ const Wrapper = styled.div`
   background-color: #eeebde;
   width: 100%;
   position: relative;
-  top: 8vh;
   padding-bottom: 10vh;
   z-index: 1;
 `;
