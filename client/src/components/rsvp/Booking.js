@@ -70,14 +70,7 @@ const Booking = () => {
       if (selectedBarber.time_off.length !== 0) {
         //here i only check for the first time off, if there are multiple time off, it will only check for the first one
         //i will need to change this to check for all time off
-        // const startDate = moment(selectedBarber.time_off[0].startDate)._i;
-        // const endDate = moment(selectedBarber.time_off[0].endDate)._i;
-        // const timeOff = moment(selectedDate).isBetween(startDate, endDate);
-        // setBarberIsOff(timeOff);
-        // if (timeOff) {
-        //   setFilteredAvailableSlots([]);
-        //   return;
-        // }
+
         const timeOffCard = selectedBarber.time_off.map((elem) => {
           const startDate = moment(elem.startDate)._i;
           const endDate = moment(elem.endDate)._i;
@@ -392,7 +385,7 @@ const Booking = () => {
             padding: "1vh 0",
           }}
         >
-          <StyledLabel for={"date"}>Date</StyledLabel>
+          <StyledLabel htmlFor={"date"}>Date</StyledLabel>
           <div
             style={{
               display: "grid",
@@ -430,7 +423,7 @@ const Booking = () => {
           </div>
         </InputLabelWrap>
         <BarberList>
-          <StyledLabel for={"barber"}>
+          <StyledLabel htmlFor={"barber"}>
             {language === "en" ? "Barber" : "Barbier"}
           </StyledLabel>
           {barberInfo.map((barber) => (
@@ -444,10 +437,10 @@ const Booking = () => {
           ))}
         </BarberList>
         <ServiceList>
-          <StyledLabel for={"service"}>Service</StyledLabel>
+          <StyledLabel htmlFor={"service"}>Service</StyledLabel>
           {servicesRendered.map((service) => (
             <Service
-              key={service.id}
+              key={service._id}
               $isSelected={selectedService === service}
               onClick={() => handleServiceClick(service)}
             >
@@ -458,7 +451,7 @@ const Booking = () => {
 
         <SlotList>
           <div>
-            <StyledLabel for={"slots"}>
+            <StyledLabel htmlFor={"slots"}>
               {language === "en" ? "Slots" : "Disponibilités"}
             </StyledLabel>
             {filteredAvailableSlots.length === 0 &&
