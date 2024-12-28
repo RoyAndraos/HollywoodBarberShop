@@ -267,23 +267,23 @@ const addReservation = async (req, res) => {
 // DELETE ENDPOINTS
 // ---------------------------------------------------------------------------------------------
 
-const getMonthIndex = (monthName) => {
-  const months = {
-    Jan: 0,
-    Feb: 1,
-    Mar: 2,
-    Apr: 3,
-    May: 4,
-    Jun: 5,
-    Jul: 6,
-    Aug: 7,
-    Sep: 8,
-    Oct: 9,
-    Nov: 10,
-    Dec: 11,
-  };
-  return months[monthName];
-};
+// const getMonthIndex = (monthName) => {
+//   const months = {
+//     Jan: 0,
+//     Feb: 1,
+//     Mar: 2,
+//     Apr: 3,
+//     May: 4,
+//     Jun: 5,
+//     Jul: 6,
+//     Aug: 7,
+//     Sep: 8,
+//     Oct: 9,
+//     Nov: 10,
+//     Dec: 11,
+//   };
+//   return months[monthName];
+// };
 
 const deleteReservation = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
