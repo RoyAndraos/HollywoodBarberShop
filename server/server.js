@@ -316,9 +316,13 @@ const deleteReservation = async (req, res) => {
 
     // Send SMS notification about the cancellation
     await twilioClient.messages.create({
-      body: `Bonjour ${reservation.fname} ${reservation.lname}, votre réservation au Hollywood Barbershop est annulée. ~Hollywood Barbershop
+      body: `Bonjour ${reservation.fname} ${
+        reservation.lname || ""
+      }, votre réservation au Hollywood Barbershop est annulée. ~Hollywood Barbershop
 
-Hello ${reservation.fname} ${reservation.lname}, your reservation at Hollywood Barbershop is cancelled. ~Hollywood Barbershop`,
+Hello ${reservation.fname} ${
+        reservation.lname || ""
+      }, your reservation at Hollywood Barbershop is cancelled. ~Hollywood Barbershop`,
       messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
       to: reservation.number,
     });
