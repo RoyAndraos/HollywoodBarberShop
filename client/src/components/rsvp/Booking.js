@@ -14,7 +14,7 @@ import { IsMobileContext } from "../contexts/IsMobileContext";
 import { InputLabelWrap } from "./GuestFormRsvp";
 import SubmitButton from "./SubmitButton";
 import logoNotHome from "../../assets/onlyNameLogo.svg";
-import { ServicesEmpContext } from "../contexts/ServicesEmpContext";
+// import { ServicesEmpContext } from "../contexts/ServicesEmpContext";
 import { FaCalendarAlt } from "react-icons/fa";
 const Booking = () => {
   const [reservations, setReservations] = useState([]);
@@ -32,8 +32,8 @@ const Booking = () => {
   const { setUserInfo, userInfo } = useContext(UserContext);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
-  const { servicesEmp } = useContext(ServicesEmpContext);
-  const [servicesRendered, setServicesRendered] = useState(services);
+  // const { servicesEmp } = useContext(ServicesEmpContext);
+  // const [servicesRendered, setServicesRendered] = useState(services);
   const todayDate = new Date();
   let datePickerRef = useRef(null);
   const formattedDate = moment(todayDate).format("ddd MMM DD YYYY").toString();
@@ -46,13 +46,13 @@ const Booking = () => {
     const options = { weekday: "short" };
     return date.toLocaleDateString(locale, options);
   };
-  useEffect(() => {
-    if (selectedBarber && selectedBarber === barberInfo[0]) {
-      setServicesRendered(services);
-    } else {
-      setServicesRendered(servicesEmp);
-    }
-  }, [barberInfo, selectedBarber, services, servicesEmp]);
+  // useEffect(() => {
+  //   if (selectedBarber && selectedBarber === barberInfo[0]) {
+  //     setServicesRendered(services);
+  //   } else {
+  //     setServicesRendered(servicesEmp);
+  //   }
+  // }, [barberInfo, selectedBarber, services, servicesEmp]);
   useEffect(() => {
     fetch("https://hollywoodbarbershop.onrender.com/getReservations")
       .then((res) => res.json())
@@ -209,48 +209,48 @@ const Booking = () => {
             (elem) => elem !== ""
           );
 
-          if (selectedBarber.given_name === "Ty") {
-            setFilteredAvailableSlots(
-              filteredSlotsBeforeNow.filter((item) => {
-                return !dailyAvailabilityFilteredSlots.some((slot) =>
-                  item.includes(slot)
-                );
-              })
-            );
-          } else {
-            setFilteredAvailableSlots(
-              //remove the 15min slot (aka 15 and 45)
-              filteredSlotsBeforeNow
-                .filter((slot) => {
-                  const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
-                  return minutes !== "45" && minutes !== "15";
-                })
-                .filter((item) => {
-                  return !dailyAvailabilityFilteredSlots.some(
-                    (slot) => item.slice(4) === slot
-                  );
-                })
-            );
-          }
-
-          ////////////////////////////////////////////////////////////////////////////
-        } else {
-          if (selectedBarber.given_name === "Ty") {
-            setFilteredAvailableSlots(
-              filteredForOverlappingSlots.filter((item) => {
-                return !todayAvailabilitySlots.some((slot) =>
-                  item.includes(slot)
-                );
-              })
-            );
-          } else {
-            setFilteredAvailableSlots(
-              filteredForOverlappingSlots.filter((slot) => {
+          // if (selectedBarber.given_name === "Ty") {
+          //   setFilteredAvailableSlots(
+          //     filteredSlotsBeforeNow.filter((item) => {
+          //       return !dailyAvailabilityFilteredSlots.some((slot) =>
+          //         item.includes(slot)
+          //       );
+          //     })
+          //   );
+          // } else {
+          setFilteredAvailableSlots(
+            //remove the 15min slot (aka 15 and 45)
+            filteredSlotsBeforeNow
+              .filter((slot) => {
                 const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
                 return minutes !== "45" && minutes !== "15";
               })
-            );
-          }
+              .filter((item) => {
+                return !dailyAvailabilityFilteredSlots.some(
+                  (slot) => item.slice(4) === slot
+                );
+              })
+          );
+          // }
+
+          ////////////////////////////////////////////////////////////////////////////
+        } else {
+          // if (selectedBarber.given_name === "Ty") {
+          //   setFilteredAvailableSlots(
+          //     filteredForOverlappingSlots.filter((item) => {
+          //       return !todayAvailabilitySlots.some((slot) =>
+          //         item.includes(slot)
+          //       );
+          //     })
+          //   );
+          // } else {
+          setFilteredAvailableSlots(
+            filteredForOverlappingSlots.filter((slot) => {
+              const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
+              return minutes !== "45" && minutes !== "15";
+            })
+          );
+          // }
         }
       }
     }
@@ -438,7 +438,7 @@ const Booking = () => {
         </BarberList>
         <ServiceList>
           <StyledLabel htmlFor={"service"}>Service</StyledLabel>
-          {servicesRendered.map((service) => (
+          {services.map((service) => (
             <Service
               key={service._id}
               $isSelected={selectedService === service}

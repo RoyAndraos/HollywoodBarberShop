@@ -43,14 +43,14 @@ const getWebsiteInfo = async (req, res) => {
   try {
     const db = client.db("HollywoodBarberShop");
 
-    const [barbers, text, services, servicesEmp] = await Promise.all([
+    const [barbers, text, services] = await Promise.all([
       db
         .collection("admin")
         .find({}, { projection: { picture: 0 } })
         .toArray(),
       db.collection("web_text").find().toArray(),
       db.collection("services").find().toArray(),
-      db.collection("servicesEmp").find().toArray(),
+      // db.collection("servicesEmp").find().toArray(),
     ]);
 
     res.status(200).json({
@@ -58,7 +58,7 @@ const getWebsiteInfo = async (req, res) => {
       barbers: barbers,
       text: text,
       services: services,
-      servicesEmp: servicesEmp,
+      // servicesEmp: servicesEmp,
     });
   } catch (err) {
     res.status(500).json({ status: 500, message: err.message });

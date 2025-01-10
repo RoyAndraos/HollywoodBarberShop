@@ -18,7 +18,7 @@ import { TextContext } from "./components/contexts/TextContext";
 import Loader from "./components/float-fixed/Loader";
 import MobileHome from "./components/homepage/MobileHome";
 import ConfirmCancel from "./components/ConfirmCancel";
-import { ServicesEmpContext } from "./components/contexts/ServicesEmpContext";
+// import { ServicesEmpContext } from "./components/contexts/ServicesEmpContext";
 import CancelRes from "./components/CancelRes";
 const App = () => {
   const { isMobile } = useContext(IsMobileContext);
@@ -26,7 +26,7 @@ const App = () => {
   const { setBarberInfo, barberInfo } = useContext(BarberContext);
   const { setServices, services } = useContext(ServiceContext);
   const { setText, text } = useContext(TextContext);
-  const { servicesEmp, setServicesEmp } = useContext(ServicesEmpContext);
+  // const { servicesEmp, setServicesEmp } = useContext(ServicesEmpContext);
   useEffect(() => {
     fetch("https://hollywoodbarbershop.onrender.com/getWebsiteInfo")
       .then((res) => res.json())
@@ -34,10 +34,21 @@ const App = () => {
         setBarberInfo(data.barbers);
         setText(data.text);
         setServices(data.services);
-        setServicesEmp(data.servicesEmp);
+        // setServicesEmp(data.servicesEmp);
       });
-  }, [setBarberInfo, setServices, setText, setServicesEmp]);
-  if (!text || !barberInfo || !services || !servicesEmp) return <Loader />;
+  }, [
+    setBarberInfo,
+    setServices,
+    setText,
+    // setServicesEmp
+  ]);
+  if (
+    !text ||
+    !barberInfo ||
+    !services
+    //  || !servicesEmp
+  )
+    return <Loader />;
   return (
     <Container ref={containerRef}>
       <GlobalStyles />
