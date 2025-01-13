@@ -50,6 +50,7 @@ const getWebsiteInfo = async (req, res) => {
         .toArray(),
       db.collection("web_text").find().toArray(),
       db.collection("services").find().toArray(),
+
       // db.collection("servicesEmp").find().toArray(),
     ]);
 
@@ -135,9 +136,11 @@ const getReservations = async (req, res) => {
 
     // Flatten the results
     const reservations = reservationsArrays.flat();
-
+    const blockedSlots = await db.collection("blockedSlots").find().toArray();
     // Send the response
-    res.status(200).json({ status: 200, data: reservations });
+    res
+      .status(200)
+      .json({ status: 200, data: reservations, blockedSlots: blockedSlots });
   } catch (err) {
     console.error("Error in getReservations:", err);
     res.status(500).json({ status: 500, message: err.message });

@@ -27,11 +27,13 @@ const Booking = () => {
   const [barberIsOff, setBarberIsOff] = useState(false);
   const [selectedSlot, setSelectedSlot] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [blockedSlots, setBlockedSlots] = useState([]);
   const { barberInfo } = useContext(BarberContext);
   const { services } = useContext(ServiceContext);
   const { setUserInfo, userInfo } = useContext(UserContext);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
+
   // const { servicesEmp } = useContext(ServicesEmpContext);
   // const [servicesRendered, setServicesRendered] = useState(services);
   const todayDate = new Date();
@@ -58,9 +60,9 @@ const Booking = () => {
       .then((res) => res.json())
       .then((data) => {
         setReservations(data.data);
+        setBlockedSlots(data.blockedSlots);
       });
   }, []);
-
   useEffect(() => {
     if (selectedBarber === null) {
       return;
@@ -99,13 +101,21 @@ const Booking = () => {
         });
       ////////////////////////////////////////////////////////////////////////////
 
-      //filter out the slots taken by the selected date's reservations (for the selected barber)
+      //filter out the slots taken by the selected date's reservations and the blocked slots (for the selected barber)
       ////////////////////////////////////////////////////////////////////////////
-      const todayReservations = reservations.filter((reservation) => {
+      const todayBlockedSlots = blockedSlots.filter((slot) => {
         const today =
-          formatDate(new Date(reservation.date)) === formatDate(selectedDate);
-        return selectedBarber.given_name === reservation.barber && today;
+          formatDate(new Date(slot.date)) === formatDate(selectedDate);
+        return selectedBarber.given_name === slot.barber && today;
       });
+      const todayReservations = reservations
+        .filter((reservation) => {
+          const today =
+            formatDate(new Date(reservation.date)) === formatDate(selectedDate);
+          return selectedBarber.given_name === reservation.barber && today;
+        })
+        .concat(todayBlockedSlots);
+
       const filteredSlots = originalAvailableSlots.filter((slot) => {
         return !todayReservations.some((reservation) => {
           if (reservation.slot.length === 1) {
@@ -261,6 +271,7 @@ const Booking = () => {
     selectedService,
     barberIsOff,
     isToday,
+    blockedSlots,
   ]);
 
   const selectNextSlot = (slot) => {
