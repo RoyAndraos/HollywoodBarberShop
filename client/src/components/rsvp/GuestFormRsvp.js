@@ -25,6 +25,7 @@ const FormRsvp = () => {
     note: "",
     numberValid: false,
   });
+  const [isEmailValid, setIsEmailValid] = useState(false);
   const { language } = useContext(LanguageContext);
   //Validate phone number
   useEffect(() => {
@@ -93,6 +94,11 @@ const FormRsvp = () => {
 
     if ((name === "fname" || name === "lname") && value.length === 1) {
       e.target.value = value.toUpperCase();
+    }
+
+    if (name === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      setIsEmailValid(emailRegex.test(value));
     }
 
     setFormData((prev) => ({
@@ -177,15 +183,18 @@ const FormRsvp = () => {
         </InputLabelWrap>
         {!isPhoneValid && (
           <Error>
-            {isCanadianFormat
-              ? isCanadianFormat // Display the Canadian-specific error message
+            {selectedCountryCode === "+1"
+              ? isCanadianFormat
               : language === "en"
-              ? "If you don't have a Canadian number, you will not receive any confirmation, reminder, or cancellation messages."
-              : "Si vous n'avez pas de numéro canadien, vous ne recevrez aucun message de confirmation, de rappel ou d'annulation."}
+              ? "If you don't have a Canadian number, an email address is required."
+              : "Si vous n'avez pas de numéro canadien, une adresse courriel est requise."}
           </Error>
         )}
         <InputLabelWrap $isMobile={isMobile}>
-          <StyledLabel>{language === "en" ? "Email" : "Courriel"}</StyledLabel>
+          <StyledLabel>
+            {language === "en" ? "Email" : "Courriel"}{" "}
+            {selectedCountryCode !== "+1" && <Required>*</Required>}
+          </StyledLabel>{" "}
           <OverLay />
           <StyledInput
             $isMobile={isMobile}
@@ -195,6 +204,14 @@ const FormRsvp = () => {
             }}
           ></StyledInput>
         </InputLabelWrap>
+        {!isEmailValid && selectedCountryCode !== "+1" && (
+          <Error>
+            {language === "en"
+              ? "Please enter a valid email address."
+              : "Veuillez entrer une adresse courriel valide."}
+          </Error>
+        )}
+
         <div
           style={{
             width: "75%",
@@ -216,8 +233,8 @@ const FormRsvp = () => {
 
           <Label $isMobile={isMobile}>
             {language === "en"
-              ? "I agree to receive automated confirmation SMS to this mobile number."
-              : "Je consens à recevoir des SMS de confirmation automatisés à ce numéro de téléphone."}
+              ? "I agree to receive automated confirmation SMS to this mobile number / email to this email address."
+              : "Je consens à recevoir des SMS de confirmation automatisés à ce numéro de téléphone / courriel à cette adresse courriel."}
           </Label>
           <Required style={{ marginLeft: "10px" }}>*</Required>
         </div>
@@ -232,7 +249,12 @@ const FormRsvp = () => {
             fontSize: "1.3rem",
           }}
           disabled={
-            formData.fname && formData.lname && formData.number ? false : true
+            formData.fname &&
+            formData.lname &&
+            (selectedCountryCode !== "+1" ? isEmailValid : true) &&
+            formData.number
+              ? false
+              : true
           }
         >
           {language === "en" ? "Next Step" : "Prochaine Etape"}

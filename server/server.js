@@ -4,6 +4,50 @@ const uuid = require("uuid").v4;
 const accountSid = process.env.SMS_SSID;
 const authToken = process.env.SMS_AUTH_TOKEN;
 const twilioClient = require("twilio")(accountSid, authToken);
+// ---------------------------------------------------------------------------------------------
+// Mailtrap stuff
+// ---------------------------------------------------------------------------------------------
+const { MailtrapClient } = require("mailtrap");
+const mailtrapClient = new MailtrapClient({
+  token: process.env.EMAIL_TOKEN,
+});
+
+const scheduleEmail = (reservationId, emailData, sendAt) => {
+  const schedule = require("node-schedule");
+
+  const job = schedule.scheduleJob(sendAt, async () => {
+    try {
+      await mailtrapClient.send({
+        from: emailData.from,
+        to: emailData.to,
+        subject: emailData.subject,
+        text: emailData.text,
+        category: emailData.category,
+      });
+    } catch (err) {
+      console.error("Error sending scheduled email:", err);
+    }
+    // Remove job reference after execution
+    delete scheduledJobs[reservationId];
+  });
+
+  // Store job reference
+  scheduledJobs[reservationId] = job;
+  console.log(`Email scheduled for reservation: ${reservationId} at ${sendAt}`);
+};
+
+const cancelScheduledEmail = (reservationId) => {
+  const job = scheduledJobs[reservationId];
+  if (job) {
+    job.cancel(); // Cancel the job
+    delete scheduledJobs[reservationId]; // Remove reference
+    console.log(`Scheduled email for reservation ${reservationId} canceled.`);
+  } else {
+    console.log(`No scheduled email found for reservation ${reservationId}.`);
+  }
+};
+
+const scheduledJobs = {};
 
 // ---------------------------------------------------------------------------------------------
 //Mongo stuff
@@ -155,7 +199,8 @@ const getReservations = async (req, res) => {
 // ---------------------------------------------------------------------------------------------
 
 const filterSlotBeforeFor2Duration = (slot) => {
-  const minuteToEdit = slot.slice(0, -2).split(":")[1];
+  const minuteToEdit = slot.split("-")[1].slice(0, -2).split(":")[1];
+
   if (minuteToEdit !== "00") {
     const newMinute = parseInt(minuteToEdit) - 15;
     if (newMinute === 0) {
@@ -170,19 +215,24 @@ const filterSlotBeforeFor2Duration = (slot) => {
     }
   } else {
     const newMinute = "45";
-    const hourToEdit = slot.slice(0, -2).split(":")[0];
+    const hourToEdit = slot.split("-")[1].slice(0, -2).split(":")[0];
     if (hourToEdit !== "1" && hourToEdit !== "12") {
-      const newHour = parseInt(slot.slice(0, -2).split(":")[0]) - 1;
-      if (newHour.toString().length === 2) {
-        return newHour.toString() + ":" + newMinute + slot.slice(-2);
-      } else {
-        return "0" + newHour.toString() + ":" + newMinute + slot.slice(-2);
-      }
+      const newHour =
+        parseInt(slot.split("-")[1].slice(0, -2).split(":")[0]) - 1;
+
+      return (
+        slot.split("-")[0] +
+        "-" +
+        newHour.toString() +
+        ":" +
+        newMinute +
+        slot.slice(-2)
+      );
     } else if (hourToEdit === "12") {
-      return "11:" + newMinute + "am";
+      return slot.split("-")[0] + "-" + "11:" + newMinute + "am";
     } else {
       const newHour = "12";
-      return newHour + ":" + newMinute + "pm";
+      return slot.split("-")[0] + "-" + newHour + ":" + newMinute + "pm";
     }
   }
 };
@@ -198,6 +248,7 @@ const removeSlotsForOverLapping = (
     case "2":
       todayReservationStartingSlots.forEach((slot) => {
         const slotToEdit = filterSlotBeforeFor2Duration(slot);
+
         slotsToRemove.push(slotToEdit);
       });
 
@@ -238,7 +289,14 @@ const addReservation = async (req, res) => {
   const userInfo = req.body[1];
   const _id = uuid();
   const client_id = uuid();
+  // Set to 8:00 AM local time
+  const reminderTime = new Date(formData.date);
+  reminderTime.setHours(8, 0, 0, 0); // 8:00 AM local time (Montreal, EST)
 
+  // Convert to UTC for Twilio
+  const reminderTimeUTC = new Date(
+    reminderTime.getTime() + reminderTime.getTimezoneOffset() * 60000
+  );
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
@@ -278,12 +336,14 @@ const addReservation = async (req, res) => {
       .collection("reservations")
       .find({ date: reservation.date, barber: reservation.barber })
       .toArray();
+
     //STEP TWO: Check if the selected slot is available based on the reserved slots
     const isSlotAvailable = reservations.every((res) => {
       return !reservation.slot.some((slot) => res.slot.includes(slot));
     });
 
     if (!isSlotAvailable) {
+      console.log("Something went wrong. Please refresh and try again.");
       return res.status(400).json({
         status: 400,
         message:
@@ -302,7 +362,9 @@ const addReservation = async (req, res) => {
     const isSlotOverlapping = slotsToRemove.every((slot) => {
       return !reservation.slot.includes(slot);
     });
-    if (!isSlotOverlapping) {
+    if (isSlotOverlapping) {
+      console.log("Something went wrong. Please refresh and try again.");
+
       return res.status(400).json({
         status: 400,
         message: "Someone has just reserved that slot!",
@@ -338,33 +400,76 @@ const addReservation = async (req, res) => {
     // send SMS to the user
     if (userInfo.numberValid) {
       try {
-        await twilioClient.messages.create({
-          body: `Bonjour ${reservation.fname} ${
-            reservation.lname !== "" && reservation.lname
-          }, votre réservation au Hollywood Barbershop est confirmée pour ${
-            reservation.date
-          } à ${reservation.slot[0].split("-")[1]}. Vous recevrez une ${
+        const message = await twilioClient.messages.create({
+          body: `
+            No Reply: Hollywood Barbershop
+
+          Bonjour ${reservation.fname} ${
+            reservation.lname || ""
+          }, un petit rappel pour votre réservation au Hollywood Barbershop demain à ${
+            reservation.slot[0].split("-")[1]
+          } avec ${reservation.barber}. Vous recevrez une ${
             reservation.service.name
-          } pour ${reservation.service.price} CAD. ~${reservation.barber}
-        
-        Hello ${reservation.fname} ${
-            reservation.lname !== "" && reservation.lname
-          }, your reservation at Hollywood Barbershop is confirmed for ${
-            reservation.date
-          } at ${reservation.slot[0].split("-")[1]}. You will be getting a ${
+          } pour ${reservation.service.price} CAD.
+    
+          Hello ${reservation.fname} ${
+            reservation.lname || ""
+          }, a quick reminder for your reservation at Hollywood Barbershop tomorrow at ${
+            reservation.slot[0].split("-")[1]
+          } with ${reservation.barber}. You will be getting a ${
             reservation.service.english
-          } for ${reservation.service.price}. ~${reservation.barber}
-        
-        Pour annuler (to cancel): https://hollywoodfairmountbarbers.com/cancel/${
-          reservation._id
-        }
-        `,
+          } for ${reservation.service.price} CAD.
+    
+          Pour annuler (to cancel): https://hollywoodfairmountbarbers.com/cancel/${
+            reservation._id
+          }
+          `,
           messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
           to: userInfo.number,
+          scheduleType: "fixed",
+          sendAt: reminderTimeUTC.toISOString(), // ISO format for the scheduled time
+        });
+        //add the res _id along with the scheduled sms to the database, in case the user wants to cancel
+
+        await db.collection("scheduledSMS").insertOne({
+          res_id: _id,
+          messageSid: message.sid,
         });
       } catch (err) {
-        console.error("Error sending SMS to user:", err);
+        console.error("Error scheduling reminder SMS:", err);
       }
+    } else {
+      // schedule an email reminder for the user
+      const emailData = {
+        from: "hello@hollywoodfairmountbarbers.com",
+        to: userInfo.email,
+        subject: "Reservation Reminder",
+        text: `
+            No Reply: Hollywood Barbershop
+            
+          Bonjour ${reservation.fname} ${
+          reservation.lname || ""
+        }, un petit rappel pour votre réservation au Hollywood Barbershop demain à ${
+          reservation.slot[0].split("-")[1]
+        } avec ${reservation.barber}. Vous recevrez une ${
+          reservation.service.name
+        } pour ${reservation.service.price} CAD.
+    
+          Hello ${reservation.fname} ${
+          reservation.lname || ""
+        }, a quick reminder for your reservation at Hollywood Barbershop tomorrow at ${
+          reservation.slot[0].split("-")[1]
+        } with ${reservation.barber}. You will be getting a ${
+          reservation.service.english
+        } for ${reservation.service.price} CAD.
+    
+          Pour annuler (to cancel): https://hollywoodfairmountbarbers.com/cancel/${
+            reservation._id
+          }
+          `,
+        category: "Reservation Reminder",
+      };
+      scheduleEmail(emailData, reminderTime);
     }
 
     // send response to the client
@@ -383,24 +488,6 @@ const addReservation = async (req, res) => {
 // ---------------------------------------------------------------------------------------------
 // DELETE ENDPOINTS
 // ---------------------------------------------------------------------------------------------
-
-// const getMonthIndex = (monthName) => {
-//   const months = {
-//     Jan: 0,
-//     Feb: 1,
-//     Mar: 2,
-//     Apr: 3,
-//     May: 4,
-//     Jun: 5,
-//     Jul: 6,
-//     Aug: 7,
-//     Sep: 8,
-//     Oct: 9,
-//     Nov: 10,
-//     Dec: 11,
-//   };
-//   return months[monthName];
-// };
 
 const deleteReservation = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
@@ -444,6 +531,16 @@ Hello ${reservation.fname} ${
       to: reservation.number,
     });
 
+    //delete the scheduled sms
+    const scheduledSMS = await db
+      .collection("scheduledSMS")
+      .findOne({ res_id: resId });
+    if (scheduledSMS) {
+      await twilioClient.messages(scheduledSMS.messageSid).remove();
+      await db.collection("scheduledSMS").deleteOne({ res_id: resId });
+    }
+    // Cancel the scheduled email
+    cancelScheduledEmail(resId);
     // Respond with success
     res.status(200).json({
       status: 200,
@@ -456,7 +553,23 @@ Hello ${reservation.fname} ${
     await client.close();
   }
 };
-
+// const getMonthIndex = (monthName) => {
+//   const months = {
+//     Jan: 0,
+//     Feb: 1,
+//     Mar: 2,
+//     Apr: 3,
+//     May: 4,
+//     Jun: 5,
+//     Jul: 6,
+//     Aug: 7,
+//     Sep: 8,
+//     Oct: 9,
+//     Nov: 10,
+//     Dec: 11,
+//   };
+//   return months[monthName];
+// };
 // const deleteReservation = async (req, res) => {
 //   const client = new MongoClient(MONGO_URI_RALF);
 //   const { resId } = req.body;
