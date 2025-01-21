@@ -343,7 +343,9 @@ const addReservation = async (req, res) => {
     });
 
     if (!isSlotAvailable) {
-      console.log("Something went wrong. Please refresh and try again.");
+      console.log(
+        "Selected slot is already reserved. Please select another slot."
+      );
       return res.status(400).json({
         status: 400,
         message:
@@ -359,17 +361,22 @@ const addReservation = async (req, res) => {
       reservation.service.duration,
       todayReservationStartingSlots
     );
-    const isSlotOverlapping = slotsToRemove.every((slot) => {
-      return !reservation.slot.includes(slot);
-    });
-    if (isSlotOverlapping) {
-      console.log("Something went wrong. Please refresh and try again.");
-
-      return res.status(400).json({
-        status: 400,
-        message: "Someone has just reserved that slot!",
+    if (slotsToRemove.length !== 0) {
+      const isSlotOverlapping = slotsToRemove.every((slot) => {
+        console.log("slot", slot);
+        console.log("reservation.slot", reservation.slot);
+        return !reservation.slot.includes(slot);
       });
+      if (isSlotOverlapping) {
+        console.log("Something went wrong. Please refresh and try again.");
+
+        return res.status(400).json({
+          status: 400,
+          message: "Someone has just reserved that slot!",
+        });
+      }
     }
+
     // check if client exists
     const isClient = await db
       .collection("Clients")

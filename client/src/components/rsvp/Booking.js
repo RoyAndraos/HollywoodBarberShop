@@ -356,7 +356,8 @@ const Booking = () => {
     formData.slot = selectedSlot;
     setIsLoading(true);
     e.preventDefault();
-    fetch("https://hollywoodbarbershop.onrender.com/addReservation", {
+    // https://hollywoodbarbershop.onrender.com
+    fetch("http://localhost:5000/addReservation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
