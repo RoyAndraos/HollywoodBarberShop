@@ -331,31 +331,6 @@ const addReservation = async (req, res) => {
           "Selected slot is already reserved. Please select another slot.",
       });
     }
-    //STEP THREE: Check if the selected slot will overlap with any of the reserved slots
-    const todayReservationStartingSlots = reservations.map(
-      (res) => res.slot[0]
-    );
-
-    const slotsToRemove = removeSlotsForOverLapping(
-      reservation.service.duration,
-      todayReservationStartingSlots
-    );
-    if (slotsToRemove.length !== 0) {
-      const isSlotOverlapping = slotsToRemove.some((slot) => {
-        console.log("slot", slot);
-        console.log("reservation.slot", reservation.slot);
-        return reservation.slot.includes(slot);
-      });
-      console.log("isSlotOverlapping", isSlotOverlapping);
-      if (isSlotOverlapping) {
-        console.log("Something went wrong. Please refresh and try again.");
-
-        return res.status(400).json({
-          status: 400,
-          message: "Someone has just reserved that slot!",
-        });
-      }
-    }
 
     // check if client exists
     const isClient = await db
