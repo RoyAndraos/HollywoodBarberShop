@@ -293,10 +293,6 @@ const addReservation = async (req, res) => {
   const reminderTime = new Date(formData.date);
   reminderTime.setHours(8, 0, 0, 0); // 8:00 AM local time (Montreal, EST)
 
-  // Convert to UTC for Twilio
-  const reminderTimeUTC = new Date(
-    reminderTime.getTime() + reminderTime.getTimezoneOffset() * 60000
-  );
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
@@ -397,7 +393,7 @@ const addReservation = async (req, res) => {
 
           Bonjour ${reservation.fname} ${
             reservation.lname || ""
-          }, un petit rappel pour votre réservation au Hollywood Barbershop demain à ${
+          }, un petit rappel pour votre réservation au Hollywood Barbershop aujourd'hui à ${
             reservation.slot[0].split("-")[1]
           } avec ${reservation.barber}. Vous recevrez une ${
             reservation.service.name
@@ -405,7 +401,7 @@ const addReservation = async (req, res) => {
     
           Hello ${reservation.fname} ${
             reservation.lname || ""
-          }, a quick reminder for your reservation at Hollywood Barbershop tomorrow at ${
+          }, a quick reminder for your reservation at Hollywood Barbershop today at ${
             reservation.slot[0].split("-")[1]
           } with ${reservation.barber}. You will be getting a ${
             reservation.service.english
@@ -418,7 +414,7 @@ const addReservation = async (req, res) => {
           messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
           to: userInfo.number,
           scheduleType: "fixed",
-          sendAt: reminderTimeUTC.toISOString(), // ISO format for the scheduled time
+          sendAt: reminderTime.toISOString(), // ISO format for the scheduled time
         });
         //add the res _id along with the scheduled sms to the database, in case the user wants to cancel
 
