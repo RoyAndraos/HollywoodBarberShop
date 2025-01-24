@@ -27,7 +27,10 @@ const YourRes = () => {
     <Wrapper>
       {isMobile && <Header isShowing={false} />}
       <SmallWrapper $isMobile={isMobile}>
-        <Message>We sent you an SMS containing the information below.</Message>
+        <Message>
+          We have scheduled a reminder SMS containing the information below, if
+          your reservation is today, you have already recieved the message.
+        </Message>
         <StyledDiv>
           Barber <StyledInfo> {res.barber}</StyledInfo>
         </StyledDiv>
@@ -45,12 +48,6 @@ const YourRes = () => {
         </StyledDiv>
         <StyledDiv>
           Phone <StyledInfo> {res.number}</StyledInfo>
-        </StyledDiv>
-        <StyledDiv>
-          Reservation ID <StyledInfo> {res._id}</StyledInfo>
-          <span>
-            This id will help you cancel your reservation if ever needed.
-          </span>
         </StyledDiv>
         <Message>Thank you for booking with hollywood barbers!</Message>
       </SmallWrapper>

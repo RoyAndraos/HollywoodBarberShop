@@ -18,6 +18,7 @@ import { TextContext } from "./components/contexts/TextContext";
 import Loader from "./components/float-fixed/Loader";
 import MobileHome from "./components/homepage/MobileHome";
 import ConfirmCancel from "./components/ConfirmCancel";
+import CancelReservation from "./components/rsvp/CancelReservation";
 // import { ServicesEmpContext } from "./components/contexts/ServicesEmpContext";
 import CancelRes from "./components/CancelRes";
 const App = () => {
@@ -90,6 +91,14 @@ const App = () => {
                 </TransitionComponent>
               }
             />
+            <Route
+              path={"/cancelRes"}
+              element={
+                <TransitionComponent>
+                  <CancelReservation />
+                </TransitionComponent>
+              }
+            />
           </>
         )}
         <Route
@@ -121,6 +130,14 @@ const App = () => {
           element={
             <TransitionComponent>
               <CancelRes />
+            </TransitionComponent>
+          }
+        />
+        <Route
+          path={"/cancelRes"}
+          element={
+            <TransitionComponent>
+              <CancelReservation />
             </TransitionComponent>
           }
         />

@@ -9,6 +9,7 @@ const {
   addReservation,
   getReservationById,
   getReservationForDelete,
+  getResByPhone,
 } = require("./server");
 const PORT = process.env.PORT || 4000;
 const cors = require("cors");
@@ -32,6 +33,7 @@ express()
   .get("/getReservationForDelete/:_id", getReservationForDelete)
   .get("/getReservations", getReservations)
   .get("/getRes/:_id", getReservationById)
+  .get("/getResByPhone/:_id", getResByPhone)
   .post("/addReservation", addReservation)
   .delete("/deleteReservation", deleteReservation)
   .listen(PORT, () => {

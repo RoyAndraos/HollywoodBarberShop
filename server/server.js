@@ -60,7 +60,39 @@ const MONGO_URI_RALF = process.env.MONGO_URI_RALF;
 // ---------------------------------------------------------------------------------------------
 //GET ENDPOINTS
 // ---------------------------------------------------------------------------------------------
+const getResByPhone = async (req, res) => {
+  const client = new MongoClient(MONGO_URI_RALF);
+  const phoneNumber = req.params._id; // Rename for clarity
 
+  try {
+    await client.connect();
+    const db = client.db("HollywoodBarberShop");
+
+    // Find the client by phone number
+    const data = await db
+      .collection("Clients")
+      .findOne({ number: phoneNumber });
+
+    if (!data) {
+      return res.status(404).json({ status: 404, message: "Client not found" });
+    }
+
+    // Fetch reservations for the client
+    const reservations = await Promise.all(
+      data.reservations.map(async (res_id) => {
+        return db.collection("reservations").findOne({ _id: res_id });
+      })
+    );
+
+    // Send response
+    res.status(200).json({ status: 200, data: { client: data, reservations } });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ status: 500, message: err.message });
+  } finally {
+    client.close();
+  }
+};
 const getReservationForDelete = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
   const resId = req.params._id;
@@ -293,6 +325,9 @@ const addReservation = async (req, res) => {
   const reminderTime = new Date(formData.date);
   reminderTime.setHours(8, 0, 0, 0); // 8:00 AM local time (Montreal, EST)
 
+  const isResToday =
+    new Date(formData.date).toDateString() === new Date().toDateString();
+
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
@@ -361,47 +396,77 @@ const addReservation = async (req, res) => {
 
     // send SMS to the user
     if (userInfo.numberValid) {
-      try {
-        const message = await twilioClient.messages.create({
-          body: `
-            No Reply: Hollywood Barbershop
+      if (isResToday) {
+        try {
+          await twilioClient.messages.create({
+            body: `No Reply ~Hollywood Barbershop
+            Bonjour ${reservation.fname} ${
+              reservation.lname || ""
+            }, votre réservation au Hollywood Barbershop est confirmée pour aujourd'hui à ${
+              reservation.slot[0].split("-")[1]
+            } avec ${reservation.barber}. Vous recevrez une ${
+              reservation.service.name
+            } pour ${reservation.service.price} CAD. ~Hollywood Barbershop
+    
+            Hello ${reservation.fname} ${
+              reservation.lname || ""
+            }, your reservation at Hollywood Barbershop is confirmed for today at ${
+              reservation.slot[0].split("-")[1]
+            } with ${reservation.barber}. You will be getting a ${
+              reservation.service.english
+            } for ${reservation.service.price} CAD. 
+              Pour annuler (to cancel): https://hollywoodfairmountbarbers.com/cancel/${
+                reservation._id
+              }
+            `,
+            messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
+            to: userInfo.number,
+          });
+        } catch (err) {
+          console.error("Error sending confirmation SMS:", err);
+        }
+      } else {
+        try {
+          const message = await twilioClient.messages.create({
+            body: `
+            No Reply ~Hollywood Barbershop
 
           Bonjour ${reservation.fname} ${
-            reservation.lname || ""
-          }, un petit rappel pour votre réservation au Hollywood Barbershop aujourd'hui à ${
-            reservation.slot[0].split("-")[1]
-          } avec ${reservation.barber}. Vous recevrez une ${
-            reservation.service.name
-          } pour ${reservation.service.price} CAD.
+              reservation.lname || ""
+            }, un petit rappel pour votre réservation au Hollywood Barbershop aujourd'hui à ${
+              reservation.slot[0].split("-")[1]
+            } avec ${reservation.barber}. Vous recevrez une ${
+              reservation.service.name
+            } pour ${reservation.service.price} CAD.
     
           Hello ${reservation.fname} ${
-            reservation.lname || ""
-          }, a quick reminder for your reservation at Hollywood Barbershop today at ${
-            reservation.slot[0].split("-")[1]
-          } with ${reservation.barber}. You will be getting a ${
-            reservation.service.english
-          } for ${reservation.service.price} CAD.
+              reservation.lname || ""
+            }, a quick reminder for your reservation at Hollywood Barbershop today at ${
+              reservation.slot[0].split("-")[1]
+            } with ${reservation.barber}. You will be getting a ${
+              reservation.service.english
+            } for ${reservation.service.price} CAD.
     
           Pour annuler (to cancel): https://hollywoodfairmountbarbers.com/cancel/${
             reservation._id
           }
           `,
-          messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
-          to: userInfo.number,
-          scheduleType: "fixed",
-          sendAt: reminderTime.toISOString(), // ISO format for the scheduled time
-        });
-        //add the res _id along with the scheduled sms to the database, in case the user wants to cancel
+            messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
+            to: userInfo.number,
+            scheduleType: "fixed",
+            sendAt: reminderTime.toISOString(), // ISO format for the scheduled time
+          });
+          //add the res _id along with the scheduled sms to the database, in case the user wants to cancel
 
-        await db.collection("scheduledSMS").insertOne({
-          res_id: _id,
-          messageSid: message.sid,
-        });
-      } catch (err) {
-        console.error("Error scheduling reminder SMS:", err);
+          await db.collection("scheduledSMS").insertOne({
+            res_id: _id,
+            messageSid: message.sid,
+          });
+        } catch (err) {
+          console.error("Error scheduling reminder SMS:", err);
+        }
       }
     } else {
-      // schedule an email reminder for the user
       const emailData = {
         from: "hello@hollywoodfairmountbarbers.com",
         to: userInfo.email,
@@ -431,7 +496,17 @@ const addReservation = async (req, res) => {
           `,
         category: "Reservation Reminder",
       };
-      scheduleEmail(emailData, reminderTime);
+      if (isResToday) {
+        //send email
+        try {
+          await mailtrapClient.send(emailData);
+        } catch (err) {
+          console.error("Error sending confirmation email:", err);
+        }
+      } else {
+        // schedule an email reminder for the user
+        scheduleEmail(emailData, reminderTime);
+      }
     }
 
     // send response to the client
@@ -636,4 +711,5 @@ module.exports = {
   getReservationById,
   deleteReservation,
   getReservationForDelete,
+  getResByPhone,
 };

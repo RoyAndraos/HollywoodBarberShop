@@ -233,12 +233,36 @@ const FormRsvp = () => {
 
           <Label $isMobile={isMobile}>
             {language === "en"
-              ? "I agree to receive automated confirmation SMS to this mobile number / email to this email address."
-              : "Je consens à recevoir des SMS de confirmation automatisés à ce numéro de téléphone / courriel à cette adresse courriel."}
+              ? "I agree to receive automated confirmation/reminder SMS/email to this mobile number/to this email address."
+              : "Je consens à recevoir des messages de confirmation/rappel automatisés à ce numéro de téléphone/à cette adresse courriel."}
           </Label>
           <Required style={{ marginLeft: "10px" }}>*</Required>
         </div>
-
+        <CancelWrap $isMobile={isMobile}>
+          {language === "en" ? (
+            <>
+              To cancel an existing reservation,
+              <CancelButton
+                onClick={() => {
+                  navigate("/cancelRes");
+                }}
+              >
+                click here
+              </CancelButton>
+            </>
+          ) : (
+            <>
+              Pour annuler une réservation existante,
+              <CancelButton
+                onClick={() => {
+                  navigate("/cancelRes");
+                }}
+              >
+                cliquez ici
+              </CancelButton>
+            </>
+          )}
+        </CancelWrap>
         <BookButton
           type="submit"
           key={"next"}
@@ -264,6 +288,28 @@ const FormRsvp = () => {
     </StyledForm>
   );
 };
+
+const CancelButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #006044;
+  cursor: pointer;
+  font-size: 1.2rem;
+  text-decoration: underline;
+  transition: 0.2s all ease-in-out;
+  &:hover {
+    color: white;
+  }
+`;
+
+const CancelWrap = styled.div`
+  width: 75%;
+  color: #006044;
+  text-align: center;
+  z-index: 2;
+  font-size: ${(props) => (props.$isMobile ? "1rem" : "1.2rem")};
+`;
+
 export const Required = styled.span`
   color: #b50000;
   font-size: 1.2rem;

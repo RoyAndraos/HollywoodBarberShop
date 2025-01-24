@@ -356,8 +356,8 @@ const Booking = () => {
     formData.slot = selectedSlot;
     setIsLoading(true);
     e.preventDefault();
-    //
-    fetch("https://hollywoodbarbershop.onrender.com/addReservation", {
+    //https://hollywoodbarbershop.onrender.com
+    fetch("http://localhost:5000/addReservation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -415,8 +415,7 @@ const Booking = () => {
                 const today = new Date();
                 today.setHours(0, 0, 0, 0);
                 const day = date.getDay();
-                //&& day !== 1
-                return date >= today && day !== 0;
+                return date >= today && day !== 0 && day !== 1;
               }}
             />
             <FaCalendarAlt
