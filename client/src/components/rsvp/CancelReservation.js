@@ -14,7 +14,9 @@ const CancelReservation = () => {
   const navigate = useNavigate();
   const handleFetchReservation = () => {
     // Fetch reservations by phone number
-    fetch(`http://localhost:5000/getResByPhone/${phoneNumber}`)
+    fetch(
+      `https://hollywoodbarbershop.onrender.com/getResByPhone/${phoneNumber}`
+    )
       .then((res) => res.json())
       .then((data) => {
         if (data.status === 200) {
