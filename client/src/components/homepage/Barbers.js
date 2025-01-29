@@ -34,7 +34,7 @@ const Barbers = () => {
             <Description> {barber.description}</Description>
             <Book
               onClick={() => {
-                navigate("/book");
+                navigate("/notice");
               }}
             >
               {language === "en" ? "Book with" : "Reserver avec"}{" "}

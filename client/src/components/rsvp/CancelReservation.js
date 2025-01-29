@@ -11,7 +11,16 @@ const CancelReservation = () => {
   const [reservations, setReservations] = useState([]);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
+  const [isResInThePast, setIsResInThePast] = useState([]);
   const navigate = useNavigate();
+  const handleFindReservationsThatAreInThePast = (cleanedReservations) => {
+    const today = new Date();
+    const resInThePast = cleanedReservations.filter((res) => {
+      const resDate = new Date(res.date);
+      return resDate > today;
+    });
+    setIsResInThePast(resInThePast);
+  };
   const handleFetchReservation = () => {
     // Fetch reservations by phone number
     fetch(
@@ -25,6 +34,7 @@ const CancelReservation = () => {
             .filter((res) => res !== null) // Remove null elements
             .sort((b, a) => new Date(a.date) - new Date(b.date)); // Sort by date
           setReservations(cleanedReservations);
+          handleFindReservationsThatAreInThePast(cleanedReservations);
         } else {
           alert("Reservation not found");
         }
@@ -92,44 +102,43 @@ const CancelReservation = () => {
 
         {reservations.length !== 0 && (
           <Wrapper>
-            <h2>Reservation</h2>
-            <p>
-              <span>{language === "en" ? "Full name" : "Nom Complet"}</span>
-              <span>
-                {reservations[0].fname} {reservations[0].lname}
-              </span>
-            </p>
-            <p>
-              <span>{language === "en" ? "Barber" : "Barbier"}</span>{" "}
-              <span>{reservations[0].barber}</span>
-            </p>
-            <p>
-              <span>Date</span> <span>{reservations[0].date}</span>
-            </p>
-            <p>
-              <span>{language === "en" ? "Time" : "Temps"}</span>
-              <span>{reservations[0].slot[0].split("-")[1]}</span>
-            </p>
-            <p>
-              <span>Service</span>
-              <span>{reservations[0].service.name}</span>
-            </p>
-
-            <BookButton
-              onClick={(e) => {
-                e.preventDefault();
-                handleDeleteReservation(reservations[0]._id);
-              }}
-            >
-              {language === "en" ? "Cancel" : "Annuler"}
-            </BookButton>
+            <h2>Reservations</h2>
+            {isResInThePast.map((res) => {
+              return (
+                <ResWrap key={res._id}>
+                  <p>
+                    <span>Date</span> <span>{res.date}</span>
+                  </p>
+                  <p>
+                    <span>{language === "en" ? "Time" : "Temps"}</span>
+                    <span>{res.slot[0].split("-")[1]}</span>
+                  </p>
+                  <p>
+                    <span>{language === "en" ? "Barber" : "Barbier"}</span>{" "}
+                    <span>{res.barber}</span>
+                  </p>
+                  <BookButton
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleDeleteReservation(res._id);
+                    }}
+                  >
+                    {language === "en" ? "Cancel" : "Annuler"}
+                  </BookButton>
+                </ResWrap>
+              );
+            })}
           </Wrapper>
         )}
       </StyledForm>
     </>
   );
 };
-
+const ResWrap = styled.div`
+  width: 100%;
+  border-bottom: 1px solid #006044;
+  padding: 0 0 2vh 0;
+`;
 const Logo = styled.img`
   position: relative;
   height: 15vh;

@@ -21,6 +21,7 @@ import ConfirmCancel from "./components/ConfirmCancel";
 import CancelReservation from "./components/rsvp/CancelReservation";
 // import { ServicesEmpContext } from "./components/contexts/ServicesEmpContext";
 import CancelRes from "./components/CancelRes";
+import Notice from "./components/rsvp/Notice";
 const App = () => {
   const { isMobile } = useContext(IsMobileContext);
   const containerRef = useRef(null);
@@ -99,6 +100,14 @@ const App = () => {
                 </TransitionComponent>
               }
             />
+            <Route
+              path={"/notice"}
+              element={
+                <TransitionComponent>
+                  <Notice />
+                </TransitionComponent>
+              }
+            />{" "}
           </>
         )}
         <Route
@@ -138,6 +147,14 @@ const App = () => {
           element={
             <TransitionComponent>
               <CancelReservation />
+            </TransitionComponent>
+          }
+        />
+        <Route
+          path={"/notice"}
+          element={
+            <TransitionComponent>
+              <Notice />
             </TransitionComponent>
           }
         />
