@@ -309,8 +309,9 @@ const BarberWrapper = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 130vh;
+  height: auto;
   top: 10vh;
+  padding-top: 10vh;
 `;
 
 const Barber = styled.div`
