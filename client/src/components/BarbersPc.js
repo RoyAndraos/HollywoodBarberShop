@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import { LanguageContext } from "./contexts/LanguageContext";
 import ralf from "../assets/ralf.webp";
 import Ty from "../assets/Ty.webp";
+import jordi from "../assets/jordi.jpg";
 const BarbersPc = () => {
   const { barberInfo } = useContext(BarberContext);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
@@ -77,10 +78,14 @@ const BarbersPc = () => {
                 marginRight: "30px",
               }}
             >
-              {barber.given_name === "Ralph" ? (
+              {barber.given_name === "Ralph" && (
                 <ProfilePic src={ralf} alt={barber.name} key={"owner"} />
-              ) : (
+              )}
+              {barber.given_name === "Ty" && (
                 <ProfilePic src={Ty} alt={barber.name} key={"employee"} />
+              )}
+              {barber.given_name === "Jordi" && (
+                <ProfilePic src={jordi} alt={barber.name} key={"employee2"} />
               )}
               {index === 0 && <Cover ref={(el) => (coverRef = el)} />}
               {index === 1 && <Cover ref={(el) => (otherCoverRef = el)} />}
@@ -331,7 +336,7 @@ const Barber = styled.div`
 const ProfilePic = styled.img`
   max-height: 45vh;
   width: 25vw;
-  object-fit: cover;
+  object-fit: contain;
 `;
 const Name = styled.h2`
   color: #006044;

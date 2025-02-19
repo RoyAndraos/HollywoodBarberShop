@@ -6,6 +6,7 @@ import Loader from "../float-fixed/Loader";
 import { BarberContext } from "../contexts/BarberContext";
 import ralf from "../../assets/ralf.webp";
 import ty from "../../assets/Ty.webp";
+import jordi from "../../assets/jordi.jpg";
 const Barbers = () => {
   const navigate = useNavigate();
   const { language } = useContext(LanguageContext);
@@ -23,14 +24,19 @@ const Barbers = () => {
       {barberInfo.map((barber, index) => {
         return (
           <BarberWrapper key={barber._id}>
-            {barber.given_name !== "Ralph" ? (
-              <Avatar src={ty} alt="barber"></Avatar>
-            ) : (
-              <Avatar src={ralf} alt="barber"></Avatar>
-            )}
             <BarberTitle>
               {barber.given_name} {barber.family_name ? barber.family_name : ""}
             </BarberTitle>
+            {barber.given_name === "Ty" && (
+              <Avatar src={ty} alt="barber"></Avatar>
+            )}
+            {barber.given_name === "Ralph" && (
+              <Avatar src={ralf} alt="barber"></Avatar>
+            )}
+            {barber.given_name === "Jordi" && (
+              <Avatar src={jordi} alt="barber"></Avatar>
+            )}
+
             <Description> {barber.description}</Description>
             <Book
               onClick={() => {
@@ -76,6 +82,8 @@ const BarberWrapper = styled.div`
 const Avatar = styled.img`
   width: 85vw;
   border-radius: 5px;
+  max-height: 50vh;
+  object-fit: contain;
 `;
 const Description = styled.p`
   font-size: 1rem;
@@ -90,7 +98,7 @@ const BarberTitle = styled.p`
   color: #006044;
   font-size: 1.5rem;
   padding: 7px 0;
-  margin-top: 30px;
+  margin: 30px 0 30px 0;
 `;
 
 export default Barbers;
