@@ -35,7 +35,7 @@ const Menu = () => {
         <p>{language === "en" ? MenuText[0].content : MenuText[0].french}</p>
         <button
           onClick={() => {
-            navigate("/notice");
+            navigate("/book");
           }}
         >
           {language === "en" ? "BOOK NOW!" : "RESERVER!"}

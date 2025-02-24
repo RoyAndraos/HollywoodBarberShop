@@ -109,7 +109,7 @@ const BarbersPc = () => {
               {index === 1 && <Cover ref={(el) => (otherCoverRef2 = el)} />}
               <BookButton
                 onClick={() => {
-                  navigate("/notice");
+                  navigate("/book");
                 }}
               >
                 {language === "en"
