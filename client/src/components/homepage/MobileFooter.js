@@ -17,7 +17,7 @@ const MobileFooter = () => {
         <li>Hollywood Barbershop</li>
         <li>18 Av. Fairmount O, Montréal, QC H2T 2M1</li>
         <li>hollywoodfairmount@gmail.com</li>
-        <li>+1(438) 923-7297</li>
+        <li>+1 (514) 431-5793</li>
       </TopList>
 
       <BottomList>
