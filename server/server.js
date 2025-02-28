@@ -230,91 +230,6 @@ const getReservations = async (req, res) => {
 // POST ENDPOINTS
 // ---------------------------------------------------------------------------------------------
 
-const filterSlotBeforeFor2Duration = (slot) => {
-  const minuteToEdit = slot.split("-")[1].slice(0, -2).split(":")[1];
-
-  if (minuteToEdit !== "00") {
-    const newMinute = parseInt(minuteToEdit) - 15;
-    if (newMinute === 0) {
-      return slot.split(":")[0] + ":00" + slot.slice(-2);
-    } else {
-      return (
-        slot.slice(0, -2).split(":")[0] +
-        ":" +
-        newMinute.toString() +
-        slot.slice(-2)
-      );
-    }
-  } else {
-    const newMinute = "45";
-    const hourToEdit = slot.split("-")[1].slice(0, -2).split(":")[0];
-    if (hourToEdit !== "1" && hourToEdit !== "12") {
-      const newHour =
-        parseInt(slot.split("-")[1].slice(0, -2).split(":")[0]) - 1;
-
-      return (
-        slot.split("-")[0] +
-        "-" +
-        newHour.toString() +
-        ":" +
-        newMinute +
-        slot.slice(-2)
-      );
-    } else if (hourToEdit === "12") {
-      return slot.split("-")[0] + "-" + "11:" + newMinute + "am";
-    } else {
-      const newHour = "12";
-      return slot.split("-")[0] + "-" + newHour + ":" + newMinute + "pm";
-    }
-  }
-};
-
-const removeSlotsForOverLapping = (
-  serviceDuration,
-  todayReservationStartingSlots
-) => {
-  let slotsToRemove = [];
-  switch (serviceDuration) {
-    case "1":
-      break;
-    case "2":
-      todayReservationStartingSlots.forEach((slot) => {
-        const slotToEdit = filterSlotBeforeFor2Duration(slot);
-
-        slotsToRemove.push(slotToEdit);
-      });
-
-      break;
-    case "3":
-      todayReservationStartingSlots.forEach((slot) => {
-        const slotToEdit = filterSlotBeforeFor2Duration(slot);
-        slotsToRemove.push(slotToEdit);
-        const slotToEdit2 = filterSlotBeforeFor2Duration(slotToEdit);
-        slotsToRemove.push(slotToEdit2);
-      });
-      break;
-    case "4":
-      todayReservationStartingSlots.forEach((slot) => {
-        const slotToEdit = filterSlotBeforeFor2Duration(slot);
-        slotsToRemove.push(slotToEdit);
-        const slotToEdit2 = filterSlotBeforeFor2Duration(slotToEdit);
-        slotsToRemove.push(slotToEdit2);
-        const slotToEdit3 = filterSlotBeforeFor2Duration(slotToEdit2);
-        slotsToRemove.push(slotToEdit3);
-      });
-      break;
-    default:
-      break;
-  }
-
-  return slotsToRemove.map((slot) => {
-    if (slot[0] === "0") {
-      return slot.slice(1);
-    }
-    return slot;
-  });
-};
-
 const addReservation = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
   const formData = req.body[0];
@@ -323,8 +238,7 @@ const addReservation = async (req, res) => {
   const client_id = uuid();
   // Set to 8:00 AM local time
   const reminderTime = new Date(formData.date);
-  reminderTime.setHours(8, 0, 0, 0); // 8:00 AM local time (Montreal, EST)
-
+  reminderTime.setHours(8 + reminderTime.getTimezoneOffset() / 60, 0, 0, 0);
   const isResToday =
     new Date(formData.date).toDateString() === new Date().toDateString();
 
