@@ -37,6 +37,7 @@ const scheduleEmail = (reservationId, emailData, sendAt) => {
 };
 
 const cancelScheduledEmail = (reservationId) => {
+  if (!scheduledJobs) return;
   const job = scheduledJobs[reservationId];
   if (job) {
     job.cancel(); // Cancel the job
@@ -410,14 +411,7 @@ const deleteReservation = async (req, res) => {
     }
 
     // Delete the reservation
-    const deleteResult = await db
-      .collection("reservations")
-      .deleteOne({ _id: resId });
-    if (deleteResult.deletedCount === 0) {
-      return res
-        .status(500)
-        .json({ status: 500, message: "Failed to delete reservation" });
-    }
+    await db.collection("reservations").deleteOne({ _id: resId });
 
     // Send SMS notification about the cancellation
     await twilioClient.messages.create({
