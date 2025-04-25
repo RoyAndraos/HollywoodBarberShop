@@ -12,6 +12,7 @@ const CancelReservation = () => {
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
   const [isResInThePast, setIsResInThePast] = useState([]);
+
   const navigate = useNavigate();
   const handleFindReservationsThatAreInThePast = (cleanedReservations) => {
     const today = new Date();
@@ -57,7 +58,6 @@ const CancelReservation = () => {
         }
       });
   };
-
   return (
     <>
       {isMobile && (

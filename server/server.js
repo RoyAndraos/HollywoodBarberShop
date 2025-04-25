@@ -270,8 +270,8 @@ const addReservation = async (req, res) => {
       console.log(
         "Selected slot is already reserved. Please select another slot."
       );
-      return res.status(400).json({
-        status: 400,
+      return res.status(404).json({
+        status: 404,
         message:
           "Selected slot is already reserved. Please select another slot.",
       });
@@ -394,9 +394,9 @@ const addReservation = async (req, res) => {
 const deleteReservation = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
   const { resId } = req.body;
-
+  console.log("resId", resId);
+  console.log("req.body", req.body);
   try {
-    await client.connect();
     const db = client.db("HollywoodBarberShop");
 
     // Find the reservation by ID
@@ -405,6 +405,7 @@ const deleteReservation = async (req, res) => {
       .findOne({ _id: resId });
 
     if (!reservation) {
+      console.log("Reservation not found:", resId);
       return res
         .status(404)
         .json({ status: 404, message: "Reservation not found" });
