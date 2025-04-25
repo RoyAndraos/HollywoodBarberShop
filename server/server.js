@@ -340,7 +340,10 @@ const addReservation = async (req, res) => {
       }
     } else {
       const emailData = {
-        from: "hello@hollywoodfairmountbarbers.com",
+        from: {
+          email: "hello@hollywoodfairmountbarbers.com",
+          name: `${reservation.barber}`,
+        },
         to: userInfo.email,
         subject: "Reservation Reminder",
         text: `No Reply ~Hollywood Barbershop
