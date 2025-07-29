@@ -99,6 +99,7 @@ const Booking = () => {
             return "";
           }
         });
+
       ////////////////////////////////////////////////////////////////////////////
 
       //filter out the slots taken by the selected date's reservations and the blocked slots (for the selected barber)
@@ -108,6 +109,7 @@ const Booking = () => {
           formatDate(new Date(slot.date)) === formatDate(selectedDate);
         return selectedBarber.given_name === slot.barber && today;
       });
+
       const todayReservations = reservations
         .filter((reservation) => {
           const today =
@@ -115,7 +117,6 @@ const Booking = () => {
           return selectedBarber.given_name === reservation.barber && today;
         })
         .concat(todayBlockedSlots);
-
       const filteredSlots = originalAvailableSlots.filter((slot) => {
         return !todayReservations.some((reservation) => {
           if (reservation.slot.length === 1) {
@@ -128,12 +129,335 @@ const Booking = () => {
               reservation.slot[1] === slot ||
               reservation.slot[2] === slot
             );
-          } else {
+          } else if (reservation.slot.length === 4) {
             return (
               reservation.slot[0] === slot ||
               reservation.slot[1] === slot ||
               reservation.slot[2] === slot ||
               reservation.slot[3] === slot
+            );
+          } else if (reservation.slot.length === 5) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot
+            );
+          } else if (reservation.slot.length === 6) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot
+            );
+          } else if (reservation.slot.length === 7) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot
+            );
+          } else if (reservation.slot.length === 8) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot
+            );
+          } else if (reservation.slot.length === 9) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot ||
+              reservation.slot[8] === slot
+            );
+          } else if (reservation.slot.length === 10) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot ||
+              reservation.slot[8] === slot ||
+              reservation.slot[9] === slot
+            );
+          } else if (reservation.slot.length === 11) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot ||
+              reservation.slot[8] === slot ||
+              reservation.slot[9] === slot ||
+              reservation.slot[10] === slot
+            );
+          } else if (reservation.slot.length === 12) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot ||
+              reservation.slot[8] === slot ||
+              reservation.slot[9] === slot ||
+              reservation.slot[10] === slot ||
+              reservation.slot[11] === slot
+            );
+          } else if (reservation.slot.length === 13) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot ||
+              reservation.slot[8] === slot ||
+              reservation.slot[9] === slot ||
+              reservation.slot[10] === slot ||
+              reservation.slot[11] === slot ||
+              reservation.slot[12] === slot
+            );
+          } else if (reservation.slot.length === 14) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot ||
+              reservation.slot[8] === slot ||
+              reservation.slot[9] === slot ||
+              reservation.slot[10] === slot ||
+              reservation.slot[11] === slot ||
+              reservation.slot[12] === slot ||
+              reservation.slot[13] === slot
+            );
+          } else if (reservation.slot.length === 15) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot ||
+              reservation.slot[8] === slot ||
+              reservation.slot[9] === slot ||
+              reservation.slot[10] === slot ||
+              reservation.slot[11] === slot ||
+              reservation.slot[12] === slot ||
+              reservation.slot[13] === slot ||
+              reservation.slot[14] === slot
+            );
+          } else if (reservation.slot.length === 16) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot ||
+              reservation.slot[8] === slot ||
+              reservation.slot[9] === slot ||
+              reservation.slot[10] === slot ||
+              reservation.slot[11] === slot ||
+              reservation.slot[12] === slot ||
+              reservation.slot[13] === slot ||
+              reservation.slot[14] === slot ||
+              reservation.slot[15] === slot
+            );
+          } else if (reservation.slot.length === 17) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot ||
+              reservation.slot[8] === slot ||
+              reservation.slot[9] === slot ||
+              reservation.slot[10] === slot ||
+              reservation.slot[11] === slot ||
+              reservation.slot[12] === slot ||
+              reservation.slot[13] === slot ||
+              reservation.slot[14] === slot ||
+              reservation.slot[15] === slot ||
+              reservation.slot[16] === slot
+            );
+          } else if (reservation.slot.length === 18) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot ||
+              reservation.slot[8] === slot ||
+              reservation.slot[9] === slot ||
+              reservation.slot[10] === slot ||
+              reservation.slot[11] === slot ||
+              reservation.slot[12] === slot ||
+              reservation.slot[13] === slot ||
+              reservation.slot[14] === slot ||
+              reservation.slot[15] === slot ||
+              reservation.slot[16] === slot ||
+              reservation.slot[17] === slot
+            );
+          } else if (reservation.slot.length === 19) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot ||
+              reservation.slot[8] === slot ||
+              reservation.slot[9] === slot ||
+              reservation.slot[10] === slot ||
+              reservation.slot[11] === slot ||
+              reservation.slot[12] === slot ||
+              reservation.slot[13] === slot ||
+              reservation.slot[14] === slot ||
+              reservation.slot[15] === slot ||
+              reservation.slot[16] === slot ||
+              reservation.slot[17] === slot ||
+              reservation.slot[18] === slot
+            );
+          } else if (reservation.slot.length === 20) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot ||
+              reservation.slot[8] === slot ||
+              reservation.slot[9] === slot ||
+              reservation.slot[10] === slot ||
+              reservation.slot[11] === slot ||
+              reservation.slot[12] === slot ||
+              reservation.slot[13] === slot ||
+              reservation.slot[14] === slot ||
+              reservation.slot[15] === slot ||
+              reservation.slot[16] === slot ||
+              reservation.slot[17] === slot ||
+              reservation.slot[18] === slot ||
+              reservation.slot[19] === slot
+            );
+          } else if (reservation.slot.length === 21) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot ||
+              reservation.slot[8] === slot ||
+              reservation.slot[9] === slot ||
+              reservation.slot[10] === slot ||
+              reservation.slot[11] === slot ||
+              reservation.slot[12] === slot ||
+              reservation.slot[13] === slot ||
+              reservation.slot[14] === slot ||
+              reservation.slot[15] === slot ||
+              reservation.slot[16] === slot ||
+              reservation.slot[17] === slot ||
+              reservation.slot[18] === slot ||
+              reservation.slot[19] === slot ||
+              reservation.slot[20] === slot
+            );
+          } else if (reservation.slot.length === 22) {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot ||
+              reservation.slot[8] === slot ||
+              reservation.slot[9] === slot ||
+              reservation.slot[10] === slot ||
+              reservation.slot[11] === slot ||
+              reservation.slot[12] === slot ||
+              reservation.slot[13] === slot ||
+              reservation.slot[14] === slot ||
+              reservation.slot[15] === slot ||
+              reservation.slot[16] === slot ||
+              reservation.slot[17] === slot ||
+              reservation.slot[18] === slot ||
+              reservation.slot[19] === slot ||
+              reservation.slot[20] === slot ||
+              reservation.slot[21] === slot
+            );
+          } else {
+            return (
+              reservation.slot[0] === slot ||
+              reservation.slot[1] === slot ||
+              reservation.slot[2] === slot ||
+              reservation.slot[3] === slot ||
+              reservation.slot[4] === slot ||
+              reservation.slot[5] === slot ||
+              reservation.slot[6] === slot ||
+              reservation.slot[7] === slot ||
+              reservation.slot[8] === slot ||
+              reservation.slot[9] === slot ||
+              reservation.slot[10] === slot ||
+              reservation.slot[11] === slot ||
+              reservation.slot[12] === slot ||
+              reservation.slot[13] === slot ||
+              reservation.slot[14] === slot ||
+              reservation.slot[15] === slot ||
+              reservation.slot[16] === slot ||
+              reservation.slot[17] === slot ||
+              reservation.slot[18] === slot ||
+              reservation.slot[19] === slot ||
+              reservation.slot[20] === slot ||
+              reservation.slot[21] === slot ||
+              reservation.slot[22] === slot
             );
           }
         });

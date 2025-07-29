@@ -33,7 +33,6 @@ const scheduleEmail = (reservationId, emailData, sendAt) => {
 
   // Store job reference
   scheduledJobs[reservationId] = job;
-  console.log(`Email scheduled for reservation: ${reservationId} at ${sendAt}`);
 };
 
 const cancelScheduledEmail = (reservationId) => {
@@ -42,9 +41,7 @@ const cancelScheduledEmail = (reservationId) => {
   if (job) {
     job.cancel(); // Cancel the job
     delete scheduledJobs[reservationId]; // Remove reference
-    console.log(`Scheduled email for reservation ${reservationId} canceled.`);
   } else {
-    console.log(`No scheduled email found for reservation ${reservationId}.`);
   }
 };
 
@@ -267,9 +264,6 @@ const addReservation = async (req, res) => {
     });
 
     if (!isSlotAvailable) {
-      console.log(
-        "Selected slot is already reserved. Please select another slot."
-      );
       return res.status(404).json({
         status: 404,
         message:
@@ -397,8 +391,7 @@ const addReservation = async (req, res) => {
 const deleteReservation = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
   const { resId } = req.body;
-  console.log("resId", resId);
-  console.log("req.body", req.body);
+
   try {
     const db = client.db("HollywoodBarberShop");
 
@@ -408,7 +401,6 @@ const deleteReservation = async (req, res) => {
       .findOne({ _id: resId });
 
     if (!reservation) {
-      console.log("Reservation not found:", resId);
       return res
         .status(404)
         .json({ status: 404, message: "Reservation not found" });

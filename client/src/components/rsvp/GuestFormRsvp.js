@@ -35,9 +35,7 @@ const FormRsvp = () => {
 
       // Check if the cleaned value has the correct length
       const isCanadian = selectedCountryCode === "+1";
-      const isValidLength = isCanadian
-        ? cleanedValue.length === 10
-        : cleanedValue.length === 10;
+      const isValidLength = isCanadian ? cleanedValue.length === 10 : true;
 
       if (isCanadian && !isValidLength) {
         setIsPhoneValid(false);
@@ -48,6 +46,7 @@ const FormRsvp = () => {
         setFormData((prev) => ({ ...prev, numberValid: false }));
       } else if (!isCanadian && isValidLength) {
         setIsPhoneValid(false);
+        setFormData((prev) => ({ ...prev, numberValid: true }));
       } else if (isCanadian && isValidLength) {
         setIsPhoneValid(true);
         setIsCanadianFormat("");
@@ -110,6 +109,7 @@ const FormRsvp = () => {
     e.preventDefault();
     setUserInfo(formData);
   };
+
   return (
     <StyledForm
       onSubmit={(e) => {
@@ -273,12 +273,11 @@ const FormRsvp = () => {
             fontSize: "1.3rem",
           }}
           disabled={
-            formData.fname &&
-            formData.lname &&
-            (selectedCountryCode !== "+1" ? isEmailValid : true) &&
-            formData.number
-              ? false
-              : true
+            formData.fname.length === 0 ||
+            formData.lname.length === 0 ||
+            (selectedCountryCode === "+1" ? false : !isEmailValid) ||
+            !formData.numberValid ||
+            isCanadianFormat.length !== 0
           }
         >
           {language === "en" ? "Next Step" : "Prochaine Etape"}
