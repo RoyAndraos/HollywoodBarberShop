@@ -4,6 +4,11 @@ const uuid = require("uuid").v4;
 const accountSid = process.env.SMS_SSID;
 const authToken = process.env.SMS_AUTH_TOKEN;
 const twilioClient = require("twilio")(accountSid, authToken);
+const telnyxApiKey = process.env.SMS_API_KEY_TELNYX;
+const initTelnyx = async () => {
+  const Telnyx = (await import("telnyx")).default;
+  return new Telnyx(telnyxApiKey);
+};
 // ---------------------------------------------------------------------------------------------
 // Mailtrap stuff
 // ---------------------------------------------------------------------------------------------
@@ -228,6 +233,23 @@ const getReservations = async (req, res) => {
 // POST ENDPOINTS
 // ---------------------------------------------------------------------------------------------
 
+const shortenUrl = async (longUrl) => {
+  const encodedUrl = encodeURIComponent(longUrl);
+  const apiUrl = `https://is.gd/create.php?format=simple&url=${encodedUrl}`;
+
+  const response = await fetch(apiUrl);
+  if (!response.ok) {
+    throw new Error(`is.gd API error: ${response.statusText}`);
+  }
+
+  const shortUrl = await response.text();
+  if (shortUrl.startsWith("Error:")) {
+    throw new Error(`is.gd API returned error: ${shortUrl}`);
+  }
+
+  return shortUrl;
+};
+
 const addReservation = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
   const formData = req.body[0];
@@ -300,37 +322,30 @@ const addReservation = async (req, res) => {
 
     // send SMS to the user
     if (userInfo.numberValid) {
+      const shortUrl = await shortenUrl(
+        `https://hollywoodfairmountbarbers.com/cancel/${_id}`
+      );
       try {
-        await twilioClient.messages.create({
-          body: `No Reply ~Hollywood Barbershop
-            Bonjour ${reservation.fname} ${
-            reservation.lname || ""
-          }, votre réservation au Hollywood Barbershop est confirmée pour ${
-            reservation.date
-          } à ${reservation.slot[0].split("-")[1]} avec ${
-            reservation.barber
-          }. Vous recevrez une ${reservation.service.name} pour ${
-            reservation.service.price
-          } CAD. ~Hollywood Barbershop
-    
-            Hello ${reservation.fname} ${
-            reservation.lname || ""
-          }, your reservation at Hollywood Barbershop is confirmed for ${
-            reservation.date
-          } at ${reservation.slot[0].split("-")[1]} with ${
-            reservation.barber
-          }. You will be getting a ${reservation.service.english} for ${
-            reservation.service.price
-          } CAD. 
-              Pour annuler (to cancel): https://hollywoodfairmountbarbers.com/cancel/${
-                reservation._id
-              }
+        (async () => {
+          const telnyx = await initTelnyx();
+          await telnyx.messages.create({
+            text: `No Reply ~Hollywood Barbershop 
+réservation confirmée pour ${reservation.fname} le ${reservation.date} à ${
+              reservation.slot[0].split("-")[1]
+            } avec ${reservation.barber}.
+Annulation: ${shortUrl}
             `,
-          messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
-          to: userInfo.number,
-        });
+            // messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
+            messaging_profile_id: process.env.SMS_PROFILE_ID,
+            from: "+14388035805",
+            to: `+1${reservation.number}`,
+          });
+        })();
       } catch (err) {
-        console.error("Error sending confirmation SMS:", err);
+        console.error(
+          "Telnyx error:",
+          JSON.stringify(err.raw?.errors, null, 2)
+        );
       }
     } else {
       const emailData = {
@@ -421,7 +436,7 @@ Hello ${reservation.fname} ${
         reservation.lname || ""
       }, your reservation at Hollywood Barbershop is cancelled. `,
       messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
-      to: reservation.number,
+      to: `+1${reservation.number}`,
     });
 
     //delete the scheduled sms
@@ -446,117 +461,6 @@ Hello ${reservation.fname} ${
     await client.close();
   }
 };
-// const getMonthIndex = (monthName) => {
-//   const months = {
-//     Jan: 0,
-//     Feb: 1,
-//     Mar: 2,
-//     Apr: 3,
-//     May: 4,
-//     Jun: 5,
-//     Jul: 6,
-//     Aug: 7,
-//     Sep: 8,
-//     Oct: 9,
-//     Nov: 10,
-//     Dec: 11,
-//   };
-//   return months[monthName];
-// };
-// const deleteReservation = async (req, res) => {
-//   const client = new MongoClient(MONGO_URI_RALF);
-//   const { resId } = req.body;
-//   try {
-//     await client.connect();
-//     const db = client.db("HollywoodBarberShop");
-//     //since resId is the 1st 5 characters of the reservation's _id, we can use it to find the reservation when _id includes resId
-//     const reservation = await db
-//       .collection("reservations")
-//       .findOne({ _id: resId });
-//     if (reservation === null) {
-//       res.status(404).json({ status: 404, message: "Reservation not found" });
-//     } else {
-//       let message;
-//       // check if reservation is in more than 3 hours
-//       // get the day
-//       const dateParts = reservation.date.split(" "); // Split date string into parts
-//       const suffix = reservation.slot[0].split("-")[1].slice(-2); // Extract AM/PM
-//       let time = reservation.slot[0].split("-")[1].slice(0, -2); // Extract time, e.g., "12:30"
-//       if (suffix === "pm" && time.split(":")[0] !== "12") {
-//         time = parseInt(time.split(":")[0]) + 12 + ":" + time.split(":")[1]; // Convert 12-hour time to 24-hour time
-//       }
-//       const [hours, minutes] = time.split(":").map(Number); // Split time into hours and minutes
-
-//       // Construct the Date object in UTC
-//       const dateTime = new Date(
-//         Date.UTC(
-//           dateParts[3], // Year
-//           getMonthIndex(dateParts[1]), // Month (converted to 0-based index)
-//           dateParts[2], // Day
-//           hours,
-//           minutes
-//         )
-//       );
-
-//       const now = new Date(
-//         Date.UTC(
-//           new Date().getFullYear(),
-//           new Date().getMonth(),
-//           new Date().getDate(),
-//           new Date().getHours(),
-//           new Date().getMinutes()
-//         )
-//       );
-//       const differenceInMilliseconds = dateTime.getTime() - now.getTime();
-//       const differenceInHours = (
-//         differenceInMilliseconds /
-//         (1000 * 60 * 60)
-//       ).toFixed(2); //Convert milliseconds to hours
-//       if (differenceInHours > 3) {
-//         // Reservation is more than 3 hours away from now
-//         const deleteResult = await db.collection("reservations").deleteOne({
-//           _id: resId,
-//         });
-//         if (deleteResult.deletedCount === 0) {
-//           res
-//             .status(500)
-//             .json({ status: 500, message: "Failed to delete reservation" });
-//         }
-//         //send sms to the user that the reservation is cancelled
-//         await twilioClient.messages.create({
-//           body: `Bonjour ${reservation.fname} ${reservation.lname}, votre réservation au Hollywood Barbershop est annulée. ~Hollywood Barbershop
-
-//           Hello ${reservation.fname} ${reservation.lname}, your reservation at Hollywood Barbershop is cancelled. ~Hollywood Barbershop`,
-//           messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
-//           to: reservation.number,
-//         });
-//         message = "success";
-//         res
-//           .status(200)
-//           .json({ status: 200, reservation: reservation, message: message });
-//       } else if (differenceInHours < 0) {
-//         res.status(200).json({
-//           status: 200,
-//           reservation: reservation,
-//           message: "Reservation is in the past.",
-//         });
-//       } else {
-//         // Reservation is within 3 hours from now
-//         res.status(200).json({
-//           status: 200,
-//           reservation: reservation,
-//           difference: differenceInHours,
-//           message:
-//             "Reservation is in less than 3 hours. If you still wish to cancel, please call the shop at +1(438) 923-7297.",
-//         });
-//       }
-//     }
-//   } catch (err) {
-//     res.status(500).json({ status: 500, message: err.message });
-//   } finally {
-//     client.close();
-//   }
-// };
 
 module.exports = {
   getWebsiteInfo,

@@ -22,8 +22,8 @@ const Notice = () => {
       )}
       <p>
         {language === "en"
-          ? "Dear Clients, Ralph will be temporarily unavailable starting February 12th for approximately 2 to 3 weeks due to a scheduled hospital operation. We kindly ask that you book your appointments before February 12th if you wish to see him prior to his break. Thank you for your understanding and continued support."
-          : "Chers clients, Ralph ne sera temporairement pas disponible à partir du 12 février pour une période d'environ 2 à 3 semaines en raison d'une opération hospitalière programmée. Nous vous demandons de bien vouloir prendre rendez-vous avant le 12 février si vous souhaitez le voir avant sa pause. Merci pour votre compréhension et votre soutien continu."}
+          ? "Hello everyone! Ralph will be away from September 10th and will be back to work on October 7th. Thank you for your continued support and understanding."
+          : "Chers clients, Ralph sera absent du 10 septembre au 7 octobre. Merci pour votre soutien et votre compréhension."}
       </p>
       <StyledButton
         onClick={() => {

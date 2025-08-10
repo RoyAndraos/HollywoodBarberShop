@@ -24,7 +24,7 @@ const HeaderMobile = () => {
         </FrButton>
         <BookButton
           onClick={() => {
-            navigate("/book");
+            navigate("/notice");
           }}
         >
           {language === "en" ? "BOOK NOW!" : "RESERVER!"}

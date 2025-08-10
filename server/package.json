@@ -21,6 +21,7 @@
     "node-schedule": "^2.1.1",
     "qs": "^6.12.1",
     "side-channel": "^1.0.6",
+    "telnyx": "^2.0.1",
     "twilio": "^5.0.1",
     "uuid": "^9.0.0"
   },

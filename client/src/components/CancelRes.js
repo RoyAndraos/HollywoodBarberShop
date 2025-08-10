@@ -11,15 +11,21 @@ const CancelRes = () => {
   const [reservation, setReservation] = useState([]);
   const { language } = useContext(LanguageContext);
   const { isMobile } = useContext(IsMobileContext);
-  const [error, setError] = useState("");
   const navigate = useNavigate();
   useEffect(() => {
     fetch(
       `https://hollywoodbarbershop.onrender.com/getReservationForDelete/${params}`
     )
       .then((res) => res.json())
-      .then((data) => setReservation(data.reservation));
-  }, [params]);
+      .then((data) => {
+        console.log(data);
+        if (data.status === 404) {
+          navigate("/notfound");
+          return;
+        }
+        setReservation(data.reservation);
+      });
+  }, [params, navigate]);
   const handleDeleteRes = () => {
     fetch("https://hollywoodbarbershop.onrender.com/deleteReservation", {
       method: "DELETE",
@@ -31,7 +37,7 @@ const CancelRes = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.message !== "success") {
-          setError(data.message);
+          navigate("*");
           return;
         } else {
           navigate("/confirmCancel");
@@ -88,7 +94,6 @@ const CancelRes = () => {
       >
         Cancel Reservation
       </BookButton>
-      {error !== "" && <Error>{error}</Error>}
     </Wrapper>
   );
 };
@@ -122,14 +127,6 @@ const Logo = styled.img`
   width: 20vh;
   position: absolute;
   top: 1rem;
-`;
-const Error = styled.p`
-  color: #c30000;
-  font-size: 1.2rem;
-  font-weight: bold;
-  padding: 0 1rem;
-  text-align: center;
-  margin-top: 1rem;
 `;
 
 export default CancelRes;

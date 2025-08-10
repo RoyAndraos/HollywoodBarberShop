@@ -93,7 +93,7 @@ const MenuPC = () => {
         <ButtonMessageWrap>
           <BookButton
             onClick={() => {
-              navigate("/book");
+              navigate("/notice");
             }}
           >
             {language === "en" ? "BOOK NOW!" : "RESERVER"}

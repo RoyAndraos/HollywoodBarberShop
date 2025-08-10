@@ -22,6 +22,7 @@ import CancelReservation from "./components/rsvp/CancelReservation";
 // import { ServicesEmpContext } from "./components/contexts/ServicesEmpContext";
 import CancelRes from "./components/CancelRes";
 import Notice from "./components/rsvp/Notice";
+import NotFound from "./components/NotFound";
 const App = () => {
   const { isMobile } = useContext(IsMobileContext);
   const containerRef = useRef(null);
@@ -155,6 +156,14 @@ const App = () => {
           element={
             <TransitionComponent>
               <Notice />
+            </TransitionComponent>
+          }
+        />
+        <Route
+          path="/notfound"
+          element={
+            <TransitionComponent>
+              <NotFound />
             </TransitionComponent>
           }
         />

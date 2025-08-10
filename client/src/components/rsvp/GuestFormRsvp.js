@@ -241,7 +241,8 @@ const FormRsvp = () => {
         <CancelWrap $isMobile={isMobile}>
           {language === "en" ? (
             <>
-              To cancel an existing reservation,
+              To <span style={{ color: "red" }}>cancel</span> an existing
+              reservation,
               <CancelButton
                 onClick={() => {
                   navigate("/cancelRes");

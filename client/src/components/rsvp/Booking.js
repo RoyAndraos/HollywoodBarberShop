@@ -513,6 +513,33 @@ const Booking = () => {
             return !slotsToRemoveForOverlappingRes.includes(time);
           });
 
+        const lastSlot =
+          filteredForOverlappingSlots[filteredForOverlappingSlots.length - 2];
+        let filteredForDuration4 = filteredForOverlappingSlots;
+        if (selectedService.duration === "4") {
+          //Check if the selected slots exist in the filteredForOverlappingSlots array
+          const allSelectedSlots = [
+            lastSlot,
+            selectNextSlot(lastSlot),
+            selectNextSlot(selectNextSlot(lastSlot)),
+            selectNextSlot(selectNextSlot(selectNextSlot(lastSlot))),
+          ];
+          const areAllSelectedSlotsValid = allSelectedSlots.every((slot) =>
+            filteredForOverlappingSlots.includes(slot)
+          );
+          if (!areAllSelectedSlotsValid) {
+            // If any selected slot is not valid, check which slot is not in the array and remove it
+            const invalidSlots = allSelectedSlots.filter(
+              (slot) => !filteredForOverlappingSlots.includes(slot)
+            );
+            if (invalidSlots.length > 0) {
+              //remove the allSelectedslots from the available slots
+              filteredForDuration4 = filteredForOverlappingSlots.filter(
+                (slot) => !allSelectedSlots.includes(slot)
+              );
+            }
+          }
+        }
         if (isToday) {
           //if the date is today's date, check for daily availabilty slots that are not available
           const dailyAvailabilityFilteredSlots =
@@ -524,36 +551,22 @@ const Booking = () => {
                 return slot.slot;
               });
           //remove all the slots that have passed
-          let filteredSlotsBeforeNow = filteredForOverlappingSlots.map(
-            (elem) => {
-              const now = moment().format("hh:mm A"); // Use 12-hour format with AM/PM
-              const elemTime = moment(elem.split("-")[1], "hh:mm A").format(
-                "hh:mm A"
-              ); // Parse in 12-hour format with AM/PM
-              if (
-                !moment(elemTime, "hh:mm A").isBefore(moment(now, "hh:mm A"))
-              ) {
-                return elem;
-              } else {
-                return "";
-              }
+          let filteredSlotsBeforeNow = filteredForDuration4.map((elem) => {
+            const now = moment().format("hh:mm A"); // Use 12-hour format with AM/PM
+            const elemTime = moment(elem.split("-")[1], "hh:mm A").format(
+              "hh:mm A"
+            ); // Parse in 12-hour format with AM/PM
+            if (!moment(elemTime, "hh:mm A").isBefore(moment(now, "hh:mm A"))) {
+              return elem;
+            } else {
+              return "";
             }
-          );
+          });
           filteredSlotsBeforeNow = filteredSlotsBeforeNow.filter(
             (elem) => elem !== ""
           );
 
-          // if (selectedBarber.given_name === "Ty") {
-          //   setFilteredAvailableSlots(
-          //     filteredSlotsBeforeNow.filter((item) => {
-          //       return !dailyAvailabilityFilteredSlots.some((slot) =>
-          //         item.includes(slot)
-          //       );
-          //     })
-          //   );
-          // } else {
           setFilteredAvailableSlots(
-            //remove the 15min slot (aka 15 and 45)
             filteredSlotsBeforeNow
               .filter((slot) => {
                 const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
@@ -565,26 +578,14 @@ const Booking = () => {
                 );
               })
           );
-          // }
-
-          ////////////////////////////////////////////////////////////////////////////
         } else {
-          // if (selectedBarber.given_name === "Ty") {
-          //   setFilteredAvailableSlots(
-          //     filteredForOverlappingSlots.filter((item) => {
-          //       return !todayAvailabilitySlots.some((slot) =>
-          //         item.includes(slot)
-          //       );
-          //     })
-          //   );
-          // } else {
           setFilteredAvailableSlots(
-            filteredForOverlappingSlots.filter((slot) => {
+            // use prev instead of filteredforoverlapping
+            filteredForDuration4.filter((slot) => {
               const minutes = slot.split("-")[1].split(":")[1].slice(0, -2);
               return minutes !== "45" && minutes !== "15";
             })
           );
-          // }
         }
       }
     }
@@ -680,8 +681,8 @@ const Booking = () => {
     formData.slot = selectedSlot;
     setIsLoading(true);
     e.preventDefault();
-    //
-    fetch("https://hollywoodbarbershop.onrender.com/addReservation", {
+    //https://hollywoodbarbershop.onrender.com
+    fetch("http://localhost:5000/addReservation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
