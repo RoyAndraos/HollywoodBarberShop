@@ -682,7 +682,7 @@ const Booking = () => {
     setIsLoading(true);
     e.preventDefault();
     //https://hollywoodbarbershop.onrender.com
-    fetch("http://localhost:5000/addReservation", {
+    fetch("https://hollywoodbarbershop.onrender.com/addReservation", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
