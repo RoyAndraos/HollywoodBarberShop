@@ -425,19 +425,25 @@ const deleteReservation = async (req, res) => {
     await db.collection("reservations").deleteOne({ _id: resId });
 
     // Send SMS notification about the cancellation
-    await twilioClient.messages.create({
-      body: `No Reply - Hollywood Barbershop
-      
-      Bonjour ${reservation.fname} ${
-        reservation.lname || ""
-      }, votre réservation au Hollywood Barbershop est annulée. 
+    (async () => {
+      const telnyx = await initTelnyx();
+      telnyx.messages.create({
+        from: "Hollywood Barbershop",
+        to: `+1${reservation.number}`,
+        body: `No Reply - Hollywood Barbershop
 
-Hello ${reservation.fname} ${
-        reservation.lname || ""
-      }, your reservation at Hollywood Barbershop is cancelled. `,
-      messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
-      to: `+1${reservation.number}`,
-    });
+        Bonjour ${reservation.fname} ${
+          reservation.lname || ""
+        }, votre réservation au Hollywood Barbershop est annulée.
+
+        Hello ${reservation.fname} ${
+          reservation.lname || ""
+        }, your reservation at Hollywood Barbershop is cancelled.`,
+        messaging_profile_id: process.env.SMS_PROFILE_ID,
+        from: "+14388035805",
+        to: `+1${reservation.number}`,
+      });
+    })();
 
     //delete the scheduled sms
     const scheduledSMS = await db
