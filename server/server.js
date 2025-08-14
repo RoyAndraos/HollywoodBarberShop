@@ -440,8 +440,6 @@ const deleteReservation = async (req, res) => {
           reservation.lname || ""
         }, your reservation at Hollywood Barbershop is cancelled.`,
         messaging_profile_id: process.env.SMS_PROFILE_ID,
-        from: "+14388035805",
-        to: `+1${reservation.number}`,
       });
     })();
 
