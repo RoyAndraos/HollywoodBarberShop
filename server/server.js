@@ -430,7 +430,7 @@ const deleteReservation = async (req, res) => {
       telnyx.messages.create({
         from: "Hollywood Barbershop",
         to: `+1${reservation.number}`,
-        body: `No Reply - Hollywood Barbershop
+        text: `No Reply - Hollywood Barbershop
 
         Bonjour ${reservation.fname} ${
           reservation.lname || ""
