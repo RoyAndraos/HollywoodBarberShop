@@ -428,7 +428,7 @@ const deleteReservation = async (req, res) => {
     (async () => {
       const telnyx = await initTelnyx();
       telnyx.messages.create({
-        from: "Hollywood Barbershop",
+        from: "+14388035805",
         to: `+1${reservation.number}`,
         text: `No Reply - Hollywood Barbershop
 
@@ -443,16 +443,6 @@ const deleteReservation = async (req, res) => {
       });
     })();
 
-    //delete the scheduled sms
-    const scheduledSMS = await db
-      .collection("scheduledSMS")
-      .findOne({ res_id: resId });
-    if (scheduledSMS) {
-      await twilioClient.messages(scheduledSMS.messageSid).remove();
-      await db.collection("scheduledSMS").deleteOne({ res_id: resId });
-    }
-    // Cancel the scheduled email
-    cancelScheduledEmail(resId);
     // Respond with success
     res.status(200).json({
       status: 200,
