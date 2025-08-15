@@ -600,6 +600,7 @@ const Booking = () => {
   ]);
 
   const selectNextSlot = (slot) => {
+    if (!slot) return;
     const day = slot.split("-")[0];
     const timeToEdit = slot.split("-")[1].split(":")[1].slice(0, -2);
     const hour = slot.split("-")[1].split(":")[0];
