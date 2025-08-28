@@ -337,7 +337,7 @@ Annulation: ${shortUrl}
             `,
             // messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
             messaging_profile_id: process.env.SMS_PROFILE_ID,
-            from: "+14388035805",
+            from: "+18334041832",
             to: `+1${reservation.number}`,
           });
         })();
@@ -428,7 +428,7 @@ const deleteReservation = async (req, res) => {
     (async () => {
       const telnyx = await initTelnyx();
       telnyx.messages.create({
-        from: "+14388035805",
+        from: "+18334041832",
         to: `+1${reservation.number}`,
         text: `No Reply - Hollywood Barbershop
 
