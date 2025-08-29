@@ -9,11 +9,15 @@ import { BookButton } from "../Reviews";
 import logoNotHome from "../../assets/onlyNameLogo.svg";
 import { countryCodes } from "../helpers";
 import Select from "react-select";
+import { PrivacyWrapper, Text, BackButton, SmallTitle } from "../FooterPc";
+
 const FormRsvp = () => {
   const { setUserInfo } = useContext(UserContext);
   const { isMobile } = useContext(IsMobileContext);
   const [isPhoneValid, setIsPhoneValid] = useState(false);
   const [isCanadianFormat, setIsCanadianFormat] = useState("");
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const navigate = useNavigate();
   const [selectedCountryCode, setSelectedCountryCode] = useState("+1");
   const [formData, setFormData] = useState({
@@ -232,12 +236,53 @@ const FormRsvp = () => {
           ></input>
 
           <Label $isMobile={isMobile}>
-            {language === "en"
-              ? "I agree to receive automated confirmation/reminder SMS/email to this mobile number/to this email address."
-              : "Je consens à recevoir des messages de confirmation/rappel automatisés à ce numéro de téléphone/à cette adresse courriel."}
+            {language === "en" ? (
+              <>
+                You are subscribing to Hollywood Barber Shop for transactional
+                messages. At any time, reply STOP to opt out. Reply HELP for
+                help. View our{" "}
+                <TermsButton
+                  onClick={() => {
+                    setIsTermsOpen(true);
+                  }}
+                >
+                  Terms and Conditions.
+                </TermsButton>
+                |
+                <TermsButton
+                  onClick={() => {
+                    setIsPrivacyOpen(true);
+                  }}
+                >
+                  View our Privacy Policy.
+                </TermsButton>
+              </>
+            ) : (
+              <>
+                Vous vous abonnez à Hollywood Barber Shop pour des messages
+                transactionnels. À tout moment, répondez STOP pour vous
+                désabonner. Répondez AIDE pour obtenir de l'aide. Voir nos{" "}
+                <TermsButton
+                  onClick={() => {
+                    setIsTermsOpen(true);
+                  }}
+                >
+                  Termes et Conditions
+                </TermsButton>
+                .| Voir notre{" "}
+                <TermsButton
+                  onClick={() => {
+                    setIsPrivacyOpen(true);
+                  }}
+                >
+                  Politique de Confidentialité
+                </TermsButton>
+                .
+              </>
+            )}
           </Label>
-          <Required style={{ marginLeft: "10px" }}>*</Required>
         </div>
+        <br />
         <CancelWrap $isMobile={isMobile}>
           {language === "en" ? (
             <>
@@ -285,10 +330,125 @@ const FormRsvp = () => {
           <FaArrowRight style={{ marginLeft: "10px", color: "whitesmoke" }} />
         </BookButton>
       </SmallWrapper>
+      {isPrivacyOpen && (
+        <PrivacyWrapper>
+          <Text>
+            <BackButton
+              onClick={() => {
+                setIsPrivacyOpen(false);
+              }}
+            >
+              X
+            </BackButton>
+            <SmallTitle>Privacy Policy:</SmallTitle>
+            <br />
+            Hollywood Fairmount Barbershop is committed to protecting the
+            privacy of our website visitors and clients. This Privacy Policy
+            outlines how we collect, use, and protect your personal information
+            when you visit our website or use our services.
+            <SmallTitle> Information We Collect:</SmallTitle>
+            <br />
+            We collect personal information such as your full name, email
+            address, and phone number when you make a booking appointment
+            through our website. This information is used solely for the purpose
+            of scheduling and contacting you regarding your appointment.
+            <br />
+            <SmallTitle>How We Use Your Information:</SmallTitle> <br /> We use
+            the information you provide to schedule appointments and communicate
+            with you regarding your bookings. We may also use your email address
+            or phone number to send appointment reminders or notify you of any
+            changes to your appointment.
+            <br />
+            <SmallTitle>Protection of Your Information:</SmallTitle>
+            <br /> We take appropriate measures to safeguard your personal
+            information against unauthorized access, alteration, disclosure, or
+            destruction. We use industry-standard encryption and security
+            protocols to protect your data. Sharing of Your Information: We do
+            not sell, trade, or otherwise transfer your personal information to
+            outside parties. Your information is only shared with our trusted
+            partners or service providers who assist us in operating our website
+            or conducting our business, and they are required to keep your
+            information confidential. <br />
+            <SmallTitle>Your Rights:</SmallTitle> <br />
+            You have the right to access, update, or delete your personal
+            information at any time. If you would like to do so, please contact
+            us using the information provided below.
+            <br />
+            <SmallTitle>Cookies:</SmallTitle> <br />
+            We may use cookies and similar tracking technologies to enhance your
+            browsing experience on our website. You can set your browser to
+            refuse cookies or alert you when cookies are being sent.
+            <br />
+            <SmallTitle>Changes to This Policy:</SmallTitle>
+            <br /> We reserve the right to update or change this Privacy Policy
+            at any time. Any changes will be effective immediately upon posting
+            on this page. If you have any questions or concerns regarding our
+            Privacy Policy, please contact us at hollywoodfairmount@gmail.com.
+          </Text>
+        </PrivacyWrapper>
+      )}
+      {isTermsOpen && (
+        <PrivacyWrapper key={"TermsOfServices"}>
+          <Text key={"TermsOfServ"}>
+            <BackButton
+              onClick={() => {
+                setIsTermsOpen(false);
+              }}
+            >
+              X
+            </BackButton>
+            <br />
+            <br />
+            <br />
+            <br />
+            Terms of Service These Terms of Service ("Terms") govern your use of
+            www.hollywoodfairmount.com and the services provided by hollywood
+            Fairmount Barbershop. By accessing or using our website or services,
+            you agree to be bound by these Terms.
+            <br />
+            <SmallTitle>Booking Appointments:</SmallTitle>
+            <br /> When booking appointments through our website, you agree to
+            provide accurate and complete information, including your full name,
+            email address, and phone number. <br />
+            <SmallTitle>Cancellation and Rescheduling:</SmallTitle> If you need
+            to cancel or reschedule your appointment, please contact us at least
+            24h in advance.
+            <br />
+            <SmallTitle>Payment:</SmallTitle>
+            <br /> Payment for services is due at the time of your appointment.
+            We accept cash, credit/debit cards .<br />
+            <SmallTitle>Use of Services:</SmallTitle>
+            <br /> You agree to use our services only for lawful purposes and in
+            compliance with these Terms. You may not use our services to harass,
+            abuse, or harm others or to engage in any illegal activities.
+            <br />
+            <SmallTitle>Intellectual Property:</SmallTitle> <br />
+            All content on our website, including text, images, logos, and
+            graphics, is the property of Hollywood Fairmount Barbershop and is
+            protected by copyright laws. You may not reproduce, distribute, or
+            transmit any content without our prior written consent.
+            <br />
+            <SmallTitle>Limitation of Liability:</SmallTitle> <br />
+            In no event shall Hollywood Fairmount Barbershop be liable for any
+            damages arising out of or in connection with your use of our website
+            or services, including but not limited to indirect, incidental,
+            consequential, or punitive damages. <br />
+            <br />
+            If you have any questions or concerns regarding our Terms of
+            Service, please contact us at hollywoodfairmount@gmail.com.
+          </Text>
+        </PrivacyWrapper>
+      )}
     </StyledForm>
   );
 };
-
+const TermsButton = styled.button`
+  background-color: transparent;
+  border: none;
+  text-decoration: underline;
+  color: #006044;
+  cursor: pointer;
+`;
 const CancelButton = styled.button`
   background-color: transparent;
   border: none;
@@ -320,7 +480,7 @@ const Logo = styled.img`
 `;
 const Label = styled.label`
   z-index: 2;
-  font-size: ${(props) => (props.$isMobile ? "1rem" : "1.2rem")};
+  font-size: 1rem;
   margin-left: 10px;
 `;
 export const InputLabelWrap = styled.div`
