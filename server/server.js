@@ -4,11 +4,11 @@ const uuid = require("uuid").v4;
 const accountSid = process.env.SMS_SSID;
 const authToken = process.env.SMS_AUTH_TOKEN;
 const twilioClient = require("twilio")(accountSid, authToken);
-const telnyxApiKey = process.env.SMS_API_KEY_TELNYX;
-const initTelnyx = async () => {
-  const Telnyx = (await import("telnyx")).default;
-  return new Telnyx(telnyxApiKey);
-};
+// const telnyxApiKey = process.env.SMS_API_KEY_TELNYX;
+// const initTelnyx = async () => {
+//   const Telnyx = (await import("telnyx")).default;
+//   return new Telnyx(telnyxApiKey);
+// };
 // ---------------------------------------------------------------------------------------------
 // Mailtrap stuff
 // ---------------------------------------------------------------------------------------------
@@ -16,41 +16,6 @@ const { MailtrapClient } = require("mailtrap");
 const mailtrapClient = new MailtrapClient({
   token: process.env.EMAIL_TOKEN,
 });
-
-const scheduleEmail = (reservationId, emailData, sendAt) => {
-  const schedule = require("node-schedule");
-
-  const job = schedule.scheduleJob(sendAt, async () => {
-    try {
-      await mailtrapClient.send({
-        from: emailData.from,
-        to: emailData.to,
-        subject: emailData.subject,
-        text: emailData.text,
-        category: emailData.category,
-      });
-    } catch (err) {
-      console.error("Error sending scheduled email:", err);
-    }
-    // Remove job reference after execution
-    delete scheduledJobs[reservationId];
-  });
-
-  // Store job reference
-  scheduledJobs[reservationId] = job;
-};
-
-const cancelScheduledEmail = (reservationId) => {
-  if (!scheduledJobs) return;
-  const job = scheduledJobs[reservationId];
-  if (job) {
-    job.cancel(); // Cancel the job
-    delete scheduledJobs[reservationId]; // Remove reference
-  } else {
-  }
-};
-
-const scheduledJobs = {};
 
 // ---------------------------------------------------------------------------------------------
 //Mongo stuff
@@ -326,21 +291,21 @@ const addReservation = async (req, res) => {
         `https://hollywoodfairmountbarbers.com/cancel/${_id}`
       );
       try {
-        (async () => {
-          const telnyx = await initTelnyx();
-          await telnyx.messages.create({
-            text: `No Reply ~Hollywood Barbershop 
+        // (async () => {
+        //   const telnyx = await initTelnyx();
+        await twilioClient.messages.create({
+          body: `No Reply ~Hollywood Barbershop 
 réservation confirmée pour ${reservation.fname} le ${reservation.date} à ${
-              reservation.slot[0].split("-")[1]
-            } avec ${reservation.barber}.
+            reservation.slot[0].split("-")[1]
+          } avec ${reservation.barber}.
 Annulation: ${shortUrl}
             `,
-            // messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
-            messaging_profile_id: process.env.SMS_PROFILE_ID,
-            from: "+18334041832",
-            to: `+1${reservation.number}`,
-          });
-        })();
+          messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
+          // messaging_profile_id: process.env.SMS_PROFILE_ID,
+          // from: "+18334041832",
+          to: reservation.number,
+        });
+        // })();
       } catch (err) {
         console.error(
           "Telnyx error:",
@@ -425,23 +390,23 @@ const deleteReservation = async (req, res) => {
     await db.collection("reservations").deleteOne({ _id: resId });
 
     // Send SMS notification about the cancellation
-    (async () => {
-      const telnyx = await initTelnyx();
-      telnyx.messages.create({
-        from: "+18334041832",
-        to: `+1${reservation.number}`,
-        text: `No Reply - Hollywood Barbershop
+    // (async () => {
+    // const telnyx = await initTelnyx();
+    twilioClient.messages.create({
+      // from: "+18334041832",
+      to: reservation.number,
+      body: `No Reply - Hollywood Barbershop
 
         Bonjour ${reservation.fname} ${
-          reservation.lname || ""
-        }, votre réservation au Hollywood Barbershop est annulée.
+        reservation.lname || ""
+      }, votre réservation au Hollywood Barbershop est annulée.
 
         Hello ${reservation.fname} ${
-          reservation.lname || ""
-        }, your reservation at Hollywood Barbershop is cancelled.`,
-        messaging_profile_id: process.env.SMS_PROFILE_ID,
-      });
-    })();
+        reservation.lname || ""
+      }, your reservation at Hollywood Barbershop is cancelled.`,
+      messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
+    });
+    // })();
 
     // Respond with success
     res.status(200).json({
