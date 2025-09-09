@@ -198,23 +198,6 @@ const getReservations = async (req, res) => {
 // POST ENDPOINTS
 // ---------------------------------------------------------------------------------------------
 
-const shortenUrl = async (longUrl) => {
-  const encodedUrl = encodeURIComponent(longUrl);
-  const apiUrl = `https://is.gd/create.php?format=simple&url=${encodedUrl}`;
-
-  const response = await fetch(apiUrl);
-  if (!response.ok) {
-    throw new Error(`is.gd API error: ${response.statusText}`);
-  }
-
-  const shortUrl = await response.text();
-  if (shortUrl.startsWith("Error:")) {
-    throw new Error(`is.gd API returned error: ${shortUrl}`);
-  }
-
-  return shortUrl;
-};
-
 const addReservation = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
   const formData = req.body[0];
@@ -287,9 +270,6 @@ const addReservation = async (req, res) => {
 
     // send SMS to the user
     if (userInfo.numberValid) {
-      const shortUrl = await shortenUrl(
-        `https://hollywoodfairmountbarbers.com/cancel/${_id}`
-      );
       try {
         // (async () => {
         //   const telnyx = await initTelnyx();
@@ -298,7 +278,7 @@ const addReservation = async (req, res) => {
 réservation confirmée pour ${reservation.fname} le ${reservation.date} à ${
             reservation.slot[0].split("-")[1]
           } avec ${reservation.barber}.
-Annulation: ${shortUrl}
+Annulation: https://hollywoodfairmountbarbers.com/cancel/${_id}
             `,
           messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
           // messaging_profile_id: process.env.SMS_PROFILE_ID,
@@ -399,11 +379,7 @@ const deleteReservation = async (req, res) => {
 
         Bonjour ${reservation.fname} ${
         reservation.lname || ""
-      }, votre réservation au Hollywood Barbershop est annulée.
-
-        Hello ${reservation.fname} ${
-        reservation.lname || ""
-      }, your reservation at Hollywood Barbershop is cancelled.`,
+      }, votre réservation au Hollywood Barbershop est annulée.`,
       messagingServiceSid: "MG92cdedd67c5d2f87d2d5d1ae14085b4b",
     });
     // })();
