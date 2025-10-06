@@ -95,7 +95,7 @@ const Reviews = () => {
         <img src={arrowright} alt="arrow pointing right" />
       </ArrowRight>
       <BookButton
-        onClick={() => navigate("/notice")}
+        onClick={() => navigate("/book")}
         style={{ marginTop: "40px", translateX: "-5px" }}
       >
         {language === "en" ? "BOOK NOW!" : "RESERVER"}

@@ -102,7 +102,7 @@ const App = () => {
               }
             />
             <Route
-              path={"/notice"}
+              path={"/book"}
               element={
                 <TransitionComponent>
                   <Notice />
@@ -152,7 +152,7 @@ const App = () => {
           }
         />
         <Route
-          path={"/notice"}
+          path={"/book"}
           element={
             <TransitionComponent>
               <Notice />
