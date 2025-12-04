@@ -33,32 +33,28 @@ const FormRsvp = () => {
   const { language } = useContext(LanguageContext);
   //Validate phone number
   useEffect(() => {
-    const validatePhoneNumber = () => {
-      // Remove all non-digit characters
-      const cleanedValue = formData.number.replace(/\D/g, "");
+    const cleanedValue = formData.number.replace(/\D/g, "");
+    const isCanadian = selectedCountryCode === "+1";
 
-      // Check if the cleaned value has the correct length
-      const isCanadian = selectedCountryCode === "+1";
-      const isValidLength = isCanadian ? cleanedValue.length === 10 : true;
+    let phoneIsValid = false;
+    let errorMsg = "";
 
-      if (isCanadian && !isValidLength) {
-        setIsPhoneValid(false);
-        setIsCanadianFormat("Please enter a valid Canadian phone number");
-        setFormData((prev) => ({ ...prev, numberValid: false }));
-      } else if (!isCanadian && !isValidLength) {
-        setIsPhoneValid(false);
-        setFormData((prev) => ({ ...prev, numberValid: false }));
-      } else if (!isCanadian && isValidLength) {
-        setIsPhoneValid(false);
-        setFormData((prev) => ({ ...prev, numberValid: true }));
-      } else if (isCanadian && isValidLength) {
-        setIsPhoneValid(true);
-        setIsCanadianFormat("");
-        setFormData((prev) => ({ ...prev, numberValid: true }));
-      }
-    };
-    validatePhoneNumber();
-  }, [formData.number, selectedCountryCode, isCanadianFormat, isPhoneValid]);
+    if (isCanadian) {
+      phoneIsValid = cleanedValue.length === 10;
+      if (!phoneIsValid)
+        errorMsg = "Please enter a valid Canadian phone number";
+    } else {
+      // For non-Canadian numbers, we only validate length loosely
+      phoneIsValid = cleanedValue.length > 5;
+    }
+
+    setIsPhoneValid(phoneIsValid);
+    setFormData((prev) => ({
+      ...prev,
+      numberValid: phoneIsValid,
+    }));
+    setIsCanadianFormat(errorMsg);
+  }, [formData.number, selectedCountryCode]);
 
   useEffect(() => {
     const styleSheet = document.createElement("style");
@@ -113,6 +109,14 @@ const FormRsvp = () => {
     e.preventDefault();
     setUserInfo(formData);
   };
+
+  console.log(
+    formData.fname.length === 0 ||
+      formData.lname.length === 0 ||
+      (selectedCountryCode === "+1" ? false : !isEmailValid) ||
+      !formData.numberValid ||
+      isCanadianFormat.length !== 0
+  );
 
   return (
     <StyledForm

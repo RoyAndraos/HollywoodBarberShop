@@ -79,11 +79,9 @@ const Booking = () => {
           const endDate = new Date(elem.endDate);
 
           endDate.setHours(23, 59, 59, 999);
-          console.log(startDate, endDate, selectedDate);
           // should now log: "object object object"
 
           const timeOff = selectedDate >= startDate && selectedDate <= endDate;
-          console.log(selectedDate >= startDate);
           // "[]" makes it inclusive (so if selectedDate === startDate or endDate, it counts as inside)
           return timeOff;
         });
