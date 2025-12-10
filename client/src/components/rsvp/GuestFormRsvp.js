@@ -11,7 +11,7 @@ import { countryCodes } from "../helpers";
 import Select from "react-select";
 import { PrivacyWrapper, Text, BackButton, SmallTitle } from "../FooterPc";
 
-const FormRsvp = () => {
+const FormRsvp = ({ selectedCountryCode, setSelectedCountryCode }) => {
   const { setUserInfo } = useContext(UserContext);
   const { isMobile } = useContext(IsMobileContext);
   const [isPhoneValid, setIsPhoneValid] = useState(false);
@@ -19,7 +19,6 @@ const FormRsvp = () => {
   const [isTermsOpen, setIsTermsOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const navigate = useNavigate();
-  const [selectedCountryCode, setSelectedCountryCode] = useState("+1");
   const [formData, setFormData] = useState({
     fname: "",
     lname: "",
@@ -109,15 +108,6 @@ const FormRsvp = () => {
     e.preventDefault();
     setUserInfo(formData);
   };
-
-  console.log(
-    formData.fname.length === 0 ||
-      formData.lname.length === 0 ||
-      (selectedCountryCode === "+1" ? false : !isEmailValid) ||
-      !formData.numberValid ||
-      isCanadianFormat.length !== 0
-  );
-
   return (
     <StyledForm
       onSubmit={(e) => {

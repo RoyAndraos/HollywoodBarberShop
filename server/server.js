@@ -202,9 +202,9 @@ const addReservation = async (req, res) => {
   const client = new MongoClient(MONGO_URI_RALF);
   const formData = req.body[0];
   const userInfo = req.body[1];
+  const selectedCountryCode = req.body[2];
   const _id = uuid();
   const client_id = uuid();
-
   try {
     await client.connect();
     const db = client.db("HollywoodBarberShop");
@@ -269,7 +269,7 @@ const addReservation = async (req, res) => {
     }
 
     // send SMS to the user
-    if (userInfo.numberValid) {
+    if (selectedCountryCode === "+1") {
       try {
         // (async () => {
         //   const telnyx = await initTelnyx();
@@ -296,10 +296,14 @@ Annulation: https://hollywoodfairmountbarbers.com/cancel/${_id}
       const emailData = {
         from: {
           email: "hello@hollywoodfairmountbarbers.com",
-          name: `${reservation.barber}`,
+          name: "Hollywood Barbershop",
         },
-        to: userInfo.email,
-        subject: "Reservation Reminder",
+        to: [
+          {
+            email: reservation.email,
+          },
+        ],
+        subject: "Reservation Confirmation",
         text: `No Reply ~Hollywood Barbershop
             Bonjour ${reservation.fname} ${
           reservation.lname || ""
@@ -316,19 +320,11 @@ Annulation: https://hollywoodfairmountbarbers.com/cancel/${_id}
         } with ${reservation.barber}. You will be getting a ${
           reservation.service.english
         } for ${reservation.service.price} CAD. 
-              Pour annuler (to cancel): https://hollywoodfairmountbarbers.com/cancel/${
-                reservation._id
-              }
+              Pour annuler (to cancel): https://hollywoodfairmountbarbers.com/cancel/${_id}
             `,
         category: "Reservation Confirmation",
       };
-
-      //send email
-      try {
-        await mailtrapClient.send(emailData);
-      } catch (err) {
-        console.error("Error sending confirmation email:", err);
-      }
+      await mailtrapClient.send(emailData);
     }
 
     // send response to the client

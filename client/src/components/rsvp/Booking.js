@@ -16,7 +16,7 @@ import SubmitButton from "./SubmitButton";
 import logoNotHome from "../../assets/onlyNameLogo.svg";
 // import { ServicesEmpContext } from "../contexts/ServicesEmpContext";
 import { FaCalendarAlt } from "react-icons/fa";
-const Booking = () => {
+const Booking = ({ selectedCountryCode }) => {
   const [reservations, setReservations] = useState([]);
   const [formData, setFormData] = useState({
     date: moment(new Date()).format("ddd MMM DD YYYY").toString(),
@@ -695,7 +695,7 @@ const Booking = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify([formData, userInfo]),
+      body: JSON.stringify([formData, userInfo, selectedCountryCode]),
     })
       .then((res) => res.json())
       .then((data) => {

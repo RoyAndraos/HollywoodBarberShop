@@ -18,7 +18,6 @@ const CancelRes = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
         if (data.status === 404) {
           navigate("/notfound");
           return;
