@@ -11,7 +11,6 @@ const Barbers = () => {
   const navigate = useNavigate();
   const { language } = useContext(LanguageContext);
   const { barberInfo } = useContext(BarberContext);
-
   if (!barberInfo) {
     return <Loader />;
   }
@@ -36,8 +35,8 @@ const Barbers = () => {
             {barber.given_name === "Jordi" && (
               <Avatar src={jordi} alt="barber"></Avatar>
             )}
-
-            <Description> {barber.description}</Description>
+"
+            <Description> { language ==="en" ? barber.description : barber.french_description}</Description>
             <Book
               onClick={() => {
                 navigate("/book");
